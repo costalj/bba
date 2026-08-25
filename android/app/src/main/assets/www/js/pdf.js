@@ -9,6 +9,18 @@ function safeText(value) {
   return String(value);
 }
 
+function formatarTelefonePdf(valor) {
+  if (typeof formatarTelefone === "function") {
+    return formatarTelefone(valor);
+  }
+  const d = String(valor || "").replace(/\D/g, "").slice(0, 11);
+  if (!d.length) return safeText(valor) || "—";
+  if (d.length <= 2) return `(${d}`;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
 function normalizarVistoriaPdf(vistoria) {
   return {
     ...vistoria,
@@ -186,7 +198,7 @@ function desenharTabelaDados(doc, y, vistoria) {
     ["Solicitante", vistoria.solicitante || "—"],
     ["CPF do Solicitante", vistoria.cpf_solicitante ? formatarCpf(vistoria.cpf_solicitante) : "—"],
     ["Endereço", vistoria.endereco || "—"],
-    ["Contato", vistoria.contato_telefonico ? formatarTelefone(vistoria.contato_telefonico) : "—"],
+    ["Contato", vistoria.contato_telefonico ? formatarTelefonePdf(vistoria.contato_telefonico) : "—"],
     ["Forma de Acionamento", vistoria.forma_acionamento || "—"],
     ["Protocolo CIOPS/Portaria/OS", vistoria.protocolo || "—"],
     ["Natureza da ocorrência", vistoria.natureza_ocorrencia || "—"],

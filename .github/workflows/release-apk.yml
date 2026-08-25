@@ -30,6 +30,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Install Android packages
+        run: |
+          sdkmanager --install "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
@@ -60,9 +64,17 @@ jobs:
           python scripts/exportar_logo_pdf.py
           python scripts/gerar_icones.py
 
+      - name: Write local.properties
+        working-directory: android
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" | sed 's|\\|/|g' > local.properties
+          cat local.properties
+
       - name: Build APK
         working-directory: android
-        run: gradle assembleDebug --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Prepare release artifact
         id: apk

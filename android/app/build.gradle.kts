@@ -10,12 +10,25 @@ android {
         applicationId = "com.vistoria.arborea"
         minSdk = 24
         targetSdk = 34
-        versionCode = 20
-        versionName = "1.0.20"
+        versionCode = 21
+        versionName = "1.0.21"
+    }
+
+    signingConfigs {
+        create("bba") {
+            storeFile = file("../keystore/bba.jks")
+            storePassword = "bba2024release"
+            keyAlias = "bba"
+            keyPassword = "bba2024release"
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("bba")
+        }
         release {
+            signingConfig = signingConfigs.getByName("bba")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

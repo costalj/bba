@@ -110,3 +110,4 @@ Usada por `scripts/exportar_app_version.py` ao gerar o APK local.
 - Requer **internet** para verificar e baixar.
 - Repositório **público** ou token não implementado no app (API pública do GitHub).
 - Instalação exige confirmação do usuário na tela do Android (limitação de segurança do sistema).
+- Todas as versões do GitHub usam a **mesma assinatura** (`android/keystore/bba.jks`). Se o app foi instalado antes com APK compilado localmente (outra assinatura), o Android recusa atualizar — **desinstale o BBA uma vez** e instale a versão da Release; depois as atualizações automáticas funcionam.

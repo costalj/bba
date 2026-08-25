@@ -74,7 +74,7 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Prepare release artifact
         id: apk
@@ -82,7 +82,7 @@ jobs:
           VERSION=$(python -c "import json; print(json.load(open('VERSION.json'))['name'])")
           mkdir -p dist
           APK="dist/BBA-${VERSION}.apk"
-          cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
+          cp android/app/build/outputs/apk/release/app-release.apk "$APK"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "apk=${APK}" >> "$GITHUB_OUTPUT"
           ls -lh "$APK"

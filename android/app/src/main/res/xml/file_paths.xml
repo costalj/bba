@@ -3,4 +3,5 @@
     <cache-path name="pdfs" path="pdfs/" />
     <cache-path name="camera" path="camera/" />
     <cache-path name="updates" path="updates/" />
+    <external-files-path name="external_updates" path="updates/" />
 </paths>

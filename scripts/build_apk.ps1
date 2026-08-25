@@ -46,13 +46,13 @@ Write-Host "Gerando icones do brasao BBA..." -ForegroundColor Cyan
 Write-Host "Compilando APK standalone (offline)..." -ForegroundColor Cyan
 Push-Location $androidDir
 try {
-    & .\gradlew.bat assembleDebug --no-daemon
+    & .\gradlew.bat assembleRelease --no-daemon
     if ($LASTEXITCODE -ne 0) { throw "Build falhou (exit $LASTEXITCODE)" }
 } finally {
     Pop-Location
 }
 
-$builtApk = Join-Path $androidDir "app\build\outputs\apk\debug\app-debug.apk"
+$builtApk = Join-Path $androidDir "app\build\outputs\apk\release\app-release.apk"
 if (-not (Test-Path $builtApk)) { throw "APK nao gerado" }
 
 Copy-Item $builtApk $apkOut -Force

@@ -89,9 +89,9 @@ Se o APK foi gerado pelo GitHub Actions com `GITHUB_REPOSITORY`, o repositório 
 
 ## Comportamento no app
 
-- **Início**: banner se houver versão mais nova (com internet).
-- **Perfil**: versão instalada, campo do repo, botão **Verificar atualização** e **Baixar**.
-- **Download**: salva em **Downloads** do celular; abra o arquivo para instalar.
+- **Início / Perfil**: banner ou botão **Baixar e instalar** quando houver versão nova.
+- **Download + instalação**: o app baixa o APK e abre a tela de instalação do Android (substitui a versão anterior; dados locais permanecem).
+- Na primeira vez, o Android pode pedir para **permitir instalar apps desconhecidos** para o BBA — confirme em Configurações e toque de novo.
 
 Verificação automática: no máximo a cada **6 horas** (economiza dados).
 
@@ -109,4 +109,4 @@ Usada por `scripts/exportar_app_version.py` ao gerar o APK local.
 
 - Requer **internet** para verificar e baixar.
 - Repositório **público** ou token não implementado no app (API pública do GitHub).
-- Instalação manual do APK (não usa Google Play).
+- Instalação exige confirmação do usuário na tela do Android (limitação de segurança do sistema).

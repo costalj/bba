@@ -113,9 +113,20 @@ async function verificarAtualizacao(opts = {}) {
   };
 }
 
-function abrirDownloadAtualizacao(url) {
+function abrirDownloadAtualizacao(url, versao) {
   if (!url) return;
+  const nomeArquivo = versao ? `BBA-${versao}.apk` : "BBA-update.apk";
+  if (typeof AndroidUpdate !== "undefined" && AndroidUpdate.downloadAndInstall) {
+    AndroidUpdate.downloadAndInstall(url, nomeArquivo);
+    return;
+  }
   window.location.href = url;
+}
+
+function textoBotaoAtualizacao(versao) {
+  const nativo =
+    typeof AndroidUpdate !== "undefined" && AndroidUpdate.downloadAndInstall;
+  return nativo ? `Baixar e instalar v${versao}` : `Baixar v${versao}`;
 }
 
 function renderBannerAtualizacao(container, info) {
@@ -124,11 +135,11 @@ function renderBannerAtualizacao(container, info) {
   container.innerHTML = `
     <section class="update-banner" id="update-banner">
       <strong>Nova versão ${r.versao}</strong>
-      <p class="hint">Instalada: ${info.versaoInstalada}. Toque para baixar o APK atualizado.</p>
-      <button type="button" class="btn btn-primary btn-block" id="btn-update-banner">Baixar ${r.versao}</button>
+      <p class="hint">Instalada: ${info.versaoInstalada}. Toque para baixar e instalar por cima (dados preservados).</p>
+      <button type="button" class="btn btn-primary btn-block" id="btn-update-banner">${textoBotaoAtualizacao(r.versao)}</button>
     </section>`;
   document.getElementById("btn-update-banner")?.addEventListener("click", () => {
-    if (r.apkUrl) abrirDownloadAtualizacao(r.apkUrl);
+    if (r.apkUrl) abrirDownloadAtualizacao(r.apkUrl, r.versao);
     else alert("APK não encontrado na release do GitHub.");
   });
 }
@@ -156,7 +167,7 @@ function htmlSecaoAtualizacao(info) {
       <button type="button" id="btn-check-update" class="btn btn-secondary btn-block">Verificar atualização</button>
       ${
         info?.disponivel && info.release?.apkUrl
-          ? `<button type="button" id="btn-download-update" class="btn btn-primary btn-block">Baixar v${info.release.versao}</button>`
+          ? `<button type="button" id="btn-download-update" class="btn btn-primary btn-block">${textoBotaoAtualizacao(info.release.versao)}</button>`
           : ""
       }
     </section>`;
@@ -181,6 +192,7 @@ function initSecaoAtualizacaoPerfil(container, infoInicial) {
 
   document.getElementById("btn-download-update")?.addEventListener("click", () => {
     const url = infoInicial?.release?.apkUrl;
-    if (url) abrirDownloadAtualizacao(url);
+    const versao = infoInicial?.release?.versao;
+    if (url) abrirDownloadAtualizacao(url, versao);
   });
 }

@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         webView.addJavascriptInterface(new PdfBridge(this), "AndroidPdf");
         webView.addJavascriptInterface(new CameraBridge(), "AndroidCamera");
+        webView.addJavascriptInterface(new UpdateBridge(this), "AndroidUpdate");
 
         webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
             try {

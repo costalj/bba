@@ -11,7 +11,7 @@ POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 OUT_PATH = os.path.join(
     ROOT, "android", "app", "src", "main", "assets", "www", "js", "seed-data.js"
 )
-SEED_VERSION = "1.0.16"
+SEED_VERSION = "1.0.17"
 
 
 def _parse_json(raw):

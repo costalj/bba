@@ -15,7 +15,7 @@
       <p>Batalhão de Bombeiros Ambiental</p>
     </div>
 
-    <form id="form-login" class="login-form">
+    <form id="form-login" class="login-form" novalidate>
       <label class="field">
         <span>CPF</span>
         <input type="text" name="cpf" id="cpf" required inputmode="numeric" placeholder="000.000.000-00" maxlength="14" autocomplete="username" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Informe os 11 dígitos do CPF">
@@ -33,6 +33,7 @@
 
   <script src="js/seed-data.js"></script>
   <script src="js/seed.js"></script>
+  <script src="js/sync-meta.js"></script>
   <script src="js/auth.js"></script>
   <script>
     function aplicarMascaraCpf(input) {
@@ -80,15 +81,21 @@
         }
 
         const fd = new FormData(e.target);
-        const res = await login(fd.get("cpf"), fd.get("senha"));
-        if (!res.ok) {
-          erro.textContent = res.erro;
+        try {
+          const res = await login(fd.get("cpf"), fd.get("senha"));
+          if (!res.ok) {
+            erro.textContent = res.erro;
+            erro.classList.remove("hidden");
+            return;
+          }
+          sessionStorage.setItem("bba_bem_vindo", "1");
+          const next = new URLSearchParams(location.search).get("next");
+          location.href = next || "index.html";
+        } catch (err) {
+          console.error(err);
+          erro.textContent = "Erro ao entrar. Reinstale o app ou limpe os dados do BBA.";
           erro.classList.remove("hidden");
-          return;
         }
-        sessionStorage.setItem("bba_bem_vindo", "1");
-        const next = new URLSearchParams(location.search).get("next");
-        location.href = next || "index.html";
       };
     })();
   </script>

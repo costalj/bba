@@ -126,7 +126,7 @@ APP_INFO = {
 
     "subtitulo": "Batalhão de Bombeiros Ambiental",
 
-    "versao": "1.0.16",
+    "versao": "1.0.17",
 
 }
 

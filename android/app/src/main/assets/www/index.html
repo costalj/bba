@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1b4332">
+  <title>BBA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="logo"><img src="img/logo-bba.png" alt="BBA"></span>
+      <div class="header-titles">
+        <h1>BBA</h1>
+        <small class="header-sub">Batalhão de Bombeiros Ambiental</small>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="hub-welcome">
+      <h2 id="hub-titulo">Bem-vindo</h2>
+      <p id="hub-subtitulo">Selecione um módulo para começar</p>
+    </section>
+    <div id="update-banner-wrap"></div>
+    <section class="modulos-grid" id="modulos"></section>
+    <section class="info-card hub-info">
+      <p class="hint">App offline · Dados e fotos sync na nuvem em Perfil</p>
+    </section>
+  </main>
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span><span>Início</span></a>
+    <a href="admin.html" class="nav-item" id="nav-admin" style="display:none"><span class="nav-icon">⚙️</span><span>Admin</span></a>
+    <span class="nav-item nav-item-disabled" id="nav-menu-placeholder"><span class="nav-icon">⚙️</span><span>Menu</span></span>
+    <a href="perfil.html" class="nav-item"><span class="nav-icon">👤</span><span>Perfil</span></a>
+  </nav>
+  <script src="js/seed-data.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/sync-meta.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/db-viaturas.js"></script>
+  <script src="js/viaturas-cadastro.js"></script>
+  <script src="js/sync-config.js"></script>
+  <script src="js/sync-fotos.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/app-version.js"></script>
+  <script src="js/update-config.js"></script>
+  <script src="js/app-update.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/config.js"></script>
+  <script>
+    if (!exigirLogin()) throw new Error("auth");
+    const u = getUsuario();
+    document.getElementById("hub-titulo").textContent = `Bem-vindo, ${nomeGuerraExibicao(u)}`;
+    document.getElementById("hub-subtitulo").innerHTML = `Função: <strong>${u.perfil}</strong> · Selecione um módulo para começar`;
+
+    if (isAdmin()) {
+      document.getElementById("nav-admin").style.display = "";
+      document.getElementById("nav-menu-placeholder").style.display = "none";
+    }
+
+    document.getElementById("modulos").innerHTML = MODULOS.map((m) => {
+      const href = m.ativo ? m.url : "#";
+      const cls = m.ativo ? "" : "modulo-em-breve";
+      const badge = m.ativo
+        ? '<span class="modulo-badge modulo-ativo">Acessar</span>'
+        : '<span class="modulo-badge">Em breve</span>';
+      return `<a href="${href}" class="modulo-card ${cls}" style="--modulo-cor:${m.cor}">
+        <span class="modulo-icone">${m.icone_img ? `<img src="${m.icone_img}" alt="" class="modulo-icone-img">` : m.icone}</span>
+        <strong class="modulo-nome">${m.nome}</strong>
+        <small class="modulo-desc">${m.descricao}</small>${badge}</a>`;
+    }).join("");
+
+    if (typeof sincronizar === "function" && typeof isSyncConfigured === "function" && isSyncConfigured()) {
+      sincronizar({ silencioso: true });
+    }
+
+    if (typeof verificarAtualizacao === "function") {
+      verificarAtualizacao({ silencioso: true }).then((info) => {
+        renderBannerAtualizacao(document.getElementById("update-banner-wrap"), info);
+      });
+    }
+  </script>
+</body>
+</html>

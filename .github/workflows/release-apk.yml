@@ -1,0 +1,100 @@
+name: Release APK
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: "Publicar GitHub Release (além do artefato)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pillow
+
+      - name: Sync version and export assets
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # Banco/nuvem: Secrets do repositório (Settings → Secrets and variables → Actions)
+          # Mantém SUPABASE no APK gerado sem gravar chaves no código.
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          python scripts/sync_version.py
+          python scripts/exportar_app_version.py
+          python scripts/exportar_sync_config.py
+          python scripts/exportar_seed_apk.py
+          python scripts/exportar_legislacao_apk.py
+          python scripts/exportar_logo_pdf.py
+          python scripts/gerar_icones.py
+
+      - name: Build APK
+        working-directory: android
+        run: gradle assembleDebug --no-daemon
+
+      - name: Prepare release artifact
+        id: apk
+        run: |
+          VERSION=$(python -c "import json; print(json.load(open('VERSION.json'))['name'])")
+          mkdir -p dist
+          APK="dist/BBA-${VERSION}.apk"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "apk=${APK}" >> "$GITHUB_OUTPUT"
+          ls -lh "$APK"
+
+      - name: Publish GitHub Release (tag push)
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: BBA ${{ github.ref_name }}
+          generate_release_notes: true
+          files: ${{ steps.apk.outputs.apk }}
+
+      - name: Publish GitHub Release (manual)
+        uses: softprops/action-gh-release@v2
+        if: github.event_name == 'workflow_dispatch' && inputs.create_release == true
+        with:
+          tag_name: v${{ steps.apk.outputs.version }}
+          name: BBA v${{ steps.apk.outputs.version }}
+          generate_release_notes: true
+          files: ${{ steps.apk.outputs.apk }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bba-apk-${{ steps.apk.outputs.version }}
+          path: ${{ steps.apk.outputs.apk }}

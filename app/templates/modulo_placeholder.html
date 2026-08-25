@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ modulo_info.nome }}{% endblock %}
+{% block header %}{{ modulo_info.nome }}{% endblock %}
+
+{% set show_back = true %}
+
+{% block content %}
+<section class="placeholder-hero" style="--modulo-cor: {{ modulo_info.cor }}">
+  <span class="placeholder-icone">{{ modulo_info.icone }}</span>
+  <h2>{{ modulo_info.nome }}</h2>
+  <p>{{ modulo_info.descricao }}</p>
+  <span class="placeholder-badge">Em desenvolvimento</span>
+</section>
+
+<section class="info-card">
+  <h3>O que virá neste módulo</h3>
+  <ul class="placeholder-lista">
+    {% for item in itens_previstos %}
+    <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<a href="{{ url_for('main.index') }}" class="btn btn-primary btn-block">Voltar ao início</a>
+{% endblock %}

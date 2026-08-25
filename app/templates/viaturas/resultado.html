@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Vistoria {{ vistoria.placa }}{% endblock %}
+{% block header %}Resultado{% endblock %}
+{% set modulo = "viaturas" %}
+
+{% block content %}
+{% set rec = vistoria.recomendacao %}
+{% set cls = 'resultado-impedida' if rec == 'IMPEDIDA' else ('resultado-restricoes' if rec == 'APROVADA COM RESTRIÇÕES' else 'resultado-aprovada') %}
+
+<div class="resultado-card {{ cls }}">
+  <div class="resultado-score">
+    <span class="score-num">{{ vistoria.pontuacao_total }}</span>
+    <span class="score-max">/ {{ total_itens }} não conformes</span>
+  </div>
+  <h2 class="resultado-titulo">{{ rec }}</h2>
+  <p>{{ vistoria.justificativa }}</p>
+</div>
+
+<div class="action-row">
+  <a href="{{ url_for('main.exportar_pdf_viatura', vistoria_id=vistoria.id) }}" class="btn btn-secondary btn-block" target="_blank" rel="noopener">📄 Exportar PDF</a>
+  <a href="{{ url_for('main.listar_vistorias_viaturas') }}" class="btn btn-secondary btn-block">📁 Ver histórico</a>
+</div>
+
+<section class="info-card">
+  <h3>Identificação</h3>
+  <dl class="detail-list">
+    <dt>Data</dt><dd>{{ vistoria.created_at | formatar_data_hora_br }}</dd>
+    <dt>Condutor</dt><dd>{{ vistoria.condutor or '—' }}</dd>
+    <dt>Viatura</dt><dd>{{ texto_viatura(vistoria) }}</dd>
+    <dt>Status</dt><dd>{{ status_viatura(vistoria) }}</dd>
+  </dl>
+</section>
+
+{% for secao in secoes %}
+<section class="info-card questionario-resumo">
+  <h3>{{ secao.titulo }}</h3>
+  <ul class="respostas-lista">
+    {% for p in secao.perguntas %}
+    <li class="resposta-item resposta-{{ checklist.get(p.id, 'nao') }}">
+      <span class="resposta-num">{{ p.numero }}</span>
+      <span class="resposta-texto">{{ p.texto }}</span>
+      <strong class="resposta-valor">{{ 'SIM' if checklist.get(p.id) == 'sim' else 'NÃO' }}</strong>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}
+
+{% if vistoria.observacoes %}
+<section class="info-card">
+  <h3>Observações</h3>
+  <p>{{ vistoria.observacoes }}</p>
+</section>
+{% endif %}
+
+<section class="info-card assinatura-card {% if assinatura %}assinada{% else %}pendente{% endif %}">
+  <h3>{% if assinatura %}✅ {% endif %}Assinatura da vistoria</h3>
+  {% if assinatura %}
+  <div class="assinatura-digital">
+    <p class="assinatura-nome">{{ assinatura.assinado_por }}</p>
+    <p class="assinatura-cargo">{{ assinatura.cargo }}</p>
+    <p class="assinatura-data">{{ assinatura.data_hora }}</p>
+    <small class="assinatura-hint">{{ assinatura.tipo or 'Assinatura eletrônica' }} registrada</small>
+  </div>
+  {% elif usuario and pode_assinar %}
+  <p class="hint">Assinatura eletrônica com seu usuário logado, data e hora.</p>
+  <p class="assinatura-militar-logado">Logado como: <strong>{{ nome_posto_guerra(usuario) }}</strong> ({{ usuario.perfil }})</p>
+  <form method="POST" action="{{ url_for('main.assinar_vistoria_viatura', vistoria_id=vistoria.id) }}" onsubmit="return confirm('Confirmar assinatura eletrônica desta vistoria?');">
+    <button type="submit" class="btn btn-primary btn-block">✍️ Assinar eletronicamente</button>
+  </form>
+  {% elif usuario %}
+  <p class="hint">Aguardando assinatura. Apenas Condutor de viatura, Chefe de Socorro ou Comandante de guarnição podem assinar.</p>
+  <p class="assinatura-militar-logado">Seu perfil: <strong>{{ usuario.perfil }}</strong></p>
+  {% else %}
+  <p class="hint">Aguardando assinatura da vistoria.</p>
+  {% endif %}
+</section>
+
+<a href="{{ url_for('main.nova_vistoria_viatura') }}" class="btn btn-secondary btn-block">Nova Vistoria</a>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% from "_questionario.html" import sim_nao %}
+{% from "_somatorio_resultado.html" import exibir_somatorio %}
+{% block title %}Nova Vistoria{% endblock %}
+{% block header %}Nova Vistoria{% endblock %}
+{% set modulo = "arvores" %}
+
+{% block content %}
+<form id="form-vistoria" method="POST" action="{{ url_for('main.criar_vistoria') }}" enctype="multipart/form-data">
+
+  <section class="form-section">
+    <h3>1. Dados da ocorrência</h3>
+    <label class="field">
+      <span>Solicitante *</span>
+      <input type="text" name="solicitante" required placeholder="Nome do solicitante">
+    </label>
+    <label class="field">
+      <span>CPF do Solicitante</span>
+      <input type="text" name="cpf_solicitante" id="cpf-solicitante" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" autocomplete="off">
+    </label>
+    <label class="field">
+      <span>Endereço *</span>
+      <input type="text" name="endereco" id="campo-endereco" required placeholder="Rua, nº, bairro, município, CEP">
+    </label>
+    <label class="field">
+      <span>Contato telefônico</span>
+      <input type="tel" name="contato_telefonico" inputmode="tel" placeholder="(98) 99999-9999">
+    </label>
+    <label class="field">
+      <span>Forma de Acionamento</span>
+      <input type="text" name="forma_acionamento" placeholder="CIOPS , Justiça , Ordem do Cmt Geral.">
+    </label>
+    <label class="field">
+      <span>Protocolo do CIOPS/Portaria/Ordem de Serviço</span>
+      <input type="text" name="protocolo" placeholder="Nº do protocolo ou ordem de serviço">
+    </label>
+    <label class="field">
+      <span>Natureza da ocorrência</span>
+      <input type="text" name="natureza_ocorrencia">
+    </label>
+    <label class="field">
+      <span>Descrição da ocorrência</span>
+      <textarea name="descricao_ocorrencia" rows="2" maxlength="100" placeholder="Resumo da ocorrência (máx. 100 caracteres)"></textarea>
+    </label>
+    <label class="field">
+      <span>Espécie da árvore</span>
+      <input type="text" name="especie" placeholder="Ex: Embaúba (Cecropia sp.)">
+    </label>
+  </section>
+
+  <section class="form-section">
+    <h3>Fotos da árvore</h3>
+    <p class="hint">Registro fotográfico da vistoria (máx. {{ max_fotos }}). As fotos aparecem no laudo PDF.</p>
+    <input type="file" name="fotos" id="input-fotos-sync" multiple hidden>
+    <input type="file" id="input-fotos-camera" accept="image/*" capture="environment" hidden>
+    <input type="file" id="input-fotos-galeria" accept="image/*" multiple hidden>
+    <div class="foto-acoes">
+      <button type="button" id="btn-foto-camera" class="btn btn-secondary foto-btn">📸 Tirar foto</button>
+      <button type="button" id="btn-foto-galeria" class="btn btn-secondary foto-btn">🖼️ Galeria</button>
+    </div>
+    <p id="fotos-contador" class="fotos-contador hint"></p>
+    <div id="fotos-preview" class="fotos-preview"></div>
+  </section>
+
+  {% for secao in secoes %}
+  <section class="form-section questionario-secao">
+    <h3>{{ secao.titulo }}</h3>
+    {% if secao.get('subtitulo') %}
+    <p class="hint">{{ secao.subtitulo }}</p>
+    {% endif %}
+    {% if secao.get('conta_risco') %}
+    <p class="hint">Respostas <strong>SIM</strong> nesta seção entram na contagem de risco.</p>
+    {% endif %}
+
+    {% if secao.get('perguntas') %}
+      {% for p in secao.perguntas %}
+      {{ sim_nao(p) }}
+      {% endfor %}
+    {% endif %}
+
+    {% for grupo in secao.get('grupos', []) %}
+    <h4 class="questionario-grupo">{{ grupo.titulo }}</h4>
+      {% for p in grupo.perguntas %}
+      {{ sim_nao(p) }}
+      {% endfor %}
+    {% endfor %}
+  </section>
+  {% endfor %}
+
+  <section class="form-section">
+    <h3>6. Observações adicionais</h3>
+    <p class="hint">Use para recusa de assinatura (item 5.3) ou demais informações.</p>
+    <label class="field">
+      <textarea name="observacoes" rows="3" placeholder="Descrição complementar..."></textarea>
+    </label>
+  </section>
+
+  <div id="preview-resultado" class="preview-card hidden">
+    <div class="preview-score">
+      <span id="preview-total">0</span>
+      <small>/ {{ max_perguntas_risco }} respostas SIM</small>
+    </div>
+    <div id="preview-recomendacao" class="preview-label preview-baixo">BAIXO</div>
+    <p id="preview-texto"></p>
+    <div id="preview-somatorio"></div>
+  </div>
+
+  <section class="form-section assinaturas-secao">
+    <h3>7. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
+    <p class="hint">O solicitante pode rubricar abaixo para confirmar ciência do laudo.</p>
+    <div class="rubrica-wrap">
+      <canvas id="canvas-rubrica" class="canvas-rubrica" aria-label="Área para rubrica do solicitante"></canvas>
+      <button type="button" id="btn-limpar-rubrica" class="btn btn-secondary btn-sm">Limpar rubrica</button>
+    </div>
+    <input type="hidden" name="rubrica_solicitante" id="rubrica_solicitante">
+  </section>
+
+  <section class="form-section assinaturas-secao">
+    <h3>8. Assinatura do Chefe de Socorro</h3>
+    {% if usuario and usuario.perfil == 'Chefe de Socorro' %}
+    <p class="hint">Assinatura eletrônica com seu usuário logado, data e hora.</p>
+    <p class="assinatura-militar-logado">Logado como: <strong>{{ usuario.posto }} {{ usuario.nome }}</strong></p>
+    <div id="preview-assinatura-chefe" class="assinatura-preview"></div>
+    <button type="button" id="btn-assinar-chefe" class="btn btn-primary btn-block">✍️ Assinar eletronicamente</button>
+    <input type="hidden" name="assinatura_json" id="assinatura_json">
+    {% elif usuario %}
+    <p class="hint">Apenas o Chefe de Socorro pode assinar. Seu perfil: <strong>{{ usuario.perfil }}</strong></p>
+    <p class="hint">A assinatura poderá ser feita depois, ao abrir a vistoria no histórico.</p>
+    {% else %}
+    <p class="hint">Faça login como Chefe de Socorro para assinar eletronicamente.</p>
+    {% endif %}
+  </section>
+
+  <button type="submit" class="btn btn-primary btn-block">Salvar vistoria</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.VISTORIA_CONFIG = { maxFotos: {{ max_fotos }}, maxPerguntasRisco: {{ max_perguntas_risco }} };
+  window.USUARIO_LOGADO = {{ usuario | tojson if usuario else 'null' }};
+</script>
+<script src="{{ url_for('static', filename='js/questionario.js') }}"></script>
+<script src="{{ url_for('static', filename='js/assinatura.js') }}"></script>
+<script src="{{ url_for('static', filename='js/fotos.js') }}"></script>
+<script src="{{ url_for('static', filename='js/formulario.js') }}"></script>
+<script>
+  (function () {
+    const cpfInput = document.getElementById("cpf-solicitante");
+    if (!cpfInput) return;
+    cpfInput.addEventListener("input", () => {
+      let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+      if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+      else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+      else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+      cpfInput.value = v;
+    });
+  })();
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ categoria.titulo }}{% endblock %}
+{% block header %}{{ categoria.titulo }}{% endblock %}
+{% set show_back = true %}
+
+{% block content %}
+<section class="legislacao-hero" style="--modulo-cor: {{ categoria.cor }}">
+  <span class="legislacao-hero-icone">{{ categoria.icone }}</span>
+  <h2>{{ categoria.titulo }}</h2>
+  <p>{{ categoria.descricao }}</p>
+</section>
+
+<section class="legislacao-categoria">
+  <ul class="doc-lista">
+    {% for doc in categoria.documentos %}
+    <li class="doc-item{% if not doc.arquivo %} doc-item-indisponivel{% endif %}">
+      <div class="doc-item-corpo">
+        <strong class="doc-item-titulo">{{ doc.titulo }}</strong>
+        <small class="doc-item-meta">{{ doc.referencia }}{% if doc.data and doc.data != '—' %} · {{ doc.data }}{% endif %}</small>
+      </div>
+      {% if doc.arquivo %}
+      <a href="{{ url_for('static', filename=doc.arquivo) }}" class="doc-item-acao" target="_blank" rel="noopener">Abrir PDF</a>
+      {% else %}
+      <span class="doc-badge">PDF em breve</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

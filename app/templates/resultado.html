@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% from "_somatorio_resultado.html" import exibir_somatorio %}
+{% block title %}Resultado #{{ vistoria.id }}{% endblock %}
+{% block header %}Resultado{% endblock %}
+{% set modulo = "arvores" %}
+
+{% block content %}
+{% set rec = vistoria.recomendacao %}
+{% set cls = 'resultado-alto' if rec == 'ALTO' else ('resultado-medio' if rec == 'MÉDIO' else ('resultado-supressao' if rec == 'SUPRESSÃO' else ('resultado-urgente' if rec == 'INTERVENÇÃO URGENTE' else ('resultado-podas' if rec == 'PODAS / ACOMPANHAMENTO' else 'resultado-baixo')))) %}
+
+<div class="resultado-card {{ cls }}">
+  <div class="resultado-score">
+    <span class="score-num">{{ vistoria.pontuacao_total }}</span>
+    <span class="score-max">/ {{ max_pontos }}{% if questionario %} SIM{% else %} pts{% endif %}</span>
+  </div>
+  <h2 class="resultado-titulo">{{ rec }}</h2>
+  {% if rec == 'ALTO' %}
+  <p class="supressao-alerta">⚠️ Alto risco potencial de queda — risco iminente</p>
+  {% endif %}
+  <p>{{ vistoria.justificativa }}</p>
+  {% if resultado_calc and resultado_calc.orientacao_conduta %}
+  <div class="orientacao-conduta orientacao-resumo">
+    <h4>O que deve ser feito com a árvore</h4>
+    <ul>
+      {% for item in resultado_calc.orientacao_conduta %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<div class="action-row">
+  <a href="{{ url_for('main.exportar_pdf', vistoria_id=vistoria.id) }}" class="btn btn-secondary btn-block">📄 Exportar PDF</a>
+  <a href="{{ url_for('main.listar_vistorias') }}" class="btn btn-secondary btn-block">📁 Ver histórico</a>
+</div>
+
+<section class="info-card">
+  <h3>1. Dados da ocorrência</h3>
+  <dl class="detail-list">
+    <dt>Data</dt><dd>{{ vistoria.created_at }}</dd>
+    <dt>Nº do Laudo</dt><dd>{{ numero_laudo }}</dd>
+    {% if vistoria.solicitante %}<dt>Solicitante</dt><dd>{{ vistoria.solicitante }}</dd>{% endif %}
+    {% if vistoria.cpf_solicitante %}<dt>CPF do Solicitante</dt><dd>{{ vistoria.cpf_solicitante | formatar_cpf }}</dd>{% endif %}
+    <dt>Endereço</dt><dd>{{ vistoria.endereco }}</dd>
+    {% if vistoria.contato_telefonico %}<dt>Contato</dt><dd>{{ vistoria.contato_telefonico }}</dd>{% endif %}
+    {% if vistoria.forma_acionamento %}<dt>Forma de Acionamento</dt><dd>{{ vistoria.forma_acionamento }}</dd>{% endif %}
+    {% if vistoria.protocolo %}<dt>Protocolo CIOPS/Portaria/OS</dt><dd>{{ vistoria.protocolo }}</dd>{% endif %}
+    {% if vistoria.natureza_ocorrencia %}<dt>Natureza da ocorrência</dt><dd>{{ vistoria.natureza_ocorrencia }}</dd>{% endif %}
+    {% if vistoria.descricao_ocorrencia %}<dt>Descrição da ocorrência</dt><dd>{{ vistoria.descricao_ocorrencia }}</dd>{% endif %}
+    {% if vistoria.latitude and vistoria.longitude %}
+    <dt>GPS</dt>
+    <dd>{{ "%.6f"|format(vistoria.latitude) }}, {{ "%.6f"|format(vistoria.longitude) }}
+      <a href="https://maps.google.com/?q={{ vistoria.latitude }},{{ vistoria.longitude }}" target="_blank" rel="noopener" class="link-maps">Ver no mapa</a>
+    </dd>
+    {% endif %}
+    {% if vistoria.especie %}<dt>Espécie</dt><dd>{{ vistoria.especie }}</dd>{% endif %}
+  </dl>
+</section>
+
+{% if fotos %}
+<section class="info-card">
+  <h3>Fotos ({{ fotos|length }})</h3>
+  <div class="fotos-galeria">
+    {% for foto in fotos %}
+    <a href="{{ url_for('main.servir_foto', filename=foto.filename) }}" target="_blank" rel="noopener">
+      <img src="{{ url_for('main.servir_foto', filename=foto.filename) }}" alt="Foto da árvore">
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if questionario %}
+  {% for secao in secoes %}
+  <section class="info-card questionario-resumo">
+    <h3>{{ secao.titulo }}</h3>
+    {% if secao.get('perguntas') %}
+    <ul class="respostas-lista">
+      {% for p in secao.perguntas %}
+      <li class="resposta-item resposta-{{ questionario.get(p.id, 'nao') }}">
+        <span class="resposta-num">{{ p.numero }}</span>
+        <span class="resposta-texto">{{ p.texto }}</span>
+        <strong class="resposta-valor">{{ 'SIM' if questionario.get(p.id) == 'sim' else 'NÃO' }}</strong>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% for grupo in secao.get('grupos', []) %}
+    <h4 class="questionario-grupo">{{ grupo.titulo }}</h4>
+    <ul class="respostas-lista">
+      {% for p in grupo.perguntas %}
+      <li class="resposta-item resposta-{{ questionario.get(p.id, 'nao') }}">
+        <span class="resposta-num">{{ p.numero }}</span>
+        <span class="resposta-texto">{{ p.texto }}</span>
+        <strong class="resposta-valor">{{ 'SIM' if questionario.get(p.id) == 'sim' else 'NÃO' }}</strong>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endfor %}
+  </section>
+  {% endfor %}
+{% else %}
+<section class="info-card">
+  <h3>Notas por critério (formato anterior)</h3>
+  <ul class="notas-lista">
+    {% for c in criterios %}
+    <li>
+      <span>{{ c.label }}</span>
+      <span class="nota-valor">{{ notas.get(c.id, '—') }}/{{ nota_max }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if vistoria.observacoes %}
+<section class="info-card">
+  <h3>Observações adicionais</h3>
+  <p>{{ vistoria.observacoes }}</p>
+</section>
+{% endif %}
+
+{{ exibir_somatorio(resultado_calc) }}
+
+<section class="info-card assinatura-card">
+  <h3>Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
+  {% if rubrica and rubrica.imagem %}
+  <p class="hint">{{ rubrica.nome }}{% if rubrica.data_hora %} · {{ rubrica.data_hora }}{% endif %}</p>
+  <img src="{{ rubrica.imagem }}" alt="Rubrica do solicitante" class="rubrica-imagem">
+  {% else %}
+  <p class="hint">Solicitante não rubricou este laudo.</p>
+  {% endif %}
+</section>
+
+<section class="info-card assinatura-card {% if assinatura %}assinada{% else %}pendente{% endif %}">
+  <h3>{% if assinatura %}✅ {% endif %}Assinatura do Chefe de Socorro</h3>
+  {% if assinatura %}
+  <div class="assinatura-digital">
+    <p class="assinatura-nome">{{ assinatura.assinado_por }}</p>
+    <p class="assinatura-cargo">{{ assinatura.cargo }}</p>
+    <p class="assinatura-data">{{ assinatura.data_hora }}</p>
+    <small class="assinatura-hint">{{ assinatura.tipo or 'Assinatura eletrônica' }} registrada</small>
+  </div>
+  {% elif usuario and usuario.perfil == 'Chefe de Socorro' %}
+  <p class="hint">Assinatura eletrônica com seu usuário logado, data e hora.</p>
+  <p class="assinatura-militar-logado">Logado como: <strong>{{ usuario.posto }} {{ usuario.nome }}</strong></p>
+  <div id="preview-assinatura-resultado" class="assinatura-preview"></div>
+  <form method="POST" action="{{ url_for('main.assinar_vistoria', vistoria_id=vistoria.id) }}" id="form-assinar-resultado" onsubmit="return confirm('Confirmar assinatura eletrônica desta vistoria?');">
+    <button type="submit" class="btn btn-primary btn-block">✍️ Assinar eletronicamente</button>
+  </form>
+  {% elif usuario %}
+  <p class="hint">Aguardando assinatura. Apenas o Chefe de Socorro pode assinar este laudo.</p>
+  <p class="assinatura-militar-logado">Seu perfil: <strong>{{ usuario.perfil }}</strong></p>
+  {% else %}
+  <p class="hint">Aguardando assinatura do Chefe de Socorro.</p>
+  {% endif %}
+</section>
+
+<a href="{{ url_for('main.nova_vistoria') }}" class="btn btn-secondary btn-block">Nova Vistoria</a>
+{% endblock %}

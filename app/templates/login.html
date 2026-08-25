@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Login — BBA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page">
+  <main class="login-container">
+    <div class="login-logo">
+      <img src="{{ url_for('static', filename='img/logo-bba.png') }}" alt="BBA">
+      <h1>BBA</h1>
+      <p>Corpo de Bombeiros Militar do Maranhão - CBMMA</p>
+      <br>
+      <p>Batalhão de Bombeiros Ambiental</p>
+    </div>
+    <form method="POST" class="login-form">
+      <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+      <label class="field">
+        <span>CPF</span>
+        <input type="text" name="cpf" id="cpf" required inputmode="numeric" placeholder="000.000.000-00" maxlength="14" autocomplete="username">
+      </label>
+      <label class="field">
+        <span>Senha</span>
+        <input type="password" name="senha" required placeholder="Sua senha">
+      </label>
+      {% if erro %}
+      <p class="login-erro">{{ erro }}</p>
+      {% endif %}
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+    <p class="login-hint">Desenvolvido pela MSR Tenologia e Soluções LTDA</p>
+  </main>
+  <script>
+    const cpfInput = document.getElementById("cpf");
+    cpfInput.addEventListener("input", () => {
+      let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+      if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+      else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+      else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+      cpfInput.value = v;
+    });
+  </script>
+</body>
+</html>

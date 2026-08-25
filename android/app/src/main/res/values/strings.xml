@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BBA</string>
+    <!--
+      URL do servidor Flask.
+      Emulador Android Studio: http://10.0.2.2:5000
+      Celular + PC na mesma Wi-Fi: http://SEU_IP_DO_PC:5000
+      Celular + Termux local: http://127.0.0.1:5000
+    -->
+    <string name="server_url">http://10.10.200.14:5000</string>
+</resources>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1b4332">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="{{ url_for('main.manifest') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+  <title>{% block title %}{{ app_info.nome }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <header class="app-header">
+    <div class="header-inner">
+      {% if show_back|default(false) %}
+      <a href="{{ back_url|default(url_for('main.index')) }}" class="header-back" aria-label="Voltar">←</a>
+      {% endif %}
+      <span class="logo">
+        <img src="{{ url_for('static', filename='img/logo-bba.png') }}" alt="Brasão BBA — Batalhão de Bombeiros Ambiental">
+      </span>
+      <div class="header-titles">
+        <h1>{% block header %}{{ app_info.nome }}{% endblock %}</h1>
+        {% block header_sub %}{% endblock %}
+      </div>
+      {% if usuario %}
+      <a href="{{ url_for('main.logout') }}" class="header-sair" title="Sair da conta" aria-label="Sair">
+        <span class="header-sair-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </span>
+        <span class="header-sair-label">Sair</span>
+      </a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="container">
+    {% if mostrar_bem_vindo and usuario %}
+    <div class="bemvindo-banner" role="status">
+      <span class="bemvindo-icon" aria-hidden="true">👋</span>
+      <div class="bemvindo-texto">
+        <strong>Bem-vindo, {{ nome_exibicao(usuario) }}!</strong>
+        <span>Função: {{ usuario.perfil }}</span>
+      </div>
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block bottom_nav %}
+  <nav class="bottom-nav">
+    <a href="{{ url_for('main.index') }}" class="nav-item {% if request.endpoint == 'main.index' %}active{% endif %}">
+      <span class="nav-icon">🏠</span>
+      <span>Início</span>
+    </a>
+    {% if modulo|default('') == 'arvores' %}
+    <a href="{{ url_for('main.nova_vistoria') }}" class="nav-item {% if request.endpoint == 'main.nova_vistoria' %}active{% endif %}">
+      <span class="nav-icon">➕</span>
+      <span>Nova</span>
+    </a>
+    <a href="{{ url_for('main.listar_vistorias') }}" class="nav-item {% if request.endpoint in ('main.listar_vistorias', 'main.detalhe_vistoria') %}active{% endif %}">
+      <span class="nav-icon">📁</span>
+      <span>Histórico</span>
+    </a>
+    {% elif modulo|default('') == 'viaturas' %}
+    <a href="{{ url_for('main.nova_vistoria_viatura') }}" class="nav-item {% if request.endpoint == 'main.nova_vistoria_viatura' %}active{% endif %}">
+      <span class="nav-icon">➕</span>
+      <span>Nova</span>
+    </a>
+    <a href="{{ url_for('main.listar_vistorias_viaturas') }}" class="nav-item {% if request.endpoint in ('main.listar_vistorias_viaturas', 'main.detalhe_vistoria_viatura') %}active{% endif %}">
+      <span class="nav-icon">📁</span>
+      <span>Histórico</span>
+    </a>
+    {% elif usuario and usuario.perfil == 'Administrador' %}
+    <a href="{{ url_for('main.admin') }}" class="nav-item {% if request.endpoint == 'main.admin' %}active{% endif %}">
+      <span class="nav-icon">⚙️</span>
+      <span>Admin</span>
+    </a>
+    {% else %}
+    <span class="nav-item nav-item-disabled">
+      <span class="nav-icon">⚙️</span>
+      <span>Menu</span>
+    </span>
+    {% endif %}
+    <a href="{{ url_for('main.perfil') }}" class="nav-item {% if request.endpoint == 'main.perfil' %}active{% endif %}">
+      <span class="nav-icon">👤</span>
+      <span>Perfil</span>
+    </a>
+  </nav>
+  {% endblock %}
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Legislação{% endblock %}
+{% block header %}Legislação{% endblock %}
+{% set show_back = true %}
+
+{% block content %}
+<section class="legislacao-hero" style="--modulo-cor: {{ modulo_info.cor }}">
+  <span class="legislacao-hero-icone">{{ modulo_info.icone }}</span>
+  <h2>Documentos oficiais</h2>
+  <p>Toque em uma categoria para abrir os documentos.</p>
+</section>
+
+<section class="modulos-grid legislacao-grid">
+  {% for cat in categorias %}
+  <a href="{{ url_for('main.legislacao_categoria', cat_id=cat.id) }}" class="modulo-card" style="--modulo-cor: {{ cat.cor }}">
+    <span class="modulo-icone">{{ cat.icone }}</span>
+    <strong class="modulo-nome">{{ cat.titulo }}</strong>
+    <small class="modulo-desc">{{ cat.descricao }}</small>
+    <span class="modulo-badge modulo-ativo">{{ cat.documentos|length }} doc{{ 's' if cat.documentos|length != 1 else '' }}</span>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="info-card legislacao-rodape">
+  <p class="hint">Documentos sem PDF serão disponibilizados conforme publicação oficial. Sugestões de inclusão: encaminhar ao Chefe de Socorro ou administração.</p>
+</section>
+{% endblock %}

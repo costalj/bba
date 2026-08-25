@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.VistoriaArborea" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#2d6a4f</item>
+        <item name="colorPrimaryDark">#1b4332</item>
+        <item name="colorAccent">#40916c</item>
+        <item name="android:statusBarColor">#1b4332</item>
+    </style>
+</resources>

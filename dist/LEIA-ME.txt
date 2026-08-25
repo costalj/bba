@@ -1,0 +1,49 @@
+BBA — Instalar no celular (OFFLINE)
+====================================
+
+Versao: 1.0.6
+Arquivo: dist/BBA-1.0.6.apk
+
+NAO precisa de PC, Wi-Fi ou Flask rodando.
+Baixe, instale e use direto no celular.
+
+DADOS INCLUSOS NESTA VERSAO
+---------------------------
+O APK ja vem com usuarios e vistorias de demonstracao exportados
+do sistema (2 usuarios, 4 vistorias no historico).
+
+Usuarios incluidos:
+  - Administrador (CPF 000.000.000-00 / senha admin123)
+  - David Wyner — Chefe de Socorro (CPF 111.111.111-11)
+
+LOGIN INICIAL (administrador)
+-----------------------------
+  CPF:  000.000.000-00
+  Senha: admin123
+
+Depois cadastre os militares em Admin > Cadastrar usuario.
+
+COMO INSTALAR
+-------------
+1. Envie BBA-1.0.6.apk para o celular (Drive, WhatsApp, USB)
+2. Configuracoes > Seguranca > Permitir apps desconhecidos
+3. Toque no APK e instale
+4. Abra o app "BBA" e faca login
+
+O QUE FUNCIONA OFFLINE
+----------------------
+- Login com CPF e senha
+- Cadastro de usuarios (admin)
+- Vistoria de arvores (questionario SIM/NAO, fotos, GPS)
+- Historico e PDF no celular
+- Rubrica do solicitante e assinatura do Chefe de Socorro
+
+REGENERAR O APK (com dados atualizados do PC)
+---------------------------------------------
+  .\scripts\build_apk.ps1
+
+O script exporta automaticamente usuarios e vistorias do banco
+do PC (instance/vistorias.db) para dentro do APK.
+
+Projeto salvo em:
+  c:\Users\leonardo.costa\Documents\python\bba

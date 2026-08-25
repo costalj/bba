@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Perfil{% endblock %}
+{% block header %}Perfil{% endblock %}
+{% set show_back = true %}
+
+{% block content %}
+<section class="info-card perfil-card">
+  <h3>Militar logado</h3>
+  <dl class="detail-list">
+    <dt>Nome</dt><dd>{{ usuario.nome }}</dd>
+    <dt>Matrícula</dt><dd>{{ usuario.matricula }}</dd>
+    <dt>CPF</dt><dd>{{ usuario.cpf }}</dd>
+    <dt>Posto</dt><dd>{{ usuario.posto }}</dd>
+    <dt>Perfil</dt><dd>{{ usuario.perfil }}</dd>
+  </dl>
+</section>
+{% if usuario.perfil == 'Administrador' %}
+<a href="{{ url_for('main.admin') }}" class="btn btn-secondary btn-block">⚙️ Administração de usuários</a>
+{% endif %}
+<a href="{{ url_for('main.logout') }}" class="btn btn-primary btn-block">Sair</a>
+{% endblock %}

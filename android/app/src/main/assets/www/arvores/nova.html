@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nova Vistoria</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="index.html" class="header-back">←</a>
+      <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
+      <div class="header-titles"><h1>Nova Vistoria</h1></div>
+    </div>
+  </header>
+  <main class="container">
+    <form id="form-vistoria">
+      <section class="form-section">
+        <h3>1. Dados da ocorrência</h3>
+        <label class="field"><span>Solicitante *</span><input name="solicitante" required placeholder="Nome do solicitante"></label>
+        <label class="field"><span>CPF do Solicitante</span><input name="cpf_solicitante" id="cpf-solicitante" inputmode="numeric" maxlength="14" placeholder="000.000.000-00"></label>
+        <label class="field">
+          <span>Endereço *</span>
+          <input name="endereco" id="campo-endereco" required placeholder="Rua, nº, bairro, município">
+        </label>
+        <label class="field"><span>Contato telefônico</span><input name="contato_telefonico" type="tel" inputmode="tel"></label>
+        <label class="field">
+          <span>Forma de Acionamento</span>
+          <input name="forma_acionamento" type="text" placeholder="CIOPS , Justiça , Ordem do Cmt Geral.">
+        </label>
+        <label class="field"><span>Protocolo do CIOPS/Portaria/Ordem de Serviço</span><input name="protocolo" placeholder="Nº do protocolo ou ordem de serviço"></label>
+        <label class="field"><span>Natureza da ocorrência</span><input name="natureza_ocorrencia" type="text"></label>
+        <label class="field"><span>Descrição da ocorrência</span><textarea name="descricao_ocorrencia" rows="2" maxlength="100" placeholder="Resumo da ocorrência (máx. 100 caracteres)"></textarea></label>
+        <label class="field"><span>Espécie da árvore</span><input name="especie" placeholder="Ex: Embaúba (Cecropia sp.)"></label>
+      </section>
+      <section class="form-section">
+        <h3>Fotos da árvore</h3>
+        <p class="hint">Registro fotográfico (máx. 5). As fotos aparecem no laudo PDF.</p>
+        <input type="file" id="input-fotos-camera" accept="image/*" capture="environment" hidden>
+        <input type="file" id="input-fotos-galeria" accept="image/*" multiple hidden>
+        <div class="foto-acoes">
+          <button type="button" id="btn-foto-camera" class="btn btn-secondary foto-btn">📸 Tirar foto</button>
+          <button type="button" id="btn-foto-galeria" class="btn btn-secondary foto-btn">🖼️ Galeria</button>
+        </div>
+        <p id="fotos-contador" class="fotos-contador hint"></p>
+        <div id="fotos-preview" class="fotos-preview"></div>
+      </section>
+      <div id="questionario"></div>
+      <section class="form-section">
+        <h3>6. Observações adicionais</h3>
+        <label class="field"><textarea name="observacoes" rows="3" placeholder="Recusa de assinatura ou demais informações"></textarea></label>
+      </section>
+      <div id="preview-resultado" class="preview-card hidden preview-baixo">
+        <div class="preview-score"><span id="preview-total">0</span><small>/ 54 respostas SIM</small></div>
+        <div id="preview-recomendacao" class="preview-label">BAIXO</div>
+        <p id="preview-texto"></p>
+      </div>
+      <div id="preview-somatorio"></div>
+
+      <section class="form-section assinaturas-secao">
+        <h3>7. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
+        <p class="hint">O solicitante pode rubricar abaixo para confirmar ciência do laudo.</p>
+        <div class="rubrica-wrap">
+          <canvas id="canvas-rubrica" class="canvas-rubrica"></canvas>
+          <button type="button" id="btn-limpar-rubrica" class="btn btn-secondary btn-sm">Limpar rubrica</button>
+        </div>
+        <input type="hidden" name="rubrica_solicitante" id="rubrica_solicitante">
+      </section>
+
+      <section class="form-section assinaturas-secao">
+        <h3>8. Assinatura do Chefe de Socorro</h3>
+        <div id="secao-assinatura-chefe"></div>
+        <input type="hidden" name="assinatura_json" id="assinatura_json">
+      </section>
+
+      <button type="submit" class="btn btn-primary btn-block">Salvar vistoria</button>
+    </form>
+  </main>
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
+    <a href="nova.html" class="nav-item active"><span class="nav-icon">➕</span><span>Nova</span></a>
+    <a href="lista.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
+  </nav>
+  <script src="../js/auth.js"></script>
+  <script src="../js/header.js"></script>
+  <script>if (!exigirLogin()) throw new Error("auth");</script>
+  <script src="../js/questionario.js"></script>
+  <script src="../js/assinatura.js"></script>
+  <script src="../js/sync-meta.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/fotos.js"></script>
+  <script>
+    (function () {
+      const cpfInput = document.getElementById("cpf-solicitante");
+      if (!cpfInput) return;
+      cpfInput.addEventListener("input", () => {
+        let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+        if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+        else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+        else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+        cpfInput.value = v;
+      });
+    })();
+  </script>
+  <script src="nova.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ app_info.nome }}{% endblock %}
+{% block header %}{{ app_info.nome }}{% endblock %}
+{% block header_sub %}<small class="header-sub">{{ app_info.subtitulo }}</small>{% endblock %}
+
+{% block content %}
+<section class="hub-welcome">
+  <h2>Bem-vindo{% if usuario %}, {{ nome_exibicao(usuario) }}{% endif %}</h2>
+  {% if usuario %}
+  <p>Função: <strong>{{ usuario.perfil }}</strong> · Selecione um módulo para começar</p>
+  {% else %}
+  <p>Selecione um módulo para começar</p>
+  {% endif %}
+</section>
+
+<section class="modulos-grid">
+  {% for mod in modulos %}
+  <a href="{{ url_for(mod.rota) }}" class="modulo-card {% if not mod.ativo %}modulo-em-breve{% endif %}" style="--modulo-cor: {{ mod.cor }}">
+    <span class="modulo-icone">
+      {% if mod.icone_img %}
+      <img src="{{ url_for('static', filename=mod.icone_img) }}" alt="" class="modulo-icone-img">
+      {% else %}
+      {{ mod.icone }}
+      {% endif %}
+    </span>
+    <strong class="modulo-nome">{{ mod.nome }}</strong>
+    <small class="modulo-desc">{{ mod.descricao }}</small>
+      {% if not mod.ativo %}
+      <span class="modulo-badge">Em breve</span>
+      {% else %}
+      <span class="modulo-badge modulo-ativo">Acessar</span>
+      {% endif %}
+  </a>
+  {% endfor %}
+</section>
+
+<section class="info-card hub-info">
+  <p class="hint">Versão {{ app_info.versao }} · Módulos marcados como "Em breve" serão liberados em atualizações futuras.</p>
+</section>
+{% endblock %}

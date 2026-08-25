@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1b4332">
+  <title>Login — BBA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+  <main class="login-container">
+    <div class="login-logo">
+      <img src="img/logo-bba.png" alt="BBA">
+      <h1>BBA</h1>
+      <p>Batalhão de Bombeiros Ambiental</p>
+    </div>
+
+    <form id="form-login" class="login-form">
+      <label class="field">
+        <span>CPF</span>
+        <input type="text" name="cpf" id="cpf" required inputmode="numeric" placeholder="000.000.000-00" maxlength="14" autocomplete="username">
+      </label>
+      <label class="field">
+        <span>Senha</span>
+        <input type="password" name="senha" required placeholder="Sua senha">
+      </label>
+      <p id="login-erro" class="login-erro hidden"></p>
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+
+    <p class="login-hint">Acesso padrão admin: CPF 000.000.000-00 · senha admin123</p>
+  </main>
+
+  <script src="js/seed-data.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (async () => {
+      await initUsuariosPadrao();
+      if (isLogado()) {
+        location.href = "index.html";
+        return;
+      }
+
+      const cpfInput = document.getElementById("cpf");
+      cpfInput.addEventListener("input", () => {
+        let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+        if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+        else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+        else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+        cpfInput.value = v;
+      });
+
+      document.getElementById("form-login").onsubmit = async (e) => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const erro = document.getElementById("login-erro");
+        erro.classList.add("hidden");
+
+        const res = await login(fd.get("cpf"), fd.get("senha"));
+        if (!res.ok) {
+          erro.textContent = res.erro;
+          erro.classList.remove("hidden");
+          return;
+        }
+        sessionStorage.setItem("bba_bem_vindo", "1");
+        const next = new URLSearchParams(location.search).get("next");
+        location.href = next || "index.html";
+      };
+    })();
+  </script>
+</body>
+</html>

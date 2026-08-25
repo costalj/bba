@@ -1,0 +1,18 @@
+{% macro sim_nao(pergunta) %}
+<div class="pergunta-card{% if pergunta.get('critico') %} pergunta-critica{% endif %}">
+  <div class="pergunta-header">
+    <span class="pergunta-numero">{{ pergunta.numero }}</span>
+    <p class="pergunta-texto">{{ pergunta.texto }}{% if pergunta.get('critico') %} <small class="pergunta-alerta">⚠️ Crítico</small>{% endif %}</p>
+  </div>
+  <div class="sim-nao-buttons">
+    <label class="sim-nao-btn">
+      <input type="radio" name="{{ pergunta.id }}" value="sim" checked required>
+      <span>Sim</span>
+    </label>
+    <label class="sim-nao-btn">
+      <input type="radio" name="{{ pergunta.id }}" value="nao">
+      <span>Não</span>
+    </label>
+  </div>
+</div>
+{% endmacro %}

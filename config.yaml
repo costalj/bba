@@ -1,0 +1,67 @@
+# Configuração da vistoria arbórea — ajuste conforme norma da prefeitura
+# Reinicie o servidor após alterar este arquivo.
+
+prefeitura:
+  nome: "Prefeitura Municipal"
+  orgao: "Secretaria de Meio Ambiente"
+
+# Cabeçalho oficial do laudo PDF (CBMMA / BBA)
+cabecalho_laudo:
+  linhas:
+    - "SECRETARIA DE SEGURANÇA PÚBLICA"
+    - "CORPO DE BOMBEIROS MILITAR DO MARANHÃO"
+    - "BATALHÃO DE BOMBEIROS AMBIENTAL"
+  titulo: "RELATÓRIO DE VISTORIA DE ÁRVORE"
+
+# Escala de notas por critério (0 = sem risco, nota_max = risco crítico)
+nota_min: 0
+nota_max: 3
+
+# Limiares de pontuação total para recomendação
+limiares:
+  supressao: 15       # >= este valor → SUPRESSÃO
+  intervencao: 11     # >= este valor → INTERVENÇÃO URGENTE
+  acompanhamento: 6   # >= este valor → PODAS / ACOMPANHAMENTO
+  # abaixo de acompanhamento → MANUTENÇÃO
+
+# Critérios de avaliação (pode adicionar, remover ou renomear)
+criterios:
+  - id: nota_tronco
+    label: "Estado do Tronco"
+    descricao: "Fissuras, oca, fungos, necrose, ferimentos"
+
+  - id: nota_raizes
+    label: "Estado das Raízes / Solo"
+    descricao: "Raízes expostas, levantamento de solo, compactação"
+
+  - id: nota_inclinacao
+    label: "Inclinação / Estabilidade"
+    descricao: "Desvio do eixo vertical, risco de queda"
+
+  - id: nota_copa
+    label: "Estado da Copa"
+    descricao: "Galhos secos, dieback, densidade irregular"
+
+  - id: nota_pragas
+    label: "Pragas e Doenças"
+    descricao: "Presença de insetos, fungos, doenças visíveis"
+
+  - id: nota_proximidade
+    label: "Proximidade a Riscos"
+    descricao: "Fiação, edificações, vias, áreas de circulação"
+
+niveis:
+  - valor: 0
+    label: "0 — Sem risco aparente"
+  - valor: 1
+    label: "1 — Risco baixo"
+  - valor: 2
+    label: "2 — Risco moderado"
+  - valor: 3
+    label: "3 — Risco crítico"
+
+# Upload de fotos
+fotos:
+  max_por_vistoria: 5
+  extensoes: ["jpg", "jpeg", "png", "webp"]
+  tamanho_max_mb: 10

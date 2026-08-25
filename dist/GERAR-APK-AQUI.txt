@@ -1,0 +1,14 @@
+BBA — APK para instalação no celular
+=====================================
+
+O arquivo APK sera gerado aqui apos rodar:
+
+    .\scripts\configurar_ip.ps1
+    .\scripts\build_apk.ps1
+
+Resultado esperado: BBA-1.0.0.apk
+
+Requisito: Android Studio instalado
+https://developer.android.com/studio
+
+Leia dist\LEIA-ME.txt para instrucoes completas de instalacao no celular.

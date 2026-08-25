@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+
+{% block title %}Administração{% endblock %}
+
+{% block header %}Administração{% endblock %}
+
+{% set show_back = true %}
+
+
+
+{% block content %}
+
+<section id="admin-hub">
+  <section class="hero">
+    <h2>Configurações</h2>
+    <p>Selecione o cadastro que deseja administrar.</p>
+  </section>
+  <section class="card-grid">
+    <button type="button" class="action-card primary admin-hub-card" data-painel="usuarios">
+      <span class="card-icon">👥</span>
+      <strong>Usuários</strong>
+      <small>Cadastrar, editar e desativar</small>
+    </button>
+    <button type="button" class="action-card admin-hub-card" data-painel="viaturas">
+      <span class="card-icon">🚒</span>
+      <strong>Viaturas</strong>
+      <small>Cadastrar, editar e excluir</small>
+    </button>
+  </section>
+</section>
+
+<div id="painel-usuarios" class="admin-painel hidden">
+<button type="button" class="btn btn-secondary btn-voltar-admin">← Voltar às configurações</button>
+<section class="form-section">
+
+  <h3>Cadastrar usuário</h3>
+
+  <form method="POST" action="{{ url_for('main.admin_criar_usuario') }}">
+
+    <label class="field"><span>Nome *</span><input name="nome" required></label>
+    <label class="field"><span>Nome de Guerra *</span><input name="nome_guerra" required placeholder="Como aparece no app"></label>
+    <label class="field"><span>Matrícula *</span><input name="matricula" required></label>
+
+    <label class="field"><span>CPF *</span><input name="cpf" id="cpf" required inputmode="numeric" placeholder="000.000.000-00" maxlength="14"></label>
+
+    <label class="field"><span>Posto / Graduação *</span>
+
+      <select name="posto" required>
+
+        {% for p in postos %}<option>{{ p }}</option>{% endfor %}
+
+      </select></label>
+
+    <label class="field"><span>Perfil de acesso *</span>
+
+      <select name="perfil" required>
+
+        {% for p in perfis %}<option>{{ p }}</option>{% endfor %}
+
+      </select></label>
+
+    <label class="field"><span>Senha inicial *</span><input type="password" name="senha" required minlength="4"></label>
+
+    {% if erro %}<p class="login-erro">{{ erro }}</p>{% endif %}
+
+    <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+
+  </form>
+
+</section>
+
+
+
+<section class="info-card">
+
+  <h3>Usuários cadastrados</h3>
+
+  <ul class="usuarios-lista">
+
+    {% for u in usuarios %}
+
+    <li class="usuario-item">
+
+      <div>
+
+        <strong>{{ u.posto }} {{ u.nome }}</strong>
+
+        <small>Mat. {{ u.matricula }} · CPF {{ u.cpf|formatar_cpf }}</small>
+
+        <small class="usuario-perfil">{{ u.perfil }}</small>
+
+      </div>
+
+      <div class="usuario-acoes">
+
+        <button type="button" class="btn-editar" title="Editar usuário"
+
+          data-id="{{ u.id }}"
+
+          data-nome="{{ u.nome }}"
+          data-nome-guerra="{{ u.nome_guerra or '' }}"
+          data-matricula="{{ u.matricula }}"
+
+          data-cpf="{{ u.cpf|formatar_cpf }}"
+
+          data-posto="{{ u.posto }}"
+
+          data-perfil="{{ u.perfil }}">✏️</button>
+
+        <button type="button" class="btn-resetar" data-action="{{ url_for('main.admin_resetar_senha', user_id=u.id) }}" data-nome="{{ u.nome }}" title="Resetar senha">🔑</button>
+
+        {% if u.perfil != 'Administrador' %}
+
+        <form method="POST" action="{{ url_for('main.admin_desativar_usuario', user_id=u.id) }}" onsubmit="return confirm('Desativar usuário?');">
+
+          <button type="submit" class="btn-remover" title="Desativar">✕</button>
+
+        </form>
+
+        {% endif %}
+
+      </div>
+
+    </li>
+
+    {% endfor %}
+
+  </ul>
+
+</section>
+
+</div>
+
+<div id="painel-viaturas" class="admin-painel hidden">
+<button type="button" class="btn btn-secondary btn-voltar-admin">← Voltar às configurações</button>
+<section class="form-section">
+  <h3>Cadastrar viatura</h3>
+  <form method="POST" action="{{ url_for('main.admin_criar_viatura') }}">
+    <label class="field"><span>AR *</span><input name="ar" required placeholder="Ex: AR 87" maxlength="20"></label>
+    <label class="field"><span>Placa *</span><input name="placa" required placeholder="ABC1D23" maxlength="8" autocapitalize="characters"></label>
+    <label class="field"><span>Marca *</span><input name="marca" required placeholder="Ex: Toyota"></label>
+    <label class="field"><span>Modelo *</span><input name="modelo" required placeholder="Ex: Hilux"></label>
+    <button type="submit" class="btn btn-primary btn-block">Cadastrar viatura</button>
+  </form>
+</section>
+
+<section class="info-card">
+  <h3>Viaturas cadastradas</h3>
+  {% if viaturas %}
+  <ul class="usuarios-lista">
+    {% for v in viaturas %}
+    <li class="usuario-item">
+      <div>
+        <strong>{{ v.ar }} · {{ v.placa }}</strong>
+        <small>{{ v.marca }} {{ v.modelo }}</small>
+      </div>
+      <div class="usuario-acoes">
+        <button type="button" class="btn-editar-viatura" title="Editar viatura"
+          data-id="{{ v.id }}" data-ar="{{ v.ar }}" data-placa="{{ v.placa }}"
+          data-marca="{{ v.marca }}" data-modelo="{{ v.modelo }}">✏️</button>
+        <form method="POST" action="{{ url_for('main.admin_excluir_viatura', viatura_id=v.id) }}"
+          onsubmit="return confirm('Excluir a viatura {{ v.ar }}?');">
+          <button type="submit" class="btn-remover" title="Excluir">✕</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="hint">Nenhuma viatura cadastrada.</p>
+  {% endif %}
+</section>
+
+</div>
+
+<div id="modal-editar-usuario" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-editar-titulo">
+
+  <div class="modal-card">
+
+    <h3 id="modal-editar-titulo">Editar usuário</h3>
+
+    <form id="form-editar-usuario" method="POST">
+
+      <label class="field"><span>Nome *</span><input name="nome" id="edit-nome" required></label>
+      <label class="field"><span>Nome de Guerra *</span><input name="nome_guerra" id="edit-nome-guerra" required></label>
+      <label class="field"><span>Matrícula *</span><input name="matricula" id="edit-matricula" required></label>
+
+      <label class="field"><span>CPF *</span><input name="cpf" id="edit-cpf" required inputmode="numeric" placeholder="000.000.000-00" maxlength="14"></label>
+
+      <label class="field"><span>Posto / Graduação *</span>
+
+        <select name="posto" id="edit-posto" required>
+
+          {% for p in postos %}<option>{{ p }}</option>{% endfor %}
+
+        </select></label>
+
+      <label class="field"><span>Perfil de acesso *</span>
+
+        <select name="perfil" id="edit-perfil" required>
+
+          {% for p in perfis_todos %}<option>{{ p }}</option>{% endfor %}
+
+        </select></label>
+
+      <div class="modal-acoes">
+
+        <button type="button" class="btn btn-secondary" id="btn-cancelar-edicao">Cancelar</button>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<div id="modal-editar-viatura" class="modal-overlay hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <h3>Editar viatura</h3>
+    <form id="form-editar-viatura" method="POST">
+      <label class="field"><span>AR *</span><input name="ar" id="edit-ar" required maxlength="20"></label>
+      <label class="field"><span>Placa *</span><input name="placa" id="edit-placa" required maxlength="8" autocapitalize="characters"></label>
+      <label class="field"><span>Marca *</span><input name="marca" id="edit-marca" required></label>
+      <label class="field"><span>Modelo *</span><input name="modelo" id="edit-modelo" required></label>
+      <div class="modal-acoes">
+        <button type="button" class="btn btn-secondary" id="btn-cancelar-viatura">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block bottom_nav %}
+
+<nav class="bottom-nav">
+
+  <a href="{{ url_for('main.index') }}" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
+
+  <a href="{{ url_for('main.admin') }}" class="nav-item active"><span class="nav-icon">⚙️</span><span>Admin</span></a>
+
+  <a href="{{ url_for('main.perfil') }}" class="nav-item"><span class="nav-icon">👤</span><span>Perfil</span></a>
+
+</nav>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+const modalEditar = document.getElementById("modal-editar-usuario");
+
+const formEditar = document.getElementById("form-editar-usuario");
+
+const editCpf = document.getElementById("edit-cpf");
+const cpfCadastro = document.getElementById("cpf");
+const modalViatura = document.getElementById("modal-editar-viatura");
+const formEditarViatura = document.getElementById("form-editar-viatura");
+const adminHub = document.getElementById("admin-hub");
+
+function abrirPainelAdmin(nome) {
+  adminHub.classList.add("hidden");
+  document.querySelectorAll(".admin-painel").forEach((painel) => painel.classList.add("hidden"));
+  const painel = document.getElementById(`painel-${nome}`);
+  if (painel) painel.classList.remove("hidden");
+  history.replaceState(null, "", `#${nome}`);
+}
+
+function abrirHubAdmin() {
+  document.querySelectorAll(".admin-painel").forEach((painel) => painel.classList.add("hidden"));
+  adminHub.classList.remove("hidden");
+  history.replaceState(null, "", location.pathname);
+}
+
+document.querySelectorAll(".admin-hub-card").forEach((btn) => {
+  btn.onclick = () => abrirPainelAdmin(btn.dataset.painel);
+});
+
+document.querySelectorAll(".btn-voltar-admin").forEach((btn) => {
+  btn.onclick = abrirHubAdmin;
+});
+
+if (location.hash === "#usuarios") abrirPainelAdmin("usuarios");
+if (location.hash === "#viaturas") abrirPainelAdmin("viaturas");
+
+
+
+function formatarCpfInput(value) {
+
+  let v = String(value || "").replace(/\D/g, "").slice(0, 11);
+
+  if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+
+  if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+
+  if (v.length > 3) return v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+
+  return v;
+
+}
+
+
+
+function abrirModalEditar(btn) {
+
+  formEditar.action = `/admin/usuarios/${btn.dataset.id}/editar`;
+
+  document.getElementById("edit-nome").value = btn.dataset.nome || "";
+  document.getElementById("edit-nome-guerra").value = btn.dataset.nomeGuerra || "";
+  document.getElementById("edit-matricula").value = btn.dataset.matricula || "";
+
+  editCpf.value = formatarCpfInput(btn.dataset.cpf || "");
+
+  document.getElementById("edit-posto").value = btn.dataset.posto || "";
+
+  document.getElementById("edit-perfil").value = btn.dataset.perfil || "";
+
+  modalEditar.classList.remove("hidden");
+
+}
+
+
+
+function fecharModalEditar() {
+
+  modalEditar.classList.add("hidden");
+
+}
+
+
+
+document.querySelectorAll(".btn-editar").forEach((btn) => {
+
+  btn.onclick = () => abrirModalEditar(btn);
+
+});
+
+
+
+document.getElementById("btn-cancelar-edicao").onclick = fecharModalEditar;
+
+modalEditar.addEventListener("click", (e) => {
+
+  if (e.target === modalEditar) fecharModalEditar();
+
+});
+
+
+
+editCpf.addEventListener("input", (e) => {
+
+  e.target.value = formatarCpfInput(e.target.value);
+
+});
+
+if (cpfCadastro) {
+  cpfCadastro.addEventListener("input", (e) => {
+    e.target.value = formatarCpfInput(e.target.value);
+  });
+}
+
+document.querySelectorAll(".btn-editar-viatura").forEach((btn) => {
+  btn.onclick = () => {
+    formEditarViatura.action = `/admin/viaturas/${btn.dataset.id}/editar`;
+    document.getElementById("edit-ar").value = btn.dataset.ar || "";
+    document.getElementById("edit-placa").value = btn.dataset.placa || "";
+    document.getElementById("edit-marca").value = btn.dataset.marca || "";
+    document.getElementById("edit-modelo").value = btn.dataset.modelo || "";
+    modalViatura.classList.remove("hidden");
+  };
+});
+
+document.getElementById("btn-cancelar-viatura").onclick = () => {
+  modalViatura.classList.add("hidden");
+};
+
+modalViatura.addEventListener("click", (e) => {
+  if (e.target === modalViatura) modalViatura.classList.add("hidden");
+});
+
+
+
+document.querySelectorAll(".btn-resetar").forEach((btn) => {
+
+  btn.onclick = () => {
+
+    const nome = btn.dataset.nome || "usuário";
+
+    const senha = prompt(`Nova senha para ${nome}:`);
+
+    if (senha === null) return;
+
+    if (senha.trim().length < 4) {
+
+      alert("A senha deve ter no mínimo 4 caracteres.");
+
+      return;
+
+    }
+
+    const form = document.createElement("form");
+
+    form.method = "POST";
+
+    form.action = btn.dataset.action;
+
+    const input = document.createElement("input");
+
+    input.type = "hidden";
+
+    input.name = "senha";
+
+    input.value = senha.trim();
+
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+  };
+
+});
+
+</script>
+
+{% endblock %}
+

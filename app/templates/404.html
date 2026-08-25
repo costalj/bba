@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Não encontrado{% endblock %}
+{% block content %}
+<div class="empty-state">
+  <span class="empty-icon">🔍</span>
+  <p>Vistoria não encontrada.</p>
+  <a href="{{ url_for('main.index') }}" class="btn btn-primary">Voltar ao início</a>
+</div>
+{% endblock %}

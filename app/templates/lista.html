@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Histórico{% endblock %}
+{% block header %}Histórico{% endblock %}
+
+{% block content %}
+{% if salva_id %}
+<div class="alerta-sucesso">
+  <strong>✅ Vistoria #{{ salva_id }} salva com sucesso!</strong>
+  <p>Exporte o relatório em PDF abaixo.</p>
+</div>
+{% endif %}
+
+{% if vistorias %}
+<ul class="vistoria-lista">
+  {% for v in vistorias %}
+  {% set max_item = max_pontos if v.questionario_json else 18 %}
+  {% set suffix = ' SIM' if v.questionario_json else '' %}
+  <li class="vistoria-lista-item{% if salva_id == v.id %} vistoria-destaque{% endif %}" id="vistoria-{{ v.id }}">
+    <a href="{{ url_for('main.detalhe_vistoria', vistoria_id=v.id) }}" class="vistoria-item
+      {% if v.recomendacao == 'ALTO' %}item-alto
+      {% elif v.recomendacao == 'MÉDIO' %}item-medio
+      {% elif v.recomendacao == 'BAIXO' %}item-baixo
+      {% elif v.recomendacao == 'SUPRESSÃO' %}item-supressao
+      {% elif v.recomendacao == 'INTERVENÇÃO URGENTE' %}item-urgente
+      {% elif v.recomendacao == 'PODAS / ACOMPANHAMENTO' %}item-medio
+      {% elif v.recomendacao == 'MANUTENÇÃO' %}item-baixo
+      {% else %}item-baixo
+      {% endif %}">
+      <div class="vistoria-info vistoria-info-compact">
+        <dl class="vistoria-resumo-lista">
+          <div class="vistoria-resumo-linha">
+            <dt>Solicitante:</dt>
+            <dd>{{ v.solicitante or '—' }}</dd>
+          </div>
+          <div class="vistoria-resumo-linha">
+            <dt>Endereço:</dt>
+            <dd>{{ v.endereco or '—' }}</dd>
+          </div>
+          <div class="vistoria-resumo-linha">
+            <dt>N° de vistoria:</dt>
+            <dd>{{ numero_laudo_vistoria(v) }}</dd>
+          </div>
+        </dl>
+        <small class="vistoria-data">{{ v.created_at | formatar_data_hora_br }}</small>
+      </div>
+      <div class="vistoria-meta">
+        <span class="score-badge">{{ v.pontuacao_total }}/{{ max_item }}{{ suffix }}</span>
+        <span class="rec-badge">{{ v.recomendacao }}</span>
+      </div>
+    </a>
+    <div class="vistoria-acoes">
+      <a href="{{ url_for('main.detalhe_vistoria', vistoria_id=v.id) }}" class="btn-acao">👁️ Abrir</a>
+      <a href="{{ url_for('main.exportar_pdf', vistoria_id=v.id) }}" class="btn-acao btn-acao-pdf" target="_blank" rel="noopener">📄 PDF</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state">
+  <span class="empty-icon">📭</span>
+  <p>Nenhuma vistoria registrada ainda.</p>
+  <a href="{{ url_for('main.nova_vistoria') }}" class="btn btn-primary">Criar primeira vistoria</a>
+</div>
+{% endif %}
+{% endblock %}

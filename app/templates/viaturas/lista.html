@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Histórico — Viaturas{% endblock %}
+{% block header %}Histórico{% endblock %}
+{% set modulo = "viaturas" %}
+
+{% block content %}
+{% if salva_id %}
+<div class="alerta-sucesso">
+  <strong>✅ Vistoria #{{ salva_id }} salva com sucesso!</strong>
+</div>
+{% endif %}
+
+{% if vistorias %}
+<ul class="vistoria-lista">
+  {% for v in vistorias %}
+  <li class="vistoria-lista-item{% if salva_id == v.id %} vistoria-destaque{% endif %}" id="vistoria-{{ v.id }}">
+    <a href="{{ url_for('main.detalhe_vistoria_viatura', vistoria_id=v.id) }}" class="vistoria-item
+      {% if v.recomendacao == 'IMPEDIDA' %}item-alto
+      {% elif v.recomendacao == 'APROVADA COM RESTRIÇÕES' %}item-medio
+      {% else %}item-baixo
+      {% endif %}">
+      <div class="vistoria-info vistoria-info-compact">
+        <dl class="vistoria-resumo-lista">
+          <div class="vistoria-resumo-linha">
+            <dt>Condutor:</dt>
+            <dd>{{ v.condutor or '—' }}</dd>
+          </div>
+          <div class="vistoria-resumo-linha">
+            <dt>Viatura:</dt>
+            <dd>{{ texto_viatura(v) }}</dd>
+          </div>
+          <div class="vistoria-resumo-linha">
+            <dt>Status:</dt>
+            <dd>{{ status_viatura(v) }}</dd>
+          </div>
+        </dl>
+        <small class="vistoria-data">{{ v.created_at | formatar_data_hora_br }}</small>
+      </div>
+    </a>
+    <div class="vistoria-acoes">
+      <a href="{{ url_for('main.detalhe_vistoria_viatura', vistoria_id=v.id) }}" class="btn-acao">👁️ Abrir</a>
+      <a href="{{ url_for('main.exportar_pdf_viatura', vistoria_id=v.id) }}" class="btn-acao btn-acao-pdf" target="_blank" rel="noopener">📄 PDF</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state">
+  <span class="empty-icon">📭</span>
+  <p>Nenhuma vistoria de viatura registrada.</p>
+  <a href="{{ url_for('main.nova_vistoria_viatura') }}" class="btn btn-primary">Criar primeira vistoria</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Vistoria de Árvores{% endblock %}
+{% block header %}Vistoria de Árvores{% endblock %}
+{% set modulo = "arvores" %}
+
+{% block content %}
+<section class="hero">
+  <h2>Avaliação do risco de queda</h2>
+  <p>Formulário oficial CBMMA com questionário SIM/NÃO, GPS, fotos e laudo em PDF.</p>
+</section>
+
+<section class="card-grid">
+  <a href="{{ url_for('main.nova_vistoria') }}" class="action-card primary">
+    <span class="card-icon">➕</span>
+    <strong>Nova Vistoria</strong>
+    <small>Preencher relatório</small>
+  </a>
+  <a href="{{ url_for('main.listar_vistorias') }}" class="action-card">
+    <span class="card-icon">📂</span>
+    <strong>Histórico</strong>
+    <small>Vistorias salvas</small>
+  </a>
+</section>
+
+<section class="info-card">
+  <h3>Como funciona</h3>
+  <ol>
+    <li>Preencha os <strong>dados da ocorrência</strong> e o questionário (itens 2 a 5)</li>
+    <li>Registre fotos e use o <strong>GPS</strong> se necessário</li>
+    <li>O app conta as respostas <strong>SIM</strong> dos itens 3 e 4 (máx. {{ max_perguntas_risco }})</li>
+    <li>Resultado: <strong>BAIXO</strong>, <strong>MÉDIO</strong> ou <strong>ALTO</strong> risco potencial de queda</li>
+  </ol>
+</section>
+
+<section class="info-card">
+  <h3>Níveis de risco (itens 3 e 4)</h3>
+  <ul class="escala">
+    <li><span class="badge badge-ok">{{ limiares_risco.baixo.min }}–{{ limiares_risco.baixo.max }} SIM</span> Baixo risco potencial de queda</li>
+    <li><span class="badge badge-warn">{{ limiares_risco.medio.min }}–{{ limiares_risco.medio.max }} SIM</span> Médio risco potencial de queda</li>
+    <li><span class="badge badge-danger">{{ limiares_risco.alto.min }}–{{ limiares_risco.alto.max }} SIM</span> Alto risco potencial de queda</li>
+  </ul>
+</section>
+{% endblock %}

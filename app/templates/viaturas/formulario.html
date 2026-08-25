@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% from "viaturas/_checklist.html" import sim_nao %}
+{% block title %}Nova Vistoria de Viatura{% endblock %}
+{% block header %}Nova Vistoria{% endblock %}
+{% set modulo = "viaturas" %}
+
+{% block content %}
+<form id="form-viatura" method="POST" action="{{ url_for('main.criar_vistoria_viatura') }}">
+
+  <section class="form-section">
+    <h3>1. Dados da viatura</h3>
+    <label class="field">
+      <span>Viatura (AR) *</span>
+      <select id="select-viatura" required>
+        <option value="">Selecione…</option>
+        {% for v in viaturas_cadastradas %}
+        <option value="{{ v.id }}" data-ar="{{ v.ar }}" data-placa="{{ v.placa }}"
+          data-marca="{{ v.marca }}" data-modelo="{{ v.modelo }}">
+          {{ v.ar }} — {{ v.marca }} {{ v.modelo }}
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="field">
+      <span>Placa</span>
+      <input type="text" name="placa" id="placa-viatura" readonly required placeholder="Preenchida automaticamente">
+    </label>
+    <input type="hidden" name="tipo_viatura" id="tipo-viatura">
+    <p id="dados-viatura" class="hint">
+      {% if not viaturas_cadastradas %}Cadastre uma viatura nas configurações do Admin.{% endif %}
+    </p>
+    <label class="field">
+      <span>Quilometragem</span>
+      <input type="text" name="km" inputmode="numeric" placeholder="Ex: 45230">
+    </label>
+    <label class="field">
+      <span>Condutor</span>
+      {% if usuario %}
+      <p class="condutor-logado"><strong>{{ nome_posto_guerra(usuario) }}</strong></p>
+      <p class="hint">Preenchido automaticamente com o usuário logado.</p>
+      {% else %}
+      <p class="hint">Faça login para registrar o condutor.</p>
+      {% endif %}
+    </label>
+  </section>
+
+  {% for secao in secoes %}
+  <section class="form-section questionario-secao">
+    <h3>{{ secao.titulo }}</h3>
+    {% for p in secao.perguntas %}
+    {{ sim_nao(p) }}
+    {% endfor %}
+  </section>
+  {% endfor %}
+
+  <section class="form-section">
+    <h3>6. Observações</h3>
+    <label class="field">
+      <textarea name="observacoes" rows="3" placeholder="Defeitos, pendências ou observações…"></textarea>
+    </label>
+  </section>
+
+  <div id="preview-resultado" class="preview-card hidden">
+    <div class="preview-score">
+      <span id="preview-total">0</span>
+      <small>/ {{ total_itens }} não conformes</small>
+    </div>
+    <div id="preview-recomendacao" class="preview-label preview-aprovada">APROVADA</div>
+    <p id="preview-texto"></p>
+  </div>
+
+  <section class="form-section assinaturas-secao">
+    <h3>7. Assinatura da vistoria</h3>
+    {% if usuario and pode_assinar %}
+    <p class="hint">Assinatura eletrônica com seu usuário logado, data e hora.</p>
+    <p class="assinatura-militar-logado">Logado como: <strong>{{ nome_posto_guerra(usuario) }}</strong> ({{ usuario.perfil }})</p>
+    <div id="preview-assinatura-condutor" class="assinatura-preview"></div>
+    <button type="button" id="btn-assinar-condutor" class="btn btn-primary btn-block">✍️ Assinar eletronicamente</button>
+    <input type="hidden" name="assinatura_json" id="assinatura_json">
+    {% elif usuario %}
+    <p class="hint">Apenas Condutor de viatura, Chefe de Socorro ou Comandante de guarnição podem assinar. Seu perfil: <strong>{{ usuario.perfil }}</strong></p>
+    <p class="hint">A assinatura poderá ser feita depois, ao abrir a vistoria no histórico.</p>
+    {% else %}
+    <p class="hint">Faça login com perfil autorizado para assinar eletronicamente.</p>
+    {% endif %}
+  </section>
+
+  <button type="submit" class="btn btn-primary btn-block">Salvar vistoria</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.VIATURA_CONFIG = { totalItens: {{ total_itens }} };
+  window.USUARIO_LOGADO = {{ usuario | tojson if usuario else 'null' }};
+</script>
+<script src="{{ url_for('static', filename='js/viaturas-checklist.js') }}"></script>
+<script src="{{ url_for('static', filename='js/assinatura.js') }}"></script>
+<script src="{{ url_for('static', filename='js/viaturas-formulario.js') }}"></script>
+{% endblock %}

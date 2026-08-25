@@ -135,7 +135,7 @@ if (!v) {
         ${v.solicitante ? `<dt>Solicitante</dt><dd>${v.solicitante}</dd>` : ""}
         ${v.cpf_solicitante ? `<dt>CPF do Solicitante</dt><dd>${formatarCpf(v.cpf_solicitante)}</dd>` : ""}
         <dt>Endereço</dt><dd>${v.endereco}</dd>
-        ${v.contato_telefonico ? `<dt>Contato</dt><dd>${v.contato_telefonico}</dd>` : ""}
+        ${v.contato_telefonico ? `<dt>Contato</dt><dd>${formatarTelefone(v.contato_telefonico)}</dd>` : ""}
         ${v.forma_acionamento ? `<dt>Forma de Acionamento</dt><dd>${v.forma_acionamento}</dd>` : ""}
         ${v.protocolo ? `<dt>Protocolo CIOPS/Portaria/OS</dt><dd>${v.protocolo}</dd>` : ""}
         ${v.natureza_ocorrencia ? `<dt>Natureza da ocorrência</dt><dd>${v.natureza_ocorrencia}</dd>` : ""}
@@ -147,6 +147,7 @@ if (!v) {
     ${questionarioHtml}
     ${v.observacoes ? `<section class="info-card"><h3>Observações adicionais</h3><p>${v.observacoes}</p></section>` : ""}
     ${resultado ? renderSomatorioHtml(resultado) : ""}
+    ${v.recursos_adicionais ? `<section class="info-card"><h3>Recursos adicionais</h3><p>${v.recursos_adicionais}</p></section>` : ""}
     ${renderRubrica(v)}
     ${renderAssinatura(v, id)}
     <a href="nova.html" class="btn btn-secondary btn-block">Nova Vistoria</a>`;

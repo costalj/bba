@@ -34,6 +34,7 @@ from app.auth_utils import (
     PERFIS,
     PERFIS_CADASTRO,
     formatar_cpf,
+    formatar_telefone,
     hash_senha,
     limpar_cpf,
     nome_completo_militar,
@@ -1051,12 +1052,12 @@ def criar_vistoria():
         INSERT INTO vistorias (
             endereco, especie, observacoes, solicitante, cpf_solicitante,
             contato_telefonico, forma_acionamento, protocolo, natureza_ocorrencia,
-            descricao_ocorrencia,
+            descricao_ocorrencia, recursos_adicionais,
             latitude, longitude, questionario_json, notas_json,
             rubrica_solicitante_json, assinatura_json,
             nota_tronco, nota_raizes, nota_inclinacao, nota_copa, nota_pragas, nota_proximidade,
             pontuacao_total, recomendacao, justificativa
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
         """,
         (
             endereco,
@@ -1064,11 +1065,12 @@ def criar_vistoria():
             (data.get("observacoes") or "").strip() or None,
             solicitante,
             cpf_solicitante,
-            (data.get("contato_telefonico") or "").strip() or None,
+            formatar_telefone((data.get("contato_telefonico") or "").strip()) or None,
             forma_acionamento,
             protocolo,
             natureza_ocorrencia,
             descricao_ocorrencia,
+            (data.get("recursos_adicionais") or "").strip() or None,
             lat,
             lng,
             json.dumps(respostas, ensure_ascii=False),

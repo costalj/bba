@@ -163,11 +163,13 @@ def _valor_coluna(vistoria, chave):
 
 
 def _append_dados_ocorrencia(story, vistoria, heading_style):
-    from app.auth_utils import formatar_cpf
+    from app.auth_utils import formatar_cpf, formatar_telefone
 
     story.append(Paragraph("1. Dados da ocorrência", heading_style))
     cpf = _valor_coluna(vistoria, "cpf_solicitante")
     cpf_exib = formatar_cpf(cpf) if cpf else "—"
+    contato = _valor_coluna(vistoria, "contato_telefonico")
+    contato_exib = formatar_telefone(contato) if contato else "—"
     dados = [
         ["Campo", "Valor"],
         ["Nº do Laudo", numero_laudo_vistoria(vistoria)],
@@ -175,7 +177,7 @@ def _append_dados_ocorrencia(story, vistoria, heading_style):
         ["Solicitante", _valor_coluna(vistoria, "solicitante") or "—"],
         ["CPF do Solicitante", cpf_exib],
         ["Endereço", vistoria["endereco"]],
-        ["Contato", _valor_coluna(vistoria, "contato_telefonico") or "—"],
+        ["Contato", contato_exib],
         ["Forma de Acionamento", _valor_coluna(vistoria, "forma_acionamento") or "—"],
         ["Protocolo CIOPS/Portaria/OS", _valor_coluna(vistoria, "protocolo") or "—"],
         ["Natureza da ocorrência", _valor_coluna(vistoria, "natureza_ocorrencia") or "—"],
@@ -296,9 +298,20 @@ def _append_registro_fotografico(story, fotos, upload_folder, heading_style, bod
 
 def _append_rubrica_e_assinatura(story, vistoria, heading_style, body_style):
     bloco = []
+    _montar_recursos_adicionais(bloco, vistoria, heading_style, body_style)
     _montar_rubrica(bloco, vistoria, heading_style, body_style)
     _montar_assinatura_chefe(bloco, vistoria, heading_style, body_style)
     story.append(KeepTogether(bloco))
+
+
+def _montar_recursos_adicionais(bloco, vistoria, heading_style, body_style):
+    texto = (_valor_coluna(vistoria, "recursos_adicionais") or "").strip()
+    if not texto:
+        return
+    bloco.append(Spacer(1, 0.3 * cm))
+    bloco.append(Paragraph("Recursos adicionais", heading_style))
+    bloco.append(Paragraph(texto.replace("\n", "<br/>"), body_style))
+    bloco.append(Spacer(1, 0.2 * cm))
 
 
 def _montar_rubrica(bloco, vistoria, heading_style, body_style):

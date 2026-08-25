@@ -34,6 +34,23 @@ def formatar_cpf(cpf: str) -> str:
     return f"{c[:3]}.{c[3:6]}.{c[6:9]}-{c[9:]}"
 
 
+def limpar_telefone(telefone: str) -> str:
+    return re.sub(r"\D", "", telefone or "")[:11]
+
+
+def formatar_telefone(telefone: str) -> str:
+    d = limpar_telefone(telefone)
+    if not d:
+        return telefone or ""
+    if len(d) <= 2:
+        return f"({d}"
+    if len(d) <= 6:
+        return f"({d[:2]}) {d[2:]}"
+    if len(d) <= 10:
+        return f"({d[:2]}) {d[2:6]}-{d[6:]}"
+    return f"({d[:2]}) {d[2:7]}-{d[7:]}"
+
+
 def hash_senha(senha: str) -> str:
     return hashlib.sha256(senha.encode("utf-8")).hexdigest()
 

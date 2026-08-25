@@ -82,6 +82,7 @@ def _migrate(db):
         ("protocolo", "TEXT"),
         ("natureza_ocorrencia", "TEXT"),
         ("descricao_ocorrencia", "TEXT"),
+        ("recursos_adicionais", "TEXT"),
         ("questionario_json", "TEXT"),
         ("rubrica_solicitante_json", "TEXT"),
     ]

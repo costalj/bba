@@ -24,7 +24,7 @@
           <span>Endereço *</span>
           <input name="endereco" id="campo-endereco" required placeholder="Rua, nº, bairro, município">
         </label>
-        <label class="field"><span>Contato telefônico</span><input name="contato_telefonico" type="tel" inputmode="tel"></label>
+        <label class="field"><span>Contato telefônico</span><input name="contato_telefonico" id="contato-telefonico" type="tel" inputmode="tel" maxlength="15" placeholder="(98) 99999-9999"></label>
         <label class="field">
           <span>Forma de Acionamento</span>
           <input name="forma_acionamento" type="text" placeholder="CIOPS , Justiça , Ordem do Cmt Geral.">
@@ -59,7 +59,14 @@
       <div id="preview-somatorio"></div>
 
       <section class="form-section assinaturas-secao">
-        <h3>7. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
+        <h3>7. Recursos adicionais</h3>
+        <label class="field">
+          <textarea name="recursos_adicionais" rows="2" placeholder="Andaimes, Equatorial, Apoio"></textarea>
+        </label>
+      </section>
+
+      <section class="form-section assinaturas-secao">
+        <h3>8. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
         <p class="hint">O solicitante pode rubricar abaixo para confirmar ciência do laudo.</p>
         <div class="rubrica-wrap">
           <canvas id="canvas-rubrica" class="canvas-rubrica"></canvas>
@@ -69,7 +76,7 @@
       </section>
 
       <section class="form-section assinaturas-secao">
-        <h3>8. Assinatura do Chefe de Socorro</h3>
+        <h3>9. Assinatura do Chefe de Socorro</h3>
         <div id="secao-assinatura-chefe"></div>
         <input type="hidden" name="assinatura_json" id="assinatura_json">
       </section>
@@ -88,19 +95,22 @@
   <script src="../js/questionario.js"></script>
   <script src="../js/assinatura.js"></script>
   <script src="../js/sync-meta.js"></script>
+  <script src="../js/telefone.js"></script>
   <script src="../js/db.js"></script>
   <script src="../js/fotos.js"></script>
   <script>
     (function () {
       const cpfInput = document.getElementById("cpf-solicitante");
-      if (!cpfInput) return;
-      cpfInput.addEventListener("input", () => {
-        let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
-        if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
-        else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
-        else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
-        cpfInput.value = v;
-      });
+      if (cpfInput) {
+        cpfInput.addEventListener("input", () => {
+          let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+          if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+          else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+          else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+          cpfInput.value = v;
+        });
+      }
+      initMascaraTelefone(document.getElementById("contato-telefonico"));
     })();
   </script>
   <script src="nova.js"></script>

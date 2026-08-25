@@ -215,6 +215,7 @@ def _payload_vistoria(row: dict, fotos: list | None = None) -> dict:
         "protocolo": row.get("protocolo"),
         "natureza_ocorrencia": row.get("natureza_ocorrencia"),
         "descricao_ocorrencia": row.get("descricao_ocorrencia"),
+        "recursos_adicionais": row.get("recursos_adicionais"),
         "latitude": row.get("latitude"),
         "longitude": row.get("longitude"),
         "questionario": questionario,

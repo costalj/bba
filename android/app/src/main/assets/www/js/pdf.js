@@ -22,6 +22,7 @@ function normalizarVistoriaPdf(vistoria) {
     descricao_ocorrencia: safeText(vistoria.descricao_ocorrencia),
     especie: safeText(vistoria.especie),
     observacoes: safeText(vistoria.observacoes),
+    recursos_adicionais: safeText(vistoria.recursos_adicionais),
     justificativa: safeText(vistoria.justificativa),
     recomendacao: safeText(vistoria.recomendacao),
     fotos: Array.isArray(vistoria.fotos)
@@ -185,7 +186,7 @@ function desenharTabelaDados(doc, y, vistoria) {
     ["Solicitante", vistoria.solicitante || "—"],
     ["CPF do Solicitante", vistoria.cpf_solicitante ? formatarCpf(vistoria.cpf_solicitante) : "—"],
     ["Endereço", vistoria.endereco || "—"],
-    ["Contato", vistoria.contato_telefonico || "—"],
+    ["Contato", vistoria.contato_telefonico ? formatarTelefone(vistoria.contato_telefonico) : "—"],
     ["Forma de Acionamento", vistoria.forma_acionamento || "—"],
     ["Protocolo CIOPS/Portaria/OS", vistoria.protocolo || "—"],
     ["Natureza da ocorrência", vistoria.natureza_ocorrencia || "—"],
@@ -274,6 +275,12 @@ function desenharSecao6(doc, y, res) {
   return y;
 }
 
+function estimarAlturaRecursos(vistoria) {
+  const txt = safeText(vistoria.recursos_adicionais).trim();
+  if (!txt) return 0;
+  return 8 + Math.min(24, Math.ceil(txt.length / 55) * 5) + 4;
+}
+
 function estimarAlturaRubrica(vistoria) {
   const rubrica = vistoria.rubrica;
   if (rubrica && rubrica.imagem && safeText(rubrica.imagem).length > 20) {
@@ -287,13 +294,30 @@ function estimarAlturaAssinatura(vistoria) {
   return 36;
 }
 
+function desenharRecursosAdicionais(doc, y, vistoria) {
+  const txt = safeText(vistoria.recursos_adicionais).trim();
+  if (!txt) return y;
+  y = tituloSecao(doc, y, "Recursos adicionais");
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  const linhas = doc.splitTextToSize(txt, PDF_LARGURA);
+  doc.text(linhas, PDF_MARGEM, y);
+  return y + linhas.length * 5 + 4;
+}
+
 function desenharRubricaEAssinatura(doc, y, vistoria) {
   const pageH = doc.internal.pageSize.getHeight();
-  const blocoAltura = 8 + estimarAlturaRubrica(vistoria) + 8 + estimarAlturaAssinatura(vistoria);
+  const blocoAltura =
+    estimarAlturaRecursos(vistoria) +
+    8 +
+    estimarAlturaRubrica(vistoria) +
+    8 +
+    estimarAlturaAssinatura(vistoria);
   if (y + blocoAltura > pageH - PDF_MARGEM) {
     doc.addPage();
     y = PDF_MARGEM;
   }
+  y = desenharRecursosAdicionais(doc, y, vistoria);
   y = desenharRubrica(doc, y, vistoria);
   y = desenharAssinaturaChefe(doc, y, vistoria, true);
   return y;

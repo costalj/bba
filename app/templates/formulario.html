@@ -24,7 +24,7 @@
     </label>
     <label class="field">
       <span>Contato telefônico</span>
-      <input type="tel" name="contato_telefonico" inputmode="tel" placeholder="(98) 99999-9999">
+      <input type="tel" name="contato_telefonico" id="contato-telefonico" inputmode="tel" maxlength="15" placeholder="(98) 99999-9999">
     </label>
     <label class="field">
       <span>Forma de Acionamento</span>
@@ -106,7 +106,14 @@
   </div>
 
   <section class="form-section assinaturas-secao">
-    <h3>7. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
+    <h3>7. Recursos adicionais</h3>
+    <label class="field">
+      <textarea name="recursos_adicionais" rows="2" placeholder="Andaimes, Equatorial, Apoio"></textarea>
+    </label>
+  </section>
+
+  <section class="form-section assinaturas-secao">
+    <h3>8. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>
     <p class="hint">O solicitante pode rubricar abaixo para confirmar ciência do laudo.</p>
     <div class="rubrica-wrap">
       <canvas id="canvas-rubrica" class="canvas-rubrica" aria-label="Área para rubrica do solicitante"></canvas>
@@ -116,7 +123,7 @@
   </section>
 
   <section class="form-section assinaturas-secao">
-    <h3>8. Assinatura do Chefe de Socorro</h3>
+    <h3>9. Assinatura do Chefe de Socorro</h3>
     {% if usuario and usuario.perfil == 'Chefe de Socorro' %}
     <p class="hint">Assinatura eletrônica com seu usuário logado, data e hora.</p>
     <p class="assinatura-militar-logado">Logado como: <strong>{{ usuario.posto }} {{ usuario.nome }}</strong></p>
@@ -140,6 +147,7 @@
   window.VISTORIA_CONFIG = { maxFotos: {{ max_fotos }}, maxPerguntasRisco: {{ max_perguntas_risco }} };
   window.USUARIO_LOGADO = {{ usuario | tojson if usuario else 'null' }};
 </script>
+<script src="{{ url_for('static', filename='js/telefone.js') }}"></script>
 <script src="{{ url_for('static', filename='js/questionario.js') }}"></script>
 <script src="{{ url_for('static', filename='js/assinatura.js') }}"></script>
 <script src="{{ url_for('static', filename='js/fotos.js') }}"></script>
@@ -155,6 +163,7 @@
       else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
       cpfInput.value = v;
     });
+    initMascaraTelefone(document.getElementById("contato-telefonico"));
   })();
 </script>
 {% endblock %}

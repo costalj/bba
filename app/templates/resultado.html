@@ -43,7 +43,7 @@
     {% if vistoria.solicitante %}<dt>Solicitante</dt><dd>{{ vistoria.solicitante }}</dd>{% endif %}
     {% if vistoria.cpf_solicitante %}<dt>CPF do Solicitante</dt><dd>{{ vistoria.cpf_solicitante | formatar_cpf }}</dd>{% endif %}
     <dt>Endereço</dt><dd>{{ vistoria.endereco }}</dd>
-    {% if vistoria.contato_telefonico %}<dt>Contato</dt><dd>{{ vistoria.contato_telefonico }}</dd>{% endif %}
+    {% if vistoria.contato_telefonico %}<dt>Contato</dt><dd>{{ vistoria.contato_telefonico | formatar_telefone }}</dd>{% endif %}
     {% if vistoria.forma_acionamento %}<dt>Forma de Acionamento</dt><dd>{{ vistoria.forma_acionamento }}</dd>{% endif %}
     {% if vistoria.protocolo %}<dt>Protocolo CIOPS/Portaria/OS</dt><dd>{{ vistoria.protocolo }}</dd>{% endif %}
     {% if vistoria.natureza_ocorrencia %}<dt>Natureza da ocorrência</dt><dd>{{ vistoria.natureza_ocorrencia }}</dd>{% endif %}
@@ -122,6 +122,13 @@
 {% endif %}
 
 {{ exibir_somatorio(resultado_calc) }}
+
+{% if vistoria.recursos_adicionais %}
+<section class="info-card">
+  <h3>Recursos adicionais</h3>
+  <p>{{ vistoria.recursos_adicionais }}</p>
+</section>
+{% endif %}
 
 <section class="info-card assinatura-card">
   <h3>Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>

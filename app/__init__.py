@@ -29,6 +29,7 @@ def create_app():
     from app.modules import APP_INFO, MODULOS
 
     from app.auth_utils import formatar_cpf as fmt_cpf
+    from app.auth_utils import formatar_telefone as fmt_tel
     from app.auth_utils import nome_exibicao as nome_exibicao_fn
     from app.auth_utils import (
         nome_posto_guerra as nome_posto_guerra_fn,
@@ -49,6 +50,10 @@ def create_app():
     @app.template_filter("formatar_cpf")
     def formatar_cpf_filter(cpf):
         return fmt_cpf(cpf)
+
+    @app.template_filter("formatar_telefone")
+    def formatar_telefone_filter(telefone):
+        return fmt_tel(telefone)
 
     from app.format_utils import formatar_data_hora_br, status_viatura, texto_viatura
 

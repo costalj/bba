@@ -1,5 +1,5 @@
 # Questionário — Relatório de Vistoria de Árvore (CBMMA / SEI)
-# Contagem de risco: respostas SIM nos itens das seções 3 e 4 (máx. 54)
+# Contagem de risco: seções 3 e 4 (máx. 54). Itens com contagem_invertida: SIM favorável — conta NÃO.
 
 limiares_risco:
   alto: { min: 42, max: 54 }
@@ -25,7 +25,7 @@ secoes:
     titulo: "3. Avaliação geral — Nível I"
     conta_risco: true
     perguntas:
-      - { id: q_3_1, numero: "3.1", texto: "A árvore aparenta estar saudável? (observar a fenologia)" }
+      - { id: q_3_1, numero: "3.1", texto: "A árvore aparenta estar saudável? (observar a fenologia)", contagem_invertida: true }
       - { id: q_3_2, numero: "3.2", texto: "A árvore está morta ou em declínio?" }
       - { id: q_3_3, numero: "3.3", texto: "A árvore apresenta anel de malpighi?", alerta: "Denunciar à delegacia de crimes ambientais." }
       - { id: q_3_4, numero: "3.4", texto: "Há evidências de crimes ambientais? (erosão e queima no caule)" }
@@ -44,11 +44,11 @@ secoes:
     grupos:
       - titulo: "Avaliação do entorno (visual externa)"
         perguntas:
-          - { id: q_4_1, numero: "4.1", texto: "Há área permeável útil na base da árvore?" }
+          - { id: q_4_1, numero: "4.1", texto: "Há área permeável útil na base da árvore?", contagem_invertida: true }
           - { id: q_4_2, numero: "4.2", texto: "O solo está inclinado ou a árvore está em solo inclinado?" }
           - { id: q_4_3, numero: "4.3", texto: "Há possibilidade de infiltração de água no solo?" }
           - { id: q_4_4, numero: "4.4", texto: "O solo está pavimentado? (apresentando rachadura)" }
-          - { id: q_4_5, numero: "4.5", texto: "O solo está estável?" }
+          - { id: q_4_5, numero: "4.5", texto: "O solo está estável?", contagem_invertida: true }
           - { id: q_4_6, numero: "4.6", texto: "Há registros de ventos fortes no local da árvore?" }
           - { id: q_4_7, numero: "4.7", texto: "Há registro de fortes chuvas no local da árvore?" }
           - { id: q_4_8, numero: "4.8", texto: "Há registro histórico de outras árvores que caíram no entorno?" }
@@ -60,7 +60,7 @@ secoes:
       - titulo: "Sistema radicular visível"
         perguntas:
           - { id: q_4_14, numero: "4.14", texto: "Raízes partidas, danificadas ou lesionadas por pavimentação, calçadas ou valas?" }
-          - { id: q_4_15, numero: "4.15", texto: "Há espaço disponível para o sistema radicular em relação ao porte da árvore?" }
+          - { id: q_4_15, numero: "4.15", texto: "Há espaço disponível para o sistema radicular em relação ao porte da árvore?", contagem_invertida: true }
           - { id: q_4_16, numero: "4.16", texto: "Há raízes dobradas e/ou enoveladas?" }
           - { id: q_4_17, numero: "4.17", texto: "Há podas ou apodrecimento de raízes significativas para a sustentação?" }
           - { id: q_4_18, numero: "4.18", texto: "Há exposição de raízes por erosão ou compactação de solo?" }

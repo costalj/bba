@@ -126,7 +126,7 @@ def _append_quadro_resultado(story, vistoria, res, max_sim, body_style):
         [Paragraph(f"<b>Nível de risco:</b> {vistoria['recomendacao']}", body_style)],
         [
             Paragraph(
-                f"<b>Respostas SIM (itens 3 e 4):</b> {vistoria['pontuacao_total']} / {max_sim}",
+                f"<b>Indicadores de risco (itens 3 e 4):</b> {vistoria['pontuacao_total']} / {max_sim}",
                 body_style,
             )
         ],
@@ -234,7 +234,7 @@ def _append_secao6_somatorio(story, res, heading_style, body_style):
     story.append(Spacer(1, 0.3 * cm))
     story.append(Paragraph("6. Resultado da avaliação de risco", heading_style))
     soma_data = [
-        ["Nível", "Respostas SIM (itens 3 e 4)"],
+        ["Nível", "Indicadores de risco (itens 3 e 4)"],
         ["ALTO", "42 a 54"],
         ["MÉDIO", "23 a 41"],
         ["BAIXO", "0 a 22"],

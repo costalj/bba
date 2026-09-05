@@ -5,7 +5,7 @@
 
   <table class="somatorio-tabela">
     <thead>
-      <tr><th>Nível</th><th>Respostas SIM (itens 3 e 4)</th></tr>
+      <tr><th>Nível</th><th>Indicadores de risco (itens 3 e 4)</th></tr>
     </thead>
     <tbody>
       {% for linha in resultado.somatorio.tabela_niveis %}
@@ -19,11 +19,11 @@
 
   <dl class="somatorio-resumo detail-list">
     <dt>Item 3 (Nível I)</dt>
-    <dd>{{ resultado.somatorio.secao_3_sim }} SIM / {{ resultado.somatorio.secao_3_total }}</dd>
+    <dd>{{ resultado.somatorio.secao_3_sim }} / {{ resultado.somatorio.secao_3_total }}</dd>
     <dt>Item 4 (Níveis II e III)</dt>
-    <dd>{{ resultado.somatorio.secao_4_sim }} SIM / {{ resultado.somatorio.secao_4_total }}</dd>
+    <dd>{{ resultado.somatorio.secao_4_sim }} / {{ resultado.somatorio.secao_4_total }}</dd>
     <dt>Total itens 3 e 4</dt>
-    <dd><strong>{{ resultado.somatorio.total_3_4_sim }} SIM</strong> / {{ resultado.somatorio.total_3_4_max }}</dd>
+    <dd><strong>{{ resultado.somatorio.total_3_4_sim }}</strong> / {{ resultado.somatorio.total_3_4_max }}</dd>
     <dt>Classificação</dt>
     <dd><strong>{{ resultado.somatorio.nivel }}</strong> (faixa {{ resultado.somatorio.faixa }})</dd>
   </dl>

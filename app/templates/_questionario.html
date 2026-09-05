@@ -6,6 +6,9 @@
     {% if pergunta.get('alerta') %}
     <small class="pergunta-alerta">⚠️ {{ pergunta.alerta }}</small>
     {% endif %}
+    {% if pergunta.get('contagem_invertida') %}
+    <small class="hint pergunta-invertida">SIM = condição favorável (não soma risco). NÃO soma na contagem.</small>
+    {% endif %}
   </div>
   <div class="sim-nao-buttons">
     <label class="sim-nao-btn">

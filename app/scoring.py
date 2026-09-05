@@ -11,8 +11,15 @@ from app.config_loader import (
 _NIVEL_KEY = {"ALTO": "alto", "MÉDIO": "medio", "BAIXO": "baixo"}
 
 
+def _conta_resposta_risco(pergunta: dict, respostas: dict) -> bool:
+    valor = respostas.get(pergunta["id"])
+    if pergunta.get("contagem_invertida"):
+        return valor == "nao"
+    return valor == "sim"
+
+
 def _contar_sim_perguntas(perguntas: list, respostas: dict) -> int:
-    return sum(1 for p in perguntas if respostas.get(p["id"]) == "sim")
+    return sum(1 for p in perguntas if _conta_resposta_risco(p, respostas))
 
 
 def _contar_sim(respostas: dict) -> int:
@@ -74,9 +81,9 @@ def _orientacao_conduta(nivel: str, respostas: dict) -> list:
 
 def _justificativa(nivel: str, sim_count: int, max_sim: int) -> str:
     return (
-        f"Conforme parâmetros do relatório SEI, obtiveram-se {sim_count} resposta(s) "
-        f"\"SIM\" nos itens 3 e 4 (máximo {max_sim}), classificando a árvore com "
-        f"{nivel} risco potencial de queda ({_faixa_nivel(nivel)} respostas SIM)."
+        f"Conforme parâmetros do relatório SEI, obtiveram-se {sim_count} indicador(es) "
+        f"de risco nos itens 3 e 4 (máximo {max_sim}), classificando a árvore com "
+        f"{nivel} risco potencial de queda ({_faixa_nivel(nivel)})."
     )
 
 

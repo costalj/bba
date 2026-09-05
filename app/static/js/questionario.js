@@ -1,4 +1,4 @@
-// Gerado a partir de questionario_arvores.yaml
+/* Gerado por scripts/exportar_questionario_js.py — nao editar manualmente */
 const QUESTIONARIO = {
   "limiares_risco": {
     "alto": {
@@ -71,7 +71,8 @@ const QUESTIONARIO = {
         {
           "id": "q_3_1",
           "numero": "3.1",
-          "texto": "A árvore aparenta estar saudável? (observar a fenologia)"
+          "texto": "A árvore aparenta estar saudável? (observar a fenologia)",
+          "contagem_invertida": true
         },
         {
           "id": "q_3_2",
@@ -142,7 +143,8 @@ const QUESTIONARIO = {
             {
               "id": "q_4_1",
               "numero": "4.1",
-              "texto": "Há área permeável útil na base da árvore?"
+              "texto": "Há área permeável útil na base da árvore?",
+              "contagem_invertida": true
             },
             {
               "id": "q_4_2",
@@ -162,7 +164,8 @@ const QUESTIONARIO = {
             {
               "id": "q_4_5",
               "numero": "4.5",
-              "texto": "O solo está estável?"
+              "texto": "O solo está estável?",
+              "contagem_invertida": true
             },
             {
               "id": "q_4_6",
@@ -217,7 +220,8 @@ const QUESTIONARIO = {
             {
               "id": "q_4_15",
               "numero": "4.15",
-              "texto": "Há espaço disponível para o sistema radicular em relação ao porte da árvore?"
+              "texto": "Há espaço disponível para o sistema radicular em relação ao porte da árvore?",
+              "contagem_invertida": true
             },
             {
               "id": "q_4_16",
@@ -437,7 +441,6 @@ const QUESTIONARIO = {
     "poda_nao_iminente": "Sem risco iminente de queda, mas com galhos/frutos que possam cair naturalmente: podas emergenciais podem ser realizadas pelo solicitante, que deve providenciar os meios necessários e obter autorização do órgão ambiental municipal ou estadual."
   }
 };
-
 const NIVEL_KEY = { ALTO: "alto", "MÉDIO": "medio", BAIXO: "baixo" };
 
 function getPerguntasSecao(secaoId) {
@@ -448,8 +451,13 @@ function getPerguntasSecao(secaoId) {
   return out;
 }
 
+function contaRespostaRisco(pergunta, resposta) {
+  if (pergunta.contagem_invertida) return resposta === "nao";
+  return resposta === "sim";
+}
+
 function contarSimPerguntas(perguntas, respostas) {
-  return perguntas.filter((p) => respostas[p.id] === "sim").length;
+  return perguntas.filter((p) => contaRespostaRisco(p, respostas[p.id])).length;
 }
 
 function getPerguntasRisco() {
@@ -520,7 +528,7 @@ function calcularResultadoQuestionario(respostas) {
     pontuacao_maxima: maxSim,
     recomendacao: nivel,
     nivel_risco: nivel,
-    justificativa: `Conforme parâmetros do relatório SEI, obtiveram-se ${simCount} resposta(s) "SIM" nos itens 3 e 4 (máximo ${maxSim}), classificando a árvore com ${nivel} risco potencial de queda (${faixaNivel(nivel)} respostas SIM).`,
+    justificativa: `Conforme parâmetros do relatório SEI, obtiveram-se ${simCount} indicador(es) de risco nos itens 3 e 4 (máximo ${maxSim}), classificando a árvore com ${nivel} risco potencial de queda (faixa ${faixaNivel(nivel)}).`,
     supressao_recomendada: nivel === "ALTO",
     somatorio,
     orientacao_conduta: orientacaoConduta(nivel, respostas),
@@ -542,11 +550,11 @@ function renderSomatorioHtml(resultado) {
     .join("");
   return `<div class="somatorio-card">
     <h3>6. Resultado da avaliação de risco</h3>
-    <table class="somatorio-tabela"><thead><tr><th>Nível</th><th>Respostas SIM (itens 3 e 4)</th></tr></thead><tbody>${tabela}</tbody></table>
+    <table class="somatorio-tabela"><thead><tr><th>Nível</th><th>Indicadores de risco (itens 3 e 4)</th></tr></thead><tbody>${tabela}</tbody></table>
     <dl class="somatorio-resumo detail-list">
-      <dt>Item 3 (Nível I)</dt><dd>${s.secao_3_sim} SIM / ${s.secao_3_total}</dd>
-      <dt>Item 4 (Níveis II e III)</dt><dd>${s.secao_4_sim} SIM / ${s.secao_4_total}</dd>
-      <dt>Total itens 3 e 4</dt><dd><strong>${s.total_3_4_sim} SIM</strong> / ${s.total_3_4_max}</dd>
+      <dt>Item 3 (Nível I)</dt><dd>${s.secao_3_sim} / ${s.secao_3_total}</dd>
+      <dt>Item 4 (Níveis II e III)</dt><dd>${s.secao_4_sim} / ${s.secao_4_total}</dd>
+      <dt>Total itens 3 e 4</dt><dd><strong>${s.total_3_4_sim}</strong> / ${s.total_3_4_max}</dd>
       <dt>Classificação</dt><dd><strong>${s.nivel}</strong> (faixa ${s.faixa})</dd>
     </dl>
     ${conduta ? `<div class="orientacao-conduta"><h4>O que deve ser feito</h4><ul>${conduta}</ul></div>` : ""}
@@ -557,10 +565,13 @@ function renderSimNao(pergunta) {
   const alerta = pergunta.alerta
     ? `<small class="pergunta-alerta">⚠️ ${pergunta.alerta}</small>`
     : "";
+  const invertida = pergunta.contagem_invertida
+    ? `<small class="hint pergunta-invertida">SIM = condição favorável (não soma risco). NÃO soma na contagem.</small>`
+    : "";
   return `<div class="pergunta-card">
     <div class="pergunta-header">
       <span class="pergunta-numero">${pergunta.numero}</span>
-      <p class="pergunta-texto">${pergunta.texto}</p>${alerta}
+      <p class="pergunta-texto">${pergunta.texto}</p>${alerta}${invertida}
     </div>
     <div class="sim-nao-buttons">
       <label class="sim-nao-btn"><input type="radio" name="${pergunta.id}" value="sim" required><span>Sim</span></label>
@@ -573,7 +584,9 @@ function renderSecoesQuestionario() {
   return QUESTIONARIO.secoes.map((secao) => {
     let html = `<section class="form-section questionario-secao"><h3>${secao.titulo}</h3>`;
     if (secao.subtitulo) html += `<p class="hint">${secao.subtitulo}</p>`;
-    if (secao.conta_risco) html += `<p class="hint">Respostas <strong>SIM</strong> entram na contagem de risco.</p>`;
+    if (secao.conta_risco) {
+      html += `<p class="hint">Contagem de risco: respostas <strong>SIM</strong> indicam fator de risco, exceto itens 3.1, 4.1, 4.5 e 4.15 (SIM favorável — conta <strong>NÃO</strong>).</p>`;
+    }
     if (secao.perguntas) html += secao.perguntas.map(renderSimNao).join("");
     (secao.grupos || []).forEach((g) => {
       html += `<h4 class="questionario-grupo">${g.titulo}</h4>`;

@@ -62,6 +62,7 @@ jobs:
           python scripts/exportar_seed_apk.py
           python scripts/exportar_legislacao_apk.py
           python scripts/exportar_especies_apk.py
+          python scripts/exportar_questionario_js.py
           python scripts/exportar_logo_pdf.py
           python scripts/gerar_icones.py
 

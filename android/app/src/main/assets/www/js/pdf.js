@@ -153,7 +153,7 @@ function desenharQuadroResultado(doc, vistoria, yStart, res, maxSim) {
     [{ content: `Nível de risco: ${vistoria.recomendacao}`, styles: { fontStyle: "bold", fontSize: 11 } }],
     [
       {
-        content: `Respostas SIM (itens 3 e 4): ${vistoria.pontuacao_total} / ${maxSim}`,
+        content: `Indicadores de risco (itens 3 e 4): ${vistoria.pontuacao_total} / ${maxSim}`,
         styles: { fontStyle: "bold" },
       },
     ],
@@ -402,7 +402,7 @@ function desenharSecao6(doc, y, res) {
 
   doc.autoTable({
     ...estiloTabelaPadrao(),
-    head: [["Nível", "Respostas SIM (itens 3 e 4)"]],
+    head: [["Nível", "Indicadores de risco (itens 3 e 4)"]],
     body,
     startY: y,
     columnStyles: { 0: { cellWidth: 60, fontStyle: "bold" }, 1: { cellWidth: 110 } },

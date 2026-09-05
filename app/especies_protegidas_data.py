@@ -1,7 +1,82 @@
-"""Catálogo de espécies protegidas, ameaçadas e tombadas (consulta na vistoria)."""
+"""Catálogo de espécies protegidas, ameaçadas e tombadas — São Luís/MA e legislação federal."""
 
 # status: ameacada | imune | tombada | protegida
 # esfera: federal | estadual | municipal
+# artigos: lista { esfera, norma, artigo, texto }
+
+# Referências legais recorrentes (São Luís — capital do MA)
+_FED_CF225 = {
+    "esfera": "federal",
+    "norma": "Constituição Federal/1988",
+    "artigo": "Art. 225",
+    "texto": "Dever de defender e preservar o meio ambiente ecologicamente equilibrado.",
+}
+_FED_L5197_A2 = {
+    "esfera": "federal",
+    "norma": "Lei nº 5.197/1967",
+    "artigo": "Art. 2º",
+    "texto": "Veda ações que coloquem em risco a conservação da fauna e da flora.",
+}
+_FED_L5197_A3 = {
+    "esfera": "federal",
+    "norma": "Lei nº 5.197/1967",
+    "artigo": "Art. 3º",
+    "texto": "Proíbe comercialização, posse e transporte de espécies protegidas sem autorização.",
+}
+_FED_L9605_A49 = {
+    "esfera": "federal",
+    "norma": "Lei nº 9.605/1998",
+    "artigo": "Art. 49",
+    "texto": "Crime destruir ou danificar floresta nativa ou plantada, sem autorização legal.",
+}
+_FED_L12651_A7 = {
+    "esfera": "federal",
+    "norma": "Lei nº 12.651/2012 (Código Florestal)",
+    "artigo": "Art. 7º",
+    "texto": "Veda corte ou supressão de vegetação nativa sem autorização do órgão competente.",
+}
+_EST_DEC11593 = {
+    "esfera": "estadual",
+    "norma": "Decreto Estadual MA nº 11.593/1990",
+    "artigo": "Capítulo único",
+    "texto": "Tombamento de árvores raras e reserva biológica em São Luís — imunes ao corte.",
+}
+_EST_LEI3999 = {
+    "esfera": "estadual",
+    "norma": "Lei Estadual MA nº 3.999/1978",
+    "artigo": "Art. 1º e Art. 3º",
+    "texto": "Proteção do patrimônio histórico, artístico e paisagístico do Maranhão.",
+}
+_MUN_LEI7811_A1 = {
+    "esfera": "municipal",
+    "norma": "Lei Municipal São Luís nº 7.811/2026",
+    "artigo": "Art. 1º",
+    "texto": "Institui a Política Municipal de Arborização de São Luís.",
+}
+_MUN_LEI7811_A6 = {
+    "esfera": "municipal",
+    "norma": "Lei Municipal São Luís nº 7.811/2026",
+    "artigo": "Art. 6º",
+    "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana.",
+}
+_MUN_LEI7811_A7 = {
+    "esfera": "municipal",
+    "norma": "Lei Municipal São Luís nº 7.811/2026",
+    "artigo": "Art. 7º",
+    "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano.",
+}
+_EST_LEI4734_A1 = {
+    "esfera": "estadual",
+    "norma": "Lei Estadual MA nº 4.734/1986",
+    "artigo": "Art. 1º",
+    "texto": "Proíbe a derrubada de palmeiras de babaçu no Estado do Maranhão.",
+}
+_EST_LEI7824_A1 = {
+    "esfera": "estadual",
+    "norma": "Lei Estadual MA nº 7.824/2003",
+    "artigo": "Art. 1º",
+    "texto": "Garante o extrativismo familiar do babaçu e reforça a proteção da palmeira.",
+}
 
 ESPECIES_PROTEGIDAS = [
     {
@@ -11,8 +86,21 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["pau brasil", "ibirapitanga"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "Portaria MMA 148/2022 · Lista oficial de espécies ameaçadas",
-        "conduta": "Corte vedado. Poda somente com autorização do órgão ambiental competente.",
+        "referencia": "Portaria MMA 148/2022 · Lei 5.197/1967 · Lei 9.605/1998",
+        "conduta": "Corte vedado. Poda somente com autorização do IBAMA/órgão ambiental competente.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie da flora ameaçada de extinção — categoria Vulnerável (VU).",
+            },
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _FED_CF225,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "mogno",
@@ -21,8 +109,26 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["mogno brasileiro"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "CITES / Portaria MMA — espécies ameaçadas",
+        "referencia": "CITES · Portaria MMA 148/2022 · Lei 5.197/1967",
         "conduta": "Corte vedado. Poda somente com autorização ambiental.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "CITES — Conv. Washington",
+                "artigo": "Apêndice II",
+                "texto": "Comércio internacional controlado; espécie ameaçada.",
+            },
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Listada como ameaçada de extinção.",
+            },
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "cedro",
@@ -31,8 +137,21 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["cedro-rosa", "cedro rosa"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "Lista oficial de espécies ameaçadas (MMA)",
+        "referencia": "Portaria MMA 148/2022 · Lei 5.197/1967",
         "conduta": "Corte vedado sem autorização. Preferir poda emergencial autorizada.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _FED_L12651_A7,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "castanha_para",
@@ -41,8 +160,20 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["castanha do para", "castanheira", "castanha-do-brasil"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "Lei 5.197/1967 · proteção especial",
+        "referencia": "Lei 5.197/1967 · Portaria MMA 148/2022",
         "conduta": "Corte vedado. Espécie de proteção especial.",
+        "artigos": [
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "jacaranda_bahia",
@@ -51,8 +182,25 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["jacaranda", "jacarandá"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "CITES Apêndice I · MMA",
+        "referencia": "CITES Apêndice I · Portaria MMA 148/2022",
         "conduta": "Corte vedado. Poda somente com autorização.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "CITES — Conv. Washington",
+                "artigo": "Apêndice I",
+                "texto": "Proibição de comércio internacional da espécie.",
+            },
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "aroeira",
@@ -61,8 +209,16 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["aroeira-do-sertao", "aroeira do sertão", "urundeuva"],
         "status": "imune",
         "esfera": "federal",
-        "referencia": "Imune de corte em várias legislações estaduais/municipais",
+        "referencia": "Lei 5.197/1967 · Lei 12.651/2012",
         "conduta": "Imune de corte. Poda só com autorização do órgão ambiental.",
+        "artigos": [
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L12651_A7,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "ipe_amarelo",
@@ -71,8 +227,15 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["ipe amarelo", "ipê", "ipe", "tabebuia"],
         "status": "protegida",
         "esfera": "municipal",
-        "referencia": "Arborização urbana — frequentemente protegida em leis municipais",
-        "conduta": "Corte/poda somente com autorização municipal/estadual.",
+        "referencia": "Lei Municipal São Luís 7.811/2026 · Lei 5.197/1967",
+        "conduta": "Corte/poda somente com autorização da Prefeitura/Impur e órgão ambiental.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_L5197_A2,
+            _FED_CF225,
+        ],
     },
     {
         "id": "ipe_roxo",
@@ -81,8 +244,15 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["ipe roxo", "ipê-rosa", "ipe rosa"],
         "status": "protegida",
         "esfera": "municipal",
-        "referencia": "Arborização urbana — proteção municipal frequente",
-        "conduta": "Corte/poda somente com autorização do órgão ambiental.",
+        "referencia": "Lei Municipal São Luís 7.811/2026 · Lei 5.197/1967",
+        "conduta": "Corte/poda somente com autorização do órgão ambiental municipal.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_L5197_A2,
+            _FED_CF225,
+        ],
     },
     {
         "id": "jatoba",
@@ -91,18 +261,37 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["jatoba", "jetaí"],
         "status": "protegida",
         "esfera": "estadual",
-        "referencia": "Espécie nativa de interesse ambiental (MA)",
+        "referencia": "Lei 12.651/2012 · Lei Municipal São Luís 7.811/2026",
         "conduta": "Avaliar autorização ambiental antes de corte ou poda drástica.",
+        "artigos": [
+            _FED_L12651_A7,
+            _FED_L5197_A2,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_CF225,
+        ],
     },
     {
         "id": "gameleira",
         "nome_popular": "Gameleira",
-        "nome_cientifico": "Ficus sp.",
+        "nome_cientifico": "Ficus microcarpa",
         "aliases": ["figueira", "gameleira-branca", "ficus"],
         "status": "tombada",
-        "esfera": "municipal",
-        "referencia": "Frequente em tombamentos municipais de árvores notáveis",
-        "conduta": "Se tombada/notável: corte vedado. Confirmar no órgão municipal.",
+        "esfera": "estadual",
+        "referencia": "Decreto MA 11.593/1990 · Lei MA 3.999/1978",
+        "conduta": "Exemplares tombados em São Luís: corte vedado. Confirmar no SPPHAP/Impur.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item FICUS",
+                "texto": "Tombamento — Av. Beira-Mar, Praça Deodoro e Praça Odorico Mendes (São Luís).",
+            },
+            _EST_LEI3999,
+            _MUN_LEI7811_A7,
+            _FED_L9605_A49,
+        ],
     },
     {
         "id": "mangueira_tombada",
@@ -111,18 +300,36 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["manga", "mangueira"],
         "status": "protegida",
         "esfera": "municipal",
-        "referencia": "Árvores notáveis/tombadas em alguns municípios (consultar cadastro local)",
-        "conduta": "Verificar tombamento local. Sem tombamento: poda/corte conforme risco e autorização.",
+        "referencia": "Lei Municipal São Luís 7.811/2026",
+        "conduta": "Verificar tombamento no cadastro municipal. Sem tombamento: poda/corte conforme risco.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_L5197_A2,
+        ],
     },
     {
         "id": "oiti",
         "nome_popular": "Oiti",
         "nome_cientifico": "Licania tomentosa",
-        "aliases": [],
-        "status": "protegida",
-        "esfera": "municipal",
-        "referencia": "Espécie frequente em arborização urbana protegida",
-        "conduta": "Corte/poda com autorização do órgão ambiental municipal.",
+        "aliases": ["oitizeiro"],
+        "status": "tombada",
+        "esfera": "estadual",
+        "referencia": "Decreto MA 11.593/1990 · Lei Municipal São Luís 7.811/2026",
+        "conduta": "Exemplares tombados (Praça Deodoro e Praça João Lisboa): corte vedado.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item OITI",
+                "texto": "Tombamento — Praça Deodoro e Praça João Lisboa (São Luís).",
+            },
+            _EST_LEI3999,
+            _MUN_LEI7811_A7,
+            _FED_L9605_A49,
+        ],
     },
     {
         "id": "sibipiruna",
@@ -131,18 +338,41 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["caesalpinia pluviosa"],
         "status": "protegida",
         "esfera": "municipal",
-        "referencia": "Arborização urbana",
-        "conduta": "Corte/poda com autorização municipal, salvo risco iminente.",
+        "referencia": "Lei Municipal São Luís 7.811/2026",
+        "conduta": "Corte/poda com autorização municipal (Impur), salvo risco iminente documentado.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_L5197_A2,
+        ],
     },
     {
         "id": "buriti",
         "nome_popular": "Buriti",
         "nome_cientifico": "Mauritia flexuosa",
         "aliases": ["miriti"],
-        "status": "protegida",
+        "status": "tombada",
         "esfera": "estadual",
-        "referencia": "Palmeira nativa — proteção em áreas úmidas/APP",
-        "conduta": "Corte vedado em APP. Autorização ambiental obrigatória.",
+        "referencia": "Decreto MA 11.593/1990 · Lei 12.651/2012",
+        "conduta": "Buritizal tombado (Maracanã/BR-135): corte vedado. Demais: autorização ambiental.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item BURITIS",
+                "texto": "Reserva biológica — Maracanã, BR-135, ~180 ha (São Luís).",
+            },
+            _FED_L12651_A7,
+            {
+                "esfera": "federal",
+                "norma": "Lei nº 12.651/2012",
+                "artigo": "Art. 4º, inc. III",
+                "texto": "APP em áreas de restinga, mangue, brejo ou vereda.",
+            },
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "babacu",
@@ -151,8 +381,20 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["babacu", "coco-babaçu"],
         "status": "protegida",
         "esfera": "estadual",
-        "referencia": "Lei estadual MA — proteção do babaçu e quebradeiras",
-        "conduta": "Corte restrito. Observar legislação estadual do babaçu.",
+        "referencia": "Lei MA 4.734/1986 · Lei MA 7.824/2003",
+        "conduta": "Derrubada proibida no MA. Corte restrito — observar extrativismo das quebradeiras.",
+        "artigos": [
+            _EST_LEI4734_A1,
+            _EST_LEI7824_A1,
+            {
+                "esfera": "estadual",
+                "norma": "Lei Estadual MA nº 7.824/2003",
+                "artigo": "Art. 2º",
+                "texto": "Assegura acesso ao babaçu em áreas públicas e privadas para extrativismo familiar.",
+            },
+            _FED_L5197_A2,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "carnauba",
@@ -161,8 +403,15 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["carnauba"],
         "status": "protegida",
         "esfera": "estadual",
-        "referencia": "Palmeira nativa de interesse econômico/ambiental",
-        "conduta": "Corte somente com autorização ambiental.",
+        "referencia": "Lei 12.651/2012 · Lei Municipal São Luís 7.811/2026",
+        "conduta": "Corte somente com autorização ambiental estadual/municipal.",
+        "artigos": [
+            _FED_L12651_A7,
+            _FED_L5197_A2,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_CF225,
+        ],
     },
     {
         "id": "palmeira_imperial",
@@ -170,9 +419,21 @@ ESPECIES_PROTEGIDAS = [
         "nome_cientifico": "Roystonea oleracea",
         "aliases": ["palmeira imperial", "imperial"],
         "status": "tombada",
-        "esfera": "municipal",
-        "referencia": "Frequentemente tombada em praças e vias históricas",
-        "conduta": "Se tombada: corte vedado. Confirmar cadastro municipal.",
+        "esfera": "estadual",
+        "referencia": "Decreto MA 11.593/1990 · Lei MA 3.999/1978",
+        "conduta": "Exemplares tombados em praças históricas: corte vedado.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item PALMEIRA IMPERIAL",
+                "texto": "Tombamento — Praça Gonçalves Dias, Praça Benedito Leite e Palácio dos Leões.",
+            },
+            _EST_LEI3999,
+            _MUN_LEI7811_A7,
+            _FED_L9605_A49,
+        ],
     },
     {
         "id": "baoba",
@@ -181,8 +442,15 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["baoba"],
         "status": "tombada",
         "esfera": "municipal",
-        "referencia": "Árvore notável — tombamento municipal frequente",
-        "conduta": "Corte vedado se tombada. Poda só com autorização.",
+        "referencia": "Lei Municipal São Luís 7.811/2026 · Lei MA 3.999/1978",
+        "conduta": "Árvore notável — verificar tombamento municipal/estadual. Corte vedado se tombada.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _EST_LEI3999,
+            _FED_L9605_A49,
+        ],
     },
     {
         "id": "peroba",
@@ -191,8 +459,20 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["peroba-rosa"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "Lista oficial de espécies ameaçadas",
+        "referencia": "Portaria MMA 148/2022 · Lei 5.197/1967",
         "conduta": "Corte vedado. Poda somente com autorização.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "brauna",
@@ -201,18 +481,42 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["brauna"],
         "status": "ameacada",
         "esfera": "federal",
-        "referencia": "Lista oficial de espécies ameaçadas",
+        "referencia": "Portaria MMA 148/2022 · Lei 5.197/1967",
         "conduta": "Corte vedado sem autorização ambiental.",
+        "artigos": [
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L5197_A2,
+            _FED_L5197_A3,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "samauma",
         "nome_popular": "Samaúma",
         "nome_cientifico": "Ceiba pentandra",
-        "aliases": ["sumauma", "samauma", "sumaúma"],
-        "status": "protegida",
+        "aliases": ["sumauma", "samauma", "sumaúma", "barrigudeira"],
+        "status": "tombada",
         "esfera": "estadual",
-        "referencia": "Árvore nativa amazônica de grande porte",
-        "conduta": "Corte/poda com autorização. Avaliar APP e tombamento.",
+        "referencia": "Decreto MA 11.593/1990 · Lei MA 3.999/1978",
+        "conduta": "Exemplares tombados (Centro, Bom Menino, Monte Castelo, Av. Newton Belo): corte vedado.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item SUMAÚMA",
+                "texto": "Tombamento — Centro, Parque do Bom Menino, Monte Castelo e Av. Newton Belo.",
+            },
+            _EST_LEI3999,
+            _MUN_LEI7811_A7,
+            _FED_L9605_A49,
+        ],
     },
     {
         "id": "andiroba",
@@ -221,8 +525,14 @@ ESPECIES_PROTEGIDAS = [
         "aliases": [],
         "status": "protegida",
         "esfera": "estadual",
-        "referencia": "Espécie nativa de interesse econômico/ambiental (MA)",
+        "referencia": "Lei 12.651/2012 · Lei Municipal São Luís 7.811/2026",
         "conduta": "Corte somente com autorização ambiental.",
+        "artigos": [
+            _FED_L12651_A7,
+            _FED_L5197_A2,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "cumaru",
@@ -231,8 +541,14 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["cumaru-ferro"],
         "status": "protegida",
         "esfera": "federal",
-        "referencia": "Espécie nativa — restrições de exploração",
+        "referencia": "Lei 5.197/1967 · Lei 12.651/2012",
         "conduta": "Corte somente com autorização ambiental.",
+        "artigos": [
+            _FED_L5197_A2,
+            _FED_L12651_A7,
+            _FED_L9605_A49,
+            _MUN_LEI7811_A7,
+        ],
     },
     {
         "id": "embauba",
@@ -241,8 +557,41 @@ ESPECIES_PROTEGIDAS = [
         "aliases": ["embauba", "imbaúba"],
         "status": "protegida",
         "esfera": "municipal",
-        "referencia": "Pioneira urbana — proteção conforme lei municipal de arborização",
+        "referencia": "Lei Municipal São Luís 7.811/2026",
         "conduta": "Sem imunidade federal. Corte/poda conforme risco e autorização municipal.",
+        "artigos": [
+            _MUN_LEI7811_A1,
+            _MUN_LEI7811_A6,
+            _MUN_LEI7811_A7,
+            _FED_CF225,
+        ],
+    },
+    {
+        "id": "jucara",
+        "nome_popular": "Juçara",
+        "nome_cientifico": "Euterpe edulis",
+        "aliases": ["jucara", "açaí-do-sul"],
+        "status": "tombada",
+        "esfera": "estadual",
+        "referencia": "Decreto MA 11.593/1990 · Portaria MMA 148/2022",
+        "conduta": "Juçarais tombados (Maracanã/BR-135): corte vedado. Espécie também ameaçada federalmente.",
+        "artigos": [
+            _EST_DEC11593,
+            {
+                "esfera": "estadual",
+                "norma": "Decreto Estadual MA nº 11.593/1990",
+                "artigo": "Item JUÇARAIS",
+                "texto": "Reserva biológica — Maracanã, BR-135 (São Luís).",
+            },
+            {
+                "esfera": "federal",
+                "norma": "Portaria MMA nº 148/2022",
+                "artigo": "Anexo I",
+                "texto": "Espécie ameaçada de extinção.",
+            },
+            _FED_L5197_A2,
+            _MUN_LEI7811_A7,
+        ],
     },
 ]
 
@@ -250,9 +599,19 @@ DOCUMENTOS_ESPECIES = [
     {
         "id": "port_mma_ameacadas",
         "titulo": "Lista oficial de espécies da flora ameaçadas de extinção",
-        "referencia": "Portaria MMA nº 148/2022 (e atualizações)",
+        "referencia": "Portaria MMA nº 148/2022",
         "data": "2022",
         "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 1º",
+                "texto": "Aprova a Lista Nacional de Espécies da Flora Ameaçadas de Extinção.",
+            },
+            {
+                "numero": "Anexo I",
+                "texto": "Relação das espécies ameaçadas, por categoria (CR, EN, VU).",
+            },
+        ],
     },
     {
         "id": "lei_codigo_florestal",
@@ -260,27 +619,134 @@ DOCUMENTOS_ESPECIES = [
         "referencia": "Lei nº 12.651/2012",
         "data": "2012",
         "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 3º",
+                "texto": "Define vegetação nativa, supressão, APP e Reserva Legal.",
+            },
+            {
+                "numero": "Art. 7º",
+                "texto": "Veda corte ou supressão de vegetação nativa sem autorização.",
+            },
+            {
+                "numero": "Art. 4º",
+                "texto": "Define Áreas de Preservação Permanente (APP).",
+            },
+        ],
+    },
+    {
+        "id": "lei_5197_fauna_flora",
+        "titulo": "Proteção da fauna e flora — espécies ameaçadas",
+        "referencia": "Lei nº 5.197/1967",
+        "data": "1967",
+        "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 2º",
+                "texto": "Veda ações que coloquem em risco a conservação da fauna e da flora.",
+            },
+            {
+                "numero": "Art. 3º",
+                "texto": "Proíbe comercialização, posse e transporte de espécies protegidas.",
+            },
+        ],
+    },
+    {
+        "id": "lei_9605_crimes",
+        "titulo": "Lei de Crimes Ambientais",
+        "referencia": "Lei nº 9.605/1998",
+        "data": "1998",
+        "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 38",
+                "texto": "Destruir ou danificar floresta nativa ou plantada, sem autorização.",
+            },
+            {
+                "numero": "Art. 49",
+                "texto": "Destruir ou danificar vegetação em florestas ou demais formas de vegetação.",
+            },
+        ],
+    },
+    {
+        "id": "decreto_ma_11593",
+        "titulo": "Tombamento de árvores raras e reserva biológica — São Luís",
+        "referencia": "Decreto Estadual MA nº 11.593/1990",
+        "data": "1990",
+        "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Capítulo único",
+                "texto": "Tombamento de sumaúmas, ficus, palmeiras imperiais, oitis, juçarais e buritizais.",
+            },
+            {
+                "numero": "Base legal",
+                "texto": "Lei Estadual MA nº 3.999/1978 e Resolução Conselho Estadual de Cultura nº 018/1987.",
+            },
+        ],
     },
     {
         "id": "lei_babacu_ma",
-        "titulo": "Proteção do babaçu e atividade das quebradeiras — Maranhão",
-        "referencia": "Legislação estadual do MA",
-        "data": "—",
+        "titulo": "Proteção do babaçu e extrativismo das quebradeiras",
+        "referencia": "Lei Estadual MA nº 4.734/1986 · Lei MA nº 7.824/2003",
+        "data": "1986/2003",
         "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Lei 4.734/1986, Art. 1º",
+                "texto": "Proíbe a derrubada de palmeiras de babaçu no Estado do Maranhão.",
+            },
+            {
+                "numero": "Lei 7.824/2003, Art. 1º",
+                "texto": "Garante o extrativismo familiar do babaçu.",
+            },
+            {
+                "numero": "Lei 7.824/2003, Art. 2º",
+                "texto": "Assegura acesso ao babaçu em áreas públicas e privadas.",
+            },
+        ],
     },
     {
-        "id": "leis_arborizacao_municipal",
-        "titulo": "Leis municipais de arborização, poda e tombamento de árvores",
-        "referencia": "Municípios atendidos pelo BBA",
-        "data": "—",
+        "id": "lei_arborizacao_sao_luis",
+        "titulo": "Política Municipal de Arborização de São Luís",
+        "referencia": "Lei Municipal São Luís nº 7.811/2026",
+        "data": "2026",
         "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 1º",
+                "texto": "Institui a Política Municipal de Arborização de São Luís.",
+            },
+            {
+                "numero": "Art. 6º",
+                "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana.",
+            },
+            {
+                "numero": "Art. 7º",
+                "texto": "Diretrizes de gestão integrada, poda, plantio e proteção do verde urbano.",
+            },
+            {
+                "numero": "Art. 30",
+                "texto": "Altera a Lei Municipal nº 7.380/2023 (competências do Impur).",
+            },
+        ],
     },
     {
-        "id": "conama_supressao",
-        "titulo": "Normas CONAMA — licenciamento e supressão de vegetação",
-        "referencia": "CONAMA / órgãos ambientais",
-        "data": "—",
+        "id": "lei_ma_3999_patrimonio",
+        "titulo": "Patrimônio histórico, artístico e paisagístico do Maranhão",
+        "referencia": "Lei Estadual MA nº 3.999/1978",
+        "data": "1978",
         "arquivo": None,
+        "artigos": [
+            {
+                "numero": "Art. 1º",
+                "texto": "Proteção e conservação do patrimônio histórico, artístico e paisagístico.",
+            },
+            {
+                "numero": "Art. 3º",
+                "texto": "Tombamento de bens de valor histórico, artístico ou paisagístico.",
+            },
+        ],
     },
 ]
 

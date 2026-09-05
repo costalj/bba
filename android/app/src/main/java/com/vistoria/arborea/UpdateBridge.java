@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -20,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 public class UpdateBridge {
@@ -171,31 +174,137 @@ public class UpdateBridge {
         }
     }
 
-    private void installApk(File apk) {
+    private String validateApkForUpdate(File apk) {
+        PackageManager pm = activity.getPackageManager();
+        String installedPackage = activity.getPackageName();
+        int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+            ? PackageManager.GET_SIGNING_CERTIFICATES
+            : PackageManager.GET_SIGNATURES;
+
+        PackageInfo archiveInfo = pm.getPackageArchiveInfo(apk.getAbsolutePath(), flags);
+        if (archiveInfo == null) {
+            return "APK baixado inválido. Tente baixar novamente.";
+        }
+
+        if (archiveInfo.applicationInfo != null) {
+            archiveInfo.applicationInfo.sourceDir = apk.getAbsolutePath();
+            archiveInfo.applicationInfo.publicSourceDir = apk.getAbsolutePath();
+        }
+
+        if (!installedPackage.equals(archiveInfo.packageName)) {
+            return "O arquivo baixado não é uma atualização do BBA.";
+        }
+
         try {
-            if (!canInstallPackages()) {
-                openInstallPermissionSettings();
-                return;
+            PackageInfo installedInfo = pm.getPackageInfo(installedPackage, flags);
+            if (!signaturesMatch(installedInfo, archiveInfo)) {
+                return "Assinatura diferente da versão instalada. Desinstale o BBA e instale pelo GitHub uma vez; depois as atualizações automáticas funcionam.";
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                installWithPackageInstaller(apk);
-            } else {
-                installWithIntent(apk);
+
+            long archiveVersion = getVersionCode(archiveInfo);
+            long installedVersion = getVersionCode(installedInfo);
+            if (archiveVersion <= installedVersion) {
+                return "Esta versão não é mais recente que a instalada (" + installedVersion + ").";
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    private long getVersionCode(PackageInfo info) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return info.getLongVersionCode();
+        }
+        return info.versionCode;
+    }
+
+    private boolean signaturesMatch(PackageInfo installed, PackageInfo archive) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (installed.signingInfo == null || archive.signingInfo == null) {
+                return false;
+            }
+            Signature[] a = installed.signingInfo.getApkContentsSigners();
+            Signature[] b = archive.signingInfo.getApkContentsSigners();
+            if (a == null || b == null || a.length == 0 || b.length == 0) {
+                return false;
+            }
+            return Arrays.equals(a[0].toByteArray(), b[0].toByteArray());
+        }
+
+        Signature[] a = installed.signatures;
+        Signature[] b = archive.signatures;
+        if (a == null || b == null || a.length == 0 || b.length == 0) {
+            return false;
+        }
+        return Arrays.equals(a[0].toByteArray(), b[0].toByteArray());
+    }
+
+    private void installApk(File apk) {
+        if (!canInstallPackages()) {
+            openInstallPermissionSettings();
+            return;
+        }
+
+        String validationError = validateApkForUpdate(apk);
+        if (validationError != null) {
+            toast(validationError);
+            return;
+        }
+
+        try {
+            installWithIntent(apk);
         } catch (Exception e) {
             try {
-                installWithIntent(apk);
+                installWithPackageInstaller(apk);
             } catch (Exception fallback) {
                 toast("Erro ao iniciar instalação: " + e.getMessage());
             }
         }
     }
 
-    private void installWithPackageInstaller(File apk) throws Exception {
-        PackageInstaller installer = activity.getPackageManager().getPackageInstaller();
-        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
-            PackageInstaller.SessionParams.MODE_FULL_INSTALL
+    private void installWithIntent(File apk) throws Exception {
+        Uri uri = FileProvider.getUriForFile(
+            activity,
+            activity.getPackageName() + ".fileprovider",
+            apk
         );
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setClipData(ClipData.newRawUri("", uri));
+
+        PackageManager pm = activity.getPackageManager();
+        List<ResolveInfo> matches = pm.queryIntentActivities(intent, 0);
+        if (matches.isEmpty()) {
+            throw new Exception("Instalador do Android indisponível");
+        }
+
+        for (ResolveInfo info : matches) {
+            activity.grantUriPermission(
+                info.activityInfo.packageName,
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+        }
+
+        activity.startActivity(intent);
+        toast("Toque em Atualizar na tela do Android.");
+    }
+
+    private void installWithPackageInstaller(File apk) throws Exception {
+        int mode = PackageInstaller.SessionParams.MODE_FULL_INSTALL;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            mode = PackageInstaller.SessionParams.MODE_INHERIT_EXISTING;
+        }
+        PackageInstaller installer = activity.getPackageManager().getPackageInstaller();
+        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(mode);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            params.setAppPackageName(activity.getPackageName());
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             params.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_REQUIRED);
         }
@@ -222,33 +331,6 @@ public class UpdateBridge {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, sessionId, callback, flags);
         session.commit(pendingIntent.getIntentSender());
         session.close();
-        toast("Confirme a instalação na tela do Android.");
-    }
-
-    private void installWithIntent(File apk) throws Exception {
-        Uri uri = FileProvider.getUriForFile(
-            activity,
-            activity.getPackageName() + ".fileprovider",
-            apk
-        );
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setClipData(ClipData.newRawUri("", uri));
-
-        PackageManager pm = activity.getPackageManager();
-        List<ResolveInfo> matches = pm.queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            activity.grantUriPermission(
-                info.activityInfo.packageName,
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            );
-        }
-
-        activity.startActivity(intent);
         toast("Confirme a instalação na tela do Android.");
     }
 

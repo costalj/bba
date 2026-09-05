@@ -135,7 +135,7 @@ function renderBannerAtualizacao(container, info) {
   container.innerHTML = `
     <section class="update-banner" id="update-banner">
       <strong>Nova versão ${r.versao}</strong>
-      <p class="hint">Instalada: ${info.versaoInstalada}. Toque para baixar e instalar por cima (dados preservados). Se aparecer "App não atualizado", desinstale o BBA uma vez e instale de novo pelo GitHub.</p>
+      <p class="hint">Instalada: ${info.versaoInstalada}. Toque para baixar; o Android abrirá a tela de atualização (dados preservados). Se pedir, permita <em>Instalar apps desconhecidos</em> para o BBA. Se aparecer erro de assinatura, desinstale o BBA uma vez e instale a versão do GitHub.</p>
       <button type="button" class="btn btn-primary btn-block" id="btn-update-banner">${textoBotaoAtualizacao(r.versao)}</button>
     </section>`;
   document.getElementById("btn-update-banner")?.addEventListener("click", () => {

@@ -64,6 +64,44 @@
     return hits[0] || null;
   }
 
+  function exigeCitacaoLegal(status) {
+    return ["ameacada", "tombada", "protegida", "imune"].includes(status);
+  }
+
+  function formatarCitacoesLegais(especie) {
+    if (!especie || !exigeCitacaoLegal(especie.status)) return "";
+    const artigos = especie.artigos || [];
+    if (!artigos.length) {
+      return especie.referencia ? `\nReferência: ${especie.referencia}.` : "";
+    }
+    const ordem = ["federal", "estadual", "municipal"];
+    const rotulos = {
+      federal: "Lei federal",
+      estadual: "Lei/dec. estadual (MA)",
+      municipal: "Lei municipal (São Luís)",
+    };
+    const grupos = {};
+    artigos.forEach((a) => {
+      const e = (a.esfera || "").toLowerCase();
+      if (!grupos[e]) grupos[e] = [];
+      grupos[e].push(a);
+    });
+    const linhas = [];
+    ordem.forEach((esfera) => {
+      const lista = grupos[esfera];
+      if (!lista || !lista.length) return;
+      const citacoes = lista
+        .map((a) => {
+          const base = `${a.norma}, ${a.artigo}`;
+          return a.texto ? `${base} (${a.texto})` : base;
+        })
+        .join("; ");
+      linhas.push(`${rotulos[esfera]}: ${citacoes}.`);
+    });
+    if (!linhas.length) return "";
+    return `\n\n${linhas.join("\n")}`;
+  }
+
   function textoResultado(especie) {
     if (!especie) {
       return {
@@ -75,10 +113,12 @@
     }
     const label = statusLabel(especie.status);
     const esfera = (especie.esfera || "").toUpperCase();
+    const citacoes = formatarCitacoesLegais(especie);
+    const descricao = `${especie.nome_popular} (${especie.nome_cientifico}). ${especie.conduta}${citacoes}`;
     return {
       nivel: especie.status,
       titulo: `${label} (${esfera})`,
-      resumo: `${especie.nome_popular} (${especie.nome_cientifico}). ${especie.conduta} Ref.: ${especie.referencia}`,
+      resumo: descricao,
       especie,
     };
   }
@@ -286,4 +326,5 @@
   window.verificarEspecieDigitada = verificarEspecieDigitada;
   window.initEspecieForm = initEspecieForm;
   window.formatarCampoResultadoEspecie = formatarCampoResultado;
+  window.formatarCitacoesLegaisEspecie = formatarCitacoesLegais;
 })();

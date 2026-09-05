@@ -100,6 +100,8 @@ def gerar_pdf(vistoria, fotos, upload_folder: str) -> bytes:
     else:
         _append_quadro_resultado(story, vistoria, res, max_sim, body_style)
 
+    _append_legislacao(story, vistoria, heading_style, body_style)
+
     _append_rubrica_e_assinatura(story, vistoria, heading_style, body_style)
 
     if fotos:
@@ -183,7 +185,6 @@ def _append_dados_ocorrencia(story, vistoria, heading_style):
         ["Natureza da ocorrência", _valor_coluna(vistoria, "natureza_ocorrencia") or "—"],
         ["Descrição da ocorrência", _valor_coluna(vistoria, "descricao_ocorrencia") or "—"],
         ["Espécie", vistoria["especie"] or "—"],
-        ["Resultado (proteção)", _valor_coluna(vistoria, "resultado_especie") or "—"],
     ]
     if vistoria["latitude"] and vistoria["longitude"]:
         lat = vistoria["latitude"]
@@ -445,6 +446,142 @@ def _table_style_padrao(font_size=10):
     else:
         cmds.append(("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f6f9f7")]))
     return TableStyle(cmds)
+
+
+def _agrupar_artigos_esfera(artigos):
+    ordem = [
+        ("federal", "Federal"),
+        ("estadual", "Estadual (MA)"),
+        ("municipal", "Municipal (São Luís)"),
+    ]
+    grupos = {}
+    for art in artigos or []:
+        esfera = (art.get("esfera") or "").lower()
+        trecho = f"{art.get('norma', '')}, {art.get('artigo', '')}"
+        if art.get("texto"):
+            trecho = f"{trecho} ({art['texto']})"
+        grupos.setdefault(esfera, []).append(trecho)
+    return [(rotulo, "; ".join(grupos[chave])) for chave, rotulo in ordem if chave in grupos]
+
+
+def _parse_resultado_especie(texto):
+    linhas = [ln.strip() for ln in (texto or "").splitlines() if ln.strip()]
+    if not linhas:
+        return None
+    titulo = linhas[0]
+    descricao = []
+    citacoes = []
+    prefixos = ("Lei federal:", "Lei/dec. estadual (MA):", "Lei municipal (São Luís):", "Referência:")
+    for linha in linhas[1:]:
+        if any(linha.startswith(p) for p in prefixos):
+            citacoes.append(linha)
+        elif not citacoes:
+            descricao.append(linha)
+    tabela = []
+    mapa = {
+        "Lei federal:": "Federal",
+        "Lei/dec. estadual (MA):": "Estadual (MA)",
+        "Lei municipal (São Luís):": "Municipal (São Luís)",
+    }
+    for linha in citacoes:
+        for prefixo, rotulo in mapa.items():
+            if linha.startswith(prefixo):
+                tabela.append((rotulo, linha[len(prefixo) :].strip()))
+                break
+    return {
+        "titulo": titulo,
+        "descricao": " ".join(descricao),
+        "citacoes": tabela,
+    }
+
+
+def _info_legislacao(vistoria):
+    from app.especies_protegidas_data import STATUS_LABEL, get_especie
+
+    especie_id = _valor_coluna(vistoria, "especie_catalogo_id")
+    especie = get_especie(especie_id) if especie_id else None
+    if especie and especie.get("status") in ("ameacada", "tombada", "protegida", "imune"):
+        label = STATUS_LABEL.get(especie["status"], especie["status"].upper())
+        esfera = (especie.get("esfera") or "").upper()
+        return {
+            "titulo": f"{label} ({esfera})",
+            "descricao": (
+                f"{especie['nome_popular']} ({especie['nome_cientifico']}). {especie['conduta']}"
+            ),
+            "citacoes": _agrupar_artigos_esfera(especie.get("artigos")),
+        }
+
+    resultado = (_valor_coluna(vistoria, "resultado_especie") or "").strip()
+    if not resultado:
+        return None
+    parsed = _parse_resultado_especie(resultado)
+    if not parsed:
+        return None
+    protegido = any(
+        termo in parsed["titulo"].upper()
+        for termo in ("AMEAÇADA", "TOMBADA", "PROTEGIDA", "IMUNE")
+    )
+    if not protegido and not parsed["citacoes"]:
+        return None
+    return parsed
+
+
+def _append_legislacao(story, vistoria, heading_style, body_style):
+    info = _info_legislacao(vistoria)
+    if not info:
+        return
+
+    leg_style = ParagraphStyle(
+        "LegislacaoCorpo",
+        parent=body_style,
+        fontSize=8,
+        leading=10,
+        spaceAfter=2,
+    )
+    leg_bold = ParagraphStyle(
+        "LegislacaoBold",
+        parent=leg_style,
+        fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#1b4332"),
+    )
+
+    bloco = [
+        Spacer(1, 0.25 * cm),
+        Paragraph("7. Legislação", heading_style),
+        Paragraph(f"<b>{info['titulo']}</b>", leg_bold),
+        Paragraph(info["descricao"], leg_style),
+    ]
+
+    citacoes = info.get("citacoes") or []
+    if citacoes:
+        rows = [[Paragraph("<b>Esfera</b>", leg_bold), Paragraph("<b>Dispositivo legal</b>", leg_bold)]]
+        for esfera, texto in citacoes:
+            rows.append(
+                [
+                    Paragraph(esfera, leg_bold),
+                    Paragraph(texto, leg_style),
+                ]
+            )
+        tabela = Table(rows, colWidths=[3.2 * cm, 12.8 * cm])
+        tabela.setStyle(
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e8f5e9")),
+                    ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#2d6a4f")),
+                    ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#c8e6c9")),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                    ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                    ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                ]
+            )
+        )
+        bloco.append(Spacer(1, 0.15 * cm))
+        bloco.append(tabela)
+
+    story.append(KeepTogether(bloco))
+    story.append(Spacer(1, 0.25 * cm))
 
 
 def _cor_recomendacao(recomendacao: str):

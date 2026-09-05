@@ -20,7 +20,15 @@
         <strong class="doc-item-titulo">{{ esp.nome_popular }}</strong>
         <small class="doc-item-meta"><em>{{ esp.nome_cientifico }}</em> · {{ esp.status|upper }} ({{ esp.esfera|upper }})</small>
         <p class="hint" style="margin:.35rem 0 0">{{ esp.conduta }}</p>
+        {% if esp.artigos %}
+        <ul class="doc-artigos">
+          {% for art in esp.artigos %}
+          <li><small><strong>{{ art.esfera|upper }}:</strong> {{ art.norma }}, {{ art.artigo }}{% if art.texto %} — {{ art.texto }}{% endif %}</small></li>
+          {% endfor %}
+        </ul>
+        {% else %}
         <small class="doc-item-meta">{{ esp.referencia }}</small>
+        {% endif %}
       </div>
       <span class="doc-badge">{{ esp.status|upper }}</span>
     </li>
@@ -38,6 +46,13 @@
       <div class="doc-item-corpo">
         <strong class="doc-item-titulo">{{ doc.titulo }}</strong>
         <small class="doc-item-meta">{{ doc.referencia }}{% if doc.data and doc.data != '—' %} · {{ doc.data }}{% endif %}</small>
+        {% if doc.artigos %}
+        <ul class="doc-artigos">
+          {% for art in doc.artigos %}
+          <li><small><strong>{{ art.numero }}:</strong> {{ art.texto }}</small></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
       </div>
       {% if doc.arquivo %}
       <a href="{{ url_for('static', filename=doc.arquivo) }}" class="doc-item-acao" target="_blank" rel="noopener">Abrir PDF</a>

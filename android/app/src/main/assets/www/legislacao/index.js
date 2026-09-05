@@ -15,6 +15,27 @@ function statusBadge(status) {
   return labels[status] || status || "";
 }
 
+function renderArtigosDoc(doc) {
+  if (!doc.artigos || !doc.artigos.length) return "";
+  return `<ul class="doc-artigos">${doc.artigos
+    .map((a) => `<li><small><strong>${a.numero}:</strong> ${a.texto}</small></li>`)
+    .join("")}</ul>`;
+}
+
+function renderArtigosEspecie(esp) {
+  if (!esp.artigos || !esp.artigos.length) {
+    return `<small class="doc-item-meta">${esp.referencia || ""}</small>`;
+  }
+  return `<ul class="doc-artigos">${esp.artigos
+    .map(
+      (a) =>
+        `<li><small><strong>${(a.esfera || "").toUpperCase()}:</strong> ${a.norma}, ${a.artigo}${
+          a.texto ? " — " + a.texto : ""
+        }</small></li>`
+    )
+    .join("")}</ul>`;
+}
+
 function renderDoc(doc) {
   const acao = doc.arquivo
     ? `<a href="../${doc.arquivo}" class="doc-item-acao" target="_blank" rel="noopener">Abrir PDF</a>`
@@ -24,6 +45,7 @@ function renderDoc(doc) {
     <div class="doc-item-corpo">
       <strong class="doc-item-titulo">${doc.titulo}</strong>
       <small class="doc-item-meta">${doc.referencia}${data}</small>
+      ${renderArtigosDoc(doc)}
     </div>
     ${acao}
   </li>`;
@@ -35,7 +57,7 @@ function renderEspecie(esp) {
       <strong class="doc-item-titulo">${esp.nome_popular}</strong>
       <small class="doc-item-meta"><em>${esp.nome_cientifico}</em> · ${statusBadge(esp.status)} (${(esp.esfera || "").toUpperCase()})</small>
       <p class="hint" style="margin:.35rem 0 0">${esp.conduta}</p>
-      <small class="doc-item-meta">${esp.referencia}</small>
+      ${renderArtigosEspecie(esp)}
     </div>
     <span class="doc-badge">${statusBadge(esp.status)}</span>
   </li>`;

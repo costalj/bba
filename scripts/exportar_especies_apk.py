@@ -12,9 +12,10 @@ from app.especies_protegidas_data import (  # noqa: E402
     STATUS_LABEL,
 )
 
-OUT = os.path.join(
+OUT_APK = os.path.join(
     ROOT, "android", "app", "src", "main", "assets", "www", "js", "especies-data.js"
 )
+OUT_WEB = os.path.join(ROOT, "app", "static", "js", "especies-data.js")
 
 
 def exportar():
@@ -24,13 +25,15 @@ def exportar():
         "status_label": STATUS_LABEL,
     }
     texto = json.dumps(payload, ensure_ascii=False, indent=2)
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8", newline="\n") as f:
-        f.write(
-            "/* Gerado por scripts/exportar_especies_apk.py — nao editar manualmente */\n"
-            f"const ESPECIES_CATALOGO = {texto};\n"
-        )
-    print(f"Especies exportadas: {OUT}")
+    conteudo = (
+        "/* Gerado por scripts/exportar_especies_apk.py — nao editar manualmente */\n"
+        f"const ESPECIES_CATALOGO = {texto};\n"
+    )
+    for destino in (OUT_APK, OUT_WEB):
+        os.makedirs(os.path.dirname(destino), exist_ok=True)
+        with open(destino, "w", encoding="utf-8", newline="\n") as f:
+            f.write(conteudo)
+        print(f"Especies exportadas: {destino}")
     print(f"  especies: {len(ESPECIES_PROTEGIDAS)}")
     print(f"  documentos: {len(DOCUMENTOS_ESPECIES)}")
 

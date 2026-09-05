@@ -832,6 +832,12 @@ body {
   background: #f8fafc;
 }
 
+.resultado-especie-texto {
+  white-space: pre-wrap;
+  line-height: 1.4;
+  font-size: 0.88rem;
+}
+
 .resultado-especie-ameacada,
 .resultado-especie-imune,
 .resultado-especie-tombada {
@@ -1701,6 +1707,22 @@ code {
   font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.3;
+}
+
+.doc-artigos {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  list-style: disc;
+}
+
+.doc-artigos li {
+  margin: 0.15rem 0;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.doc-artigos small {
+  font-size: 0.72rem;
 }
 
 .doc-item-acao {

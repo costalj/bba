@@ -10,8 +10,8 @@ android {
         applicationId = "com.vistoria.arborea"
         minSdk = 24
         targetSdk = 34
-        versionCode = 23
-        versionName = "1.0.23"
+        versionCode = 24
+        versionName = "1.0.24"
     }
 
     signingConfigs {

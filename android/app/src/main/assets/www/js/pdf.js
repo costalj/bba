@@ -192,6 +192,129 @@ function tituloSecao(doc, y, texto) {
   return y + 8;
 }
 
+function agruparArtigosEsfera(artigos) {
+  const ordem = [
+    ["federal", "Federal"],
+    ["estadual", "Estadual (MA)"],
+    ["municipal", "Municipal (São Luís)"],
+  ];
+  const grupos = {};
+  (artigos || []).forEach((art) => {
+    const esfera = safeText(art.esfera).toLowerCase();
+    let trecho = `${safeText(art.norma)}, ${safeText(art.artigo)}`;
+    if (art.texto) trecho += ` (${art.texto})`;
+    if (!grupos[esfera]) grupos[esfera] = [];
+    grupos[esfera].push(trecho);
+  });
+  return ordem.filter(([chave]) => grupos[chave]).map(([chave, rotulo]) => [rotulo, grupos[chave].join("; ")]);
+}
+
+function parseResultadoEspecie(texto) {
+  const linhas = safeText(texto)
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (!linhas.length) return null;
+  const titulo = linhas[0];
+  const descricao = [];
+  const citacoes = [];
+  const prefixos = [
+    ["Lei federal:", "Federal"],
+    ["Lei/dec. estadual (MA):", "Estadual (MA)"],
+    ["Lei municipal (São Luís):", "Municipal (São Luís)"],
+  ];
+  linhas.slice(1).forEach((linha) => {
+    const hit = prefixos.find(([p]) => linha.startsWith(p));
+    if (hit) citacoes.push([hit[1], linha.slice(hit[0].length).trim()]);
+    else if (!citacoes.length) descricao.push(linha);
+  });
+  return { titulo, descricao: descricao.join(" "), citacoes };
+}
+
+function infoLegislacao(vistoria) {
+  const catalogo =
+    typeof ESPECIES_CATALOGO !== "undefined" && ESPECIES_CATALOGO.especies
+      ? ESPECIES_CATALOGO.especies
+      : [];
+  const statusMap =
+    typeof ESPECIES_CATALOGO !== "undefined" && ESPECIES_CATALOGO.status_label
+      ? ESPECIES_CATALOGO.status_label
+      : {};
+  const id = safeText(vistoria.especie_catalogo_id);
+  const especie = id ? catalogo.find((e) => e.id === id) : null;
+
+  if (especie && ["ameacada", "tombada", "protegida", "imune"].includes(especie.status)) {
+    const label = statusMap[especie.status] || String(especie.status || "").toUpperCase();
+    const esfera = safeText(especie.esfera).toUpperCase();
+    return {
+      titulo: `${label} (${esfera})`,
+      descricao: `${especie.nome_popular} (${especie.nome_cientifico}). ${especie.conduta}`,
+      citacoes: agruparArtigosEsfera(especie.artigos),
+    };
+  }
+
+  const resultado = safeText(vistoria.resultado_especie).trim();
+  if (!resultado) return null;
+  const parsed = parseResultadoEspecie(resultado);
+  if (!parsed) return null;
+  const protegido = /AMEAÇADA|TOMBADA|PROTEGIDA|IMUNE/.test(parsed.titulo.toUpperCase());
+  if (!protegido && !parsed.citacoes.length) return null;
+  return parsed;
+}
+
+function estimarAlturaLegislacao(info) {
+  const descLinhas = Math.ceil(safeText(info.descricao).length / 78);
+  const citacoesAlt = (info.citacoes || []).reduce(
+    (total, [, texto]) => total + Math.max(1, Math.ceil(safeText(texto).length / 62)),
+    0
+  );
+  return 8 + descLinhas * 4 + 8 + citacoesAlt * 5 + 8;
+}
+
+function desenharLegislacao(doc, y, vistoria) {
+  const info = infoLegislacao(vistoria);
+  if (!info) return y;
+
+  const pageH = doc.internal.pageSize.getHeight();
+  const altura = estimarAlturaLegislacao(info);
+  if (y + altura > pageH - PDF_MARGEM) {
+    doc.addPage();
+    y = PDF_MARGEM;
+  }
+
+  y = tituloSecao(doc, y, "7. Legislação");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(27, 67, 50);
+  doc.text(safeText(info.titulo), PDF_MARGEM, y);
+  y += 5;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
+  const desc = doc.splitTextToSize(safeText(info.descricao), PDF_LARGURA);
+  doc.text(desc, PDF_MARGEM, y);
+  y += desc.length * 3.8 + 2;
+
+  if (info.citacoes && info.citacoes.length) {
+    doc.autoTable({
+      ...estiloTabelaPadrao(8),
+      head: [["Esfera", "Dispositivo legal"]],
+      body: info.citacoes,
+      startY: y,
+      columnStyles: {
+        0: { cellWidth: 32, fontStyle: "bold", fillColor: [232, 245, 233] },
+        1: { cellWidth: 138, overflow: "linebreak" },
+      },
+      margin: { left: PDF_MARGEM, right: PDF_MARGEM },
+    });
+    y = doc.lastAutoTable.finalY + 4;
+  }
+
+  return y;
+}
+
 function desenharTabelaDados(doc, y, vistoria) {
   y = tituloSecao(doc, y, "1. Dados da ocorrência");
   const body = [
@@ -206,7 +329,6 @@ function desenharTabelaDados(doc, y, vistoria) {
     ["Natureza da ocorrência", vistoria.natureza_ocorrencia || "—"],
     ["Descrição da ocorrência", vistoria.descricao_ocorrencia || "—"],
     ["Espécie", vistoria.especie || "—"],
-    ["Resultado (proteção)", vistoria.resultado_especie || "—"],
   ];
 
   doc.autoTable({
@@ -560,6 +682,7 @@ function gerarPdfVistoria(vistoria, opts) {
 
   y = desenharSecao6(doc, y, res);
   y = desenharQuadroResultado(doc, vistoria, y, res, maxSim);
+  y = desenharLegislacao(doc, y, vistoria);
   y = desenharRubricaEAssinatura(doc, y, vistoria);
   y = desenharFotos(doc, y, vistoria.fotos);
 

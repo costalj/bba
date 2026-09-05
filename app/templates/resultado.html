@@ -55,7 +55,7 @@
     </dd>
     {% endif %}
     {% if vistoria.especie %}<dt>Espécie</dt><dd>{{ vistoria.especie }}</dd>{% endif %}
-    {% if vistoria.resultado_especie %}<dt>Resultado (proteção)</dt><dd>{{ vistoria.resultado_especie }}</dd>{% endif %}
+    {% if vistoria.resultado_especie %}<dt>Resultado (proteção)</dt><dd class="resultado-especie-texto">{{ vistoria.resultado_especie }}</dd>{% endif %}
   </dl>
 </section>
 {% if vistoria.foto_especie %}

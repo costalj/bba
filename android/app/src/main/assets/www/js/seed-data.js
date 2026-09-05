@@ -1,7 +1,7 @@
 /* Gerado por scripts/exportar_seed_apk.py — nao editar manualmente */
 const SEED_DATA = {
-  "version": "1.0.27",
-  "exported_at": "2026-09-05T19:36:12",
+  "version": "1.0.28",
+  "exported_at": "2026-09-05T19:48:40",
   "usuarios": [
     {
       "id": 1,

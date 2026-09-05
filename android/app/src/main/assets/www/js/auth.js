@@ -244,6 +244,9 @@ function nomePostoGuerra(u) {
 }
 
 async function login(cpf, senha) {
+  if (typeof aplicarSeedInicial === "function") {
+    aplicarSeedInicial();
+  }
   await initUsuariosPadrao();
   const cpfLimpo = limparCpf(cpf);
   const user = listarUsuarios().find(
@@ -257,6 +260,9 @@ async function login(cpf, senha) {
 }
 
 function exigirLogin() {
+  if (typeof aplicarSeedInicial === "function") {
+    aplicarSeedInicial();
+  }
   if (!isLogado()) {
     const rel = (location.href.split("/www/")[1] || "index.html").split("?")[0];
     const depth = rel.includes("/") ? "../" : "";

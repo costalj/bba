@@ -109,8 +109,12 @@ function renderHistorico(lista) {
 (async function initHistorico() {
   el.innerHTML = `<div class="empty-state"><p>Carregando histórico…</p></div>`;
   try {
+    if (typeof aplicarSeedInicial === "function") aplicarSeedInicial();
     if (typeof prepararHistoricoVistorias === "function") {
-      await prepararHistoricoVistorias();
+      await Promise.race([
+        prepararHistoricoVistorias(),
+        new Promise((resolve) => setTimeout(resolve, 8000)),
+      ]);
     }
   } catch (e) {
     console.warn("Histórico:", e);

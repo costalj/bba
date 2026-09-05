@@ -3,7 +3,7 @@ const USUARIOS_SEED = [
   {
     "id": 1,
     "nome": "Administrador",
-    "nome_guerra": "",
+    "nome_guerra": "Admin",
     "matricula": "0001",
     "cpf": "00000000000",
     "posto": "Capitão",

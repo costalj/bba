@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vistoria de Viaturas</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="../index.html" class="header-back">←</a>
+      <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
+      <div class="header-titles"><h1>Vistoria de Viaturas</h1></div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <h2>Inspeção pré-operacional</h2>
+      <p>Checklist básico com itens principais. Assinatura eletrônica do condutor de viatura.</p>
+    </section>
+    <section class="card-grid">
+      <a href="nova.html" class="action-card primary">
+        <span class="card-icon">➕</span><strong>Nova Vistoria</strong><small>Preencher checklist</small>
+      </a>
+      <a href="lista.html" class="action-card">
+        <span class="card-icon">📂</span><strong>Histórico</strong><small>Vistorias salvas</small>
+      </a>
+    </section>
+  </main>
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
+    <a href="nova.html" class="nav-item"><span class="nav-icon">➕</span><span>Nova</span></a>
+    <a href="lista.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
+  </nav>
+  <script src="../js/usuarios-seed.js"></script>
+  <script src="../js/seed-meta.js"></script>
+  <script src="../js/vistorias-viaturas-seed.js"></script>
+  <script src="../js/viaturas-cadastro-seed.js"></script>
+  <script src="../js/seed.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/header.js"></script>
+  <script>if (!exigirLogin()) throw new Error("auth");</script>
+</body>
+</html>

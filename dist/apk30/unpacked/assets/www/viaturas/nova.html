@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nova Vistoria de Viatura</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="index.html" class="header-back">←</a>
+      <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
+      <div class="header-titles"><h1>Nova Vistoria</h1></div>
+    </div>
+  </header>
+  <main class="container">
+    <form id="form-viatura">
+      <section class="form-section">
+        <h3>1. Dados da viatura</h3>
+        <label class="field">
+          <span>Viatura (AR) *</span>
+          <select id="select-viatura" required><option value="">Selecione…</option></select>
+        </label>
+        <label class="field"><span>Placa</span><input name="placa" id="placa-viatura" readonly required placeholder="Preenchida automaticamente"></label>
+        <input type="hidden" name="tipo_viatura" id="tipo-viatura">
+        <p id="dados-viatura" class="hint"></p>
+        <label class="field"><span>Quilometragem</span><input name="km" inputmode="numeric" placeholder="Ex: 45230"></label>
+        <label class="field"><span>Condutor</span>
+          <p class="condutor-logado" id="condutor-logado"></p>
+          <p class="hint">Preenchido automaticamente com o usuário logado.</p>
+        </label>
+      </section>
+      <div id="checklist"></div>
+      <section class="form-section">
+        <h3>6. Observações</h3>
+        <label class="field"><textarea name="observacoes" rows="3" placeholder="Defeitos, pendências ou observações…"></textarea></label>
+      </section>
+      <div id="preview-resultado" class="preview-card hidden preview-aprovada">
+        <div class="preview-score"><span id="preview-total">0</span><small>/ 19 não conformes</small></div>
+        <div id="preview-recomendacao" class="preview-label">APROVADA</div>
+        <p id="preview-texto"></p>
+      </div>
+      <section class="form-section assinaturas-secao">
+        <h3>7. Assinatura da vistoria</h3>
+        <div id="secao-assinatura-condutor"></div>
+        <input type="hidden" name="assinatura_json" id="assinatura_json">
+      </section>
+      <button type="submit" class="btn btn-primary btn-block">Salvar vistoria</button>
+    </form>
+  </main>
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
+    <a href="nova.html" class="nav-item active"><span class="nav-icon">➕</span><span>Nova</span></a>
+    <a href="lista.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
+  </nav>
+  <script src="../js/usuarios-seed.js"></script>
+  <script src="../js/seed-meta.js"></script>
+  <script src="../js/vistorias-viaturas-seed.js"></script>
+  <script src="../js/viaturas-cadastro-seed.js"></script>
+  <script src="../js/seed.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/header.js"></script>
+  <script>if (!exigirLogin()) throw new Error("auth");</script>
+  <script src="../js/viaturas-checklist.js"></script>
+  <script src="../js/assinatura.js"></script>
+  <script src="../js/sync-meta.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/db-viaturas.js"></script>
+  <script src="../js/viaturas-cadastro.js"></script>
+  <script src="nova.js"></script>
+</body>
+</html>

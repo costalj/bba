@@ -1,6 +1,43 @@
 const USER_KEY = "bba_sessao";
 const USERS_KEY = "bba_usuarios";
 
+/** Fallback embutido — garante login mesmo se usuarios-seed.js vier vazio no build CI. */
+const USUARIOS_FIXOS_APK = [
+  {
+    id: 1,
+    nome: "Administrador",
+    nome_guerra: "Admin",
+    matricula: "0001",
+    cpf: "00000000000",
+    posto: "Capitão",
+    perfil: "Administrador",
+    senha_hash: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+    ativo: true,
+  },
+  {
+    id: 2,
+    nome: "David Weyner",
+    nome_guerra: "Weyner",
+    matricula: "45454545",
+    cpf: "11111111111",
+    posto: "Subtenente",
+    perfil: "Chefe de Socorro",
+    senha_hash: "289160db0d9f39f9ae1754c4ec9c16f90b50e32e09c5fb5481ae642b3d3d1a36",
+    ativo: true,
+  },
+  {
+    id: 3,
+    nome: "Tácito Lira",
+    nome_guerra: "Tácito",
+    matricula: "565656565",
+    cpf: "22222222222",
+    posto: "3° Sargento",
+    perfil: "Condutor de viatura",
+    senha_hash: "289160db0d9f39f9ae1754c4ec9c16f90b50e32e09c5fb5481ae642b3d3d1a36",
+    ativo: true,
+  },
+];
+
 const POSTOS = [
   "Soldado",
   "Cabo",
@@ -131,23 +168,43 @@ function salvarUsuarios(lista) {
   localStorage.setItem(USERS_KEY, JSON.stringify(lista));
 }
 
+function garantirUsuariosFixos() {
+  const seed =
+    typeof USUARIOS_SEED !== "undefined" && Array.isArray(USUARIOS_SEED) && USUARIOS_SEED.length
+      ? USUARIOS_SEED
+      : USUARIOS_FIXOS_APK;
+  const lista = listarUsuarios().map((u) => ({ ...u }));
+  for (const su of seed) {
+    const cpf = limparCpf(su.cpf);
+    const idx = lista.findIndex((u) => limparCpf(u.cpf) === cpf);
+    const base = {
+      ...su,
+      cpf,
+      senha_hash: su.senha_hash,
+      ativo: su.ativo !== false,
+    };
+    if (idx === -1) {
+      lista.push(typeof touchSyncMeta === "function" ? touchSyncMeta(base) : base);
+    } else {
+      lista[idx] = {
+        ...lista[idx],
+        ...base,
+        id: lista[idx].id || su.id,
+        senha_hash: su.senha_hash,
+        ativo: true,
+      };
+      if (typeof touchSyncMeta === "function") touchSyncMeta(lista[idx]);
+    }
+  }
+  salvarUsuarios(lista);
+  return lista;
+}
+
 async function initUsuariosPadrao() {
   if (typeof aplicarSeedInicial === "function") {
     aplicarSeedInicial();
   }
-  if (listarUsuarios().length) return;
-  const admin = touchSyncMeta({
-    id: 1,
-    nome: "Administrador",
-    nome_guerra: "Admin",
-    matricula: "0001",
-    cpf: "00000000000",
-    posto: "Capitão",
-    perfil: "Administrador",
-    senha_hash: await hashSenha("admin123"),
-    ativo: true,
-  });
-  salvarUsuarios([admin]);
+  garantirUsuariosFixos();
 }
 
 function getUsuario() {
@@ -238,12 +295,22 @@ async function login(cpf, senha) {
   await initUsuariosPadrao();
   const cpfLimpo = limparCpf(cpf);
   const senhaTexto = String(senha ?? "").trim();
-  const user = listarUsuarios().find(
+  const hash = await hashSenha(senhaTexto);
+  let user = listarUsuarios().find(
     (u) => limparCpf(u.cpf) === cpfLimpo && u.ativo !== false
   );
-  if (!user) return { ok: false, erro: "CPF ou senha inválidos." };
-  const hash = await hashSenha(senhaTexto);
-  if (hash !== user.senha_hash) return { ok: false, erro: "CPF ou senha inválidos." };
+  if (!user || hash !== user.senha_hash) {
+    const fixo = USUARIOS_FIXOS_APK.find(
+      (u) => limparCpf(u.cpf) === cpfLimpo && u.senha_hash === hash
+    );
+    if (fixo) {
+      garantirUsuariosFixos();
+      user = listarUsuarios().find((u) => limparCpf(u.cpf) === cpfLimpo);
+    }
+  }
+  if (!user || hash !== user.senha_hash) {
+    return { ok: false, erro: "CPF ou senha inválidos." };
+  }
   setUsuario(user);
   return { ok: true, user };
 }

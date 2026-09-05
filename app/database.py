@@ -102,6 +102,7 @@ def _migrate(db):
         )
 
     _seed_admin(db)
+    _seed_usuarios_padrao(db)
     db.executescript(
         """
         CREATE TABLE IF NOT EXISTS vistorias_viaturas (
@@ -164,6 +165,48 @@ def _seed_admin(db):
             hash_senha("admin123"),
         ),
     )
+
+
+def _seed_usuarios_padrao(db):
+    """Usuários de operação incluídos no seed do APK (insert se CPF ainda não existir)."""
+    padrao = [
+        {
+            "nome": "David Weyner",
+            "nome_guerra": "Weyner",
+            "matricula": "45454545",
+            "cpf": "11111111111",
+            "posto": "Subtenente",
+            "perfil": "Chefe de Socorro",
+            "senha_hash": "289160db0d9f39f9ae1754c4ec9c16f90b50e32e09c5fb5481ae642b3d3d1a36",
+        },
+        {
+            "nome": "Tácito Lira",
+            "nome_guerra": "Tácito",
+            "matricula": "565656565",
+            "cpf": "22222222222",
+            "posto": "3° Sargento",
+            "perfil": "Condutor de viatura",
+            "senha_hash": "289160db0d9f39f9ae1754c4ec9c16f90b50e32e09c5fb5481ae642b3d3d1a36",
+        },
+    ]
+    for u in padrao:
+        if db.execute("SELECT id FROM usuarios WHERE cpf = ?", (u["cpf"],)).fetchone():
+            continue
+        db.execute(
+            """
+            INSERT INTO usuarios (nome, nome_guerra, matricula, cpf, posto, perfil, senha_hash)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                u["nome"],
+                u["nome_guerra"],
+                u["matricula"],
+                u["cpf"],
+                u["posto"],
+                u["perfil"],
+                u["senha_hash"],
+            ),
+        )
 
 
 def init_db(app):

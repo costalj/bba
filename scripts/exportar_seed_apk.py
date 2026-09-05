@@ -11,7 +11,10 @@ POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 OUT_PATH = os.path.join(
     ROOT, "android", "app", "src", "main", "assets", "www", "js", "seed-data.js"
 )
-SEED_VERSION = "1.0.28"
+OUT_USUARIOS_PATH = os.path.join(
+    ROOT, "android", "app", "src", "main", "assets", "www", "js", "usuarios-seed.js"
+)
+SEED_VERSION = "1.0.29"
 
 
 def _parse_json(raw):
@@ -173,7 +176,16 @@ def exportar_seed():
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         f.write(content)
 
+    usuarios_payload = json.dumps(seed["usuarios"], ensure_ascii=False, indent=2)
+    usuarios_content = (
+        "/* Gerado por scripts/exportar_seed_apk.py — nao editar manualmente */\n"
+        f"const USUARIOS_SEED = {usuarios_payload};\n"
+    )
+    with open(OUT_USUARIOS_PATH, "w", encoding="utf-8") as f:
+        f.write(usuarios_content)
+
     print(f"Seed exportado: {OUT_PATH}")
+    print(f"Usuarios exportados: {OUT_USUARIOS_PATH}")
     print(f"  versao: {SEED_VERSION}")
     print(f"  usuarios: {len(seed['usuarios'])}")
     print(f"  vistorias: {len(seed['vistorias'])}")

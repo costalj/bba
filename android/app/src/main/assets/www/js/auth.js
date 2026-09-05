@@ -113,21 +113,6 @@ function sha256Hex(message) {
 
 async function hashSenha(senha) {
   const texto = String(senha ?? "");
-  if (
-    typeof crypto !== "undefined" &&
-    crypto.subtle &&
-    typeof crypto.subtle.digest === "function"
-  ) {
-    try {
-      const buf = new TextEncoder().encode(texto);
-      const hash = await crypto.subtle.digest("SHA-256", buf);
-      return Array.from(new Uint8Array(hash))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-    } catch (_) {
-      /* WebView file:// — crypto.subtle indisponível */
-    }
-  }
   if (typeof sha256Hex === "function") {
     return sha256Hex(texto);
   }
@@ -147,6 +132,9 @@ function salvarUsuarios(lista) {
 }
 
 async function initUsuariosPadrao() {
+  if (typeof aplicarSeedInicial === "function") {
+    aplicarSeedInicial();
+  }
   if (listarUsuarios().length) return;
   const admin = touchSyncMeta({
     id: 1,
@@ -249,11 +237,12 @@ async function login(cpf, senha) {
   }
   await initUsuariosPadrao();
   const cpfLimpo = limparCpf(cpf);
+  const senhaTexto = String(senha ?? "").trim();
   const user = listarUsuarios().find(
     (u) => limparCpf(u.cpf) === cpfLimpo && u.ativo !== false
   );
   if (!user) return { ok: false, erro: "CPF ou senha inválidos." };
-  const hash = await hashSenha(senha);
+  const hash = await hashSenha(senhaTexto);
   if (hash !== user.senha_hash) return { ok: false, erro: "CPF ou senha inválidos." };
   setUsuario(user);
   return { ok: true, user };

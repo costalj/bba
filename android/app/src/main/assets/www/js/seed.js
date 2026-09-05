@@ -34,7 +34,35 @@
     return Array.from(map.values()).sort((a, b) => Number(b.id) - Number(a.id));
   }
 
+  function obterUsuariosSeed() {
+    if (
+      typeof SEED_DATA !== "undefined" &&
+      SEED_DATA.usuarios &&
+      SEED_DATA.usuarios.length
+    ) {
+      return SEED_DATA.usuarios;
+    }
+    if (typeof USUARIOS_SEED !== "undefined" && USUARIOS_SEED.length) {
+      return USUARIOS_SEED;
+    }
+    return [];
+  }
+
   function aplicarSeedInicial() {
+    const seedUsuarios = obterUsuariosSeed();
+    let usuarios = [];
+    try {
+      usuarios = JSON.parse(localStorage.getItem("bba_usuarios") || "[]");
+    } catch {
+      usuarios = [];
+    }
+
+    if (seedUsuarios.length) {
+      const merged = mergeUsuariosSeed(usuarios, seedUsuarios);
+      localStorage.setItem("bba_usuarios", JSON.stringify(merged));
+      usuarios = merged;
+    }
+
     if (typeof SEED_DATA === "undefined") return;
 
     if (
@@ -50,21 +78,6 @@
 
     const versaoAtual = localStorage.getItem(SEED_KEY);
     const versaoMudou = versaoAtual !== SEED_DATA.version;
-
-    let usuarios = [];
-    try {
-      usuarios = JSON.parse(localStorage.getItem("bba_usuarios") || "[]");
-    } catch {
-      usuarios = [];
-    }
-
-    if (SEED_DATA.usuarios && SEED_DATA.usuarios.length) {
-      const merged = mergeUsuariosSeed(usuarios, SEED_DATA.usuarios);
-      localStorage.setItem("bba_usuarios", JSON.stringify(merged));
-      usuarios = merged;
-    } else if (!usuarios.length && typeof initUsuariosPadrao === "function") {
-      /* initUsuariosPadrao é async — login.html chama depois */
-    }
 
     let vistorias = [];
     try {

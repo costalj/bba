@@ -183,6 +183,7 @@ def _append_dados_ocorrencia(story, vistoria, heading_style):
         ["Natureza da ocorrência", _valor_coluna(vistoria, "natureza_ocorrencia") or "—"],
         ["Descrição da ocorrência", _valor_coluna(vistoria, "descricao_ocorrencia") or "—"],
         ["Espécie", vistoria["especie"] or "—"],
+        ["Resultado (proteção)", _valor_coluna(vistoria, "resultado_especie") or "—"],
     ]
     if vistoria["latitude"] and vistoria["longitude"]:
         lat = vistoria["latitude"]

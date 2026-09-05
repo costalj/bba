@@ -16,7 +16,13 @@
     <span class="modulo-icone">{{ cat.icone }}</span>
     <strong class="modulo-nome">{{ cat.titulo }}</strong>
     <small class="modulo-desc">{{ cat.descricao }}</small>
-    <span class="modulo-badge modulo-ativo">{{ cat.documentos|length }} doc{{ 's' if cat.documentos|length != 1 else '' }}</span>
+    <span class="modulo-badge modulo-ativo">
+      {% if cat.especies %}
+        {{ cat.especies|length }} espécies
+      {% else %}
+        {{ cat.documentos|length }} doc{{ 's' if cat.documentos|length != 1 else '' }}
+      {% endif %}
+    </span>
   </a>
   {% endfor %}
 </section>

@@ -37,6 +37,9 @@ Write-Host "Exportando usuarios e vistorias para o APK..." -ForegroundColor Cyan
 Write-Host "Exportando catalogo de legislacao para o APK..." -ForegroundColor Cyan
 & (Join-Path $projectRoot "venv\Scripts\python.exe") (Join-Path $projectRoot "scripts\exportar_legislacao_apk.py")
 
+Write-Host "Exportando especies protegidas para o APK..." -ForegroundColor Cyan
+& (Join-Path $projectRoot "venv\Scripts\python.exe") (Join-Path $projectRoot "scripts\exportar_especies_apk.py")
+
 Write-Host "Exportando brasao para PDF offline..." -ForegroundColor Cyan
 & (Join-Path $projectRoot "venv\Scripts\python.exe") (Join-Path $projectRoot "scripts\exportar_logo_pdf.py")
 

@@ -141,8 +141,10 @@ if (!v) {
         ${v.natureza_ocorrencia ? `<dt>Natureza da ocorrência</dt><dd>${v.natureza_ocorrencia}</dd>` : ""}
         ${v.descricao_ocorrencia ? `<dt>Descrição da ocorrência</dt><dd>${v.descricao_ocorrencia}</dd>` : ""}
         ${v.especie ? `<dt>Espécie</dt><dd>${v.especie}</dd>` : ""}
+        ${v.resultado_especie ? `<dt>Resultado (proteção)</dt><dd>${String(v.resultado_especie).replace(/\n/g, "<br>")}</dd>` : ""}
       </dl>
     </section>
+    ${v.foto_especie ? `<section class="info-card"><h3>Foto de identificação</h3><img src="${v.foto_especie}" alt="Foto espécie" class="rubrica-imagem"></section>` : ""}
     ${fotosHtml}
     ${questionarioHtml}
     ${v.observacoes ? `<section class="info-card"><h3>Observações adicionais</h3><p>${v.observacoes}</p></section>` : ""}

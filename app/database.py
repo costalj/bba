@@ -83,6 +83,10 @@ def _migrate(db):
         ("natureza_ocorrencia", "TEXT"),
         ("descricao_ocorrencia", "TEXT"),
         ("recursos_adicionais", "TEXT"),
+        ("resultado_especie", "TEXT"),
+        ("especie_status", "TEXT"),
+        ("especie_catalogo_id", "TEXT"),
+        ("foto_especie", "TEXT"),
         ("questionario_json", "TEXT"),
         ("rubrica_solicitante_json", "TEXT"),
     ]

@@ -1053,11 +1053,12 @@ def criar_vistoria():
             endereco, especie, observacoes, solicitante, cpf_solicitante,
             contato_telefonico, forma_acionamento, protocolo, natureza_ocorrencia,
             descricao_ocorrencia, recursos_adicionais,
+            resultado_especie, especie_status, especie_catalogo_id, foto_especie,
             latitude, longitude, questionario_json, notas_json,
             rubrica_solicitante_json, assinatura_json,
             nota_tronco, nota_raizes, nota_inclinacao, nota_copa, nota_pragas, nota_proximidade,
             pontuacao_total, recomendacao, justificativa
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
         """,
         (
             endereco,
@@ -1071,6 +1072,10 @@ def criar_vistoria():
             natureza_ocorrencia,
             descricao_ocorrencia,
             (data.get("recursos_adicionais") or "").strip() or None,
+            (data.get("resultado_especie") or "").strip() or None,
+            (data.get("especie_status") or "").strip() or None,
+            (data.get("especie_catalogo_id") or "").strip() or None,
+            (data.get("foto_especie") or "").strip() or None,
             lat,
             lng,
             json.dumps(respostas, ensure_ascii=False),

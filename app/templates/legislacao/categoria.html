@@ -10,7 +10,28 @@
   <p>{{ categoria.descricao }}</p>
 </section>
 
+{% if categoria.especies %}
 <section class="legislacao-categoria">
+  <h3 class="questionario-grupo">Catálogo de espécies</h3>
+  <ul class="doc-lista">
+    {% for esp in categoria.especies %}
+    <li class="doc-item">
+      <div class="doc-item-corpo">
+        <strong class="doc-item-titulo">{{ esp.nome_popular }}</strong>
+        <small class="doc-item-meta"><em>{{ esp.nome_cientifico }}</em> · {{ esp.status|upper }} ({{ esp.esfera|upper }})</small>
+        <p class="hint" style="margin:.35rem 0 0">{{ esp.conduta }}</p>
+        <small class="doc-item-meta">{{ esp.referencia }}</small>
+      </div>
+      <span class="doc-badge">{{ esp.status|upper }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if categoria.documentos %}
+<section class="legislacao-categoria">
+  <h3 class="questionario-grupo">Documentos de referência</h3>
   <ul class="doc-lista">
     {% for doc in categoria.documentos %}
     <li class="doc-item{% if not doc.arquivo %} doc-item-indisponivel{% endif %}">
@@ -27,4 +48,5 @@
     {% endfor %}
   </ul>
 </section>
+{% endif %}
 {% endblock %}

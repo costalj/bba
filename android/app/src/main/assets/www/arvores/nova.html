@@ -32,7 +32,24 @@
         <label class="field"><span>Protocolo do CIOPS/Portaria/Ordem de Serviço</span><input name="protocolo" placeholder="Nº do protocolo ou ordem de serviço"></label>
         <label class="field"><span>Natureza da ocorrência</span><input name="natureza_ocorrencia" type="text"></label>
         <label class="field"><span>Descrição da ocorrência</span><textarea name="descricao_ocorrencia" rows="2" maxlength="100" placeholder="Resumo da ocorrência (máx. 100 caracteres)"></textarea></label>
-        <label class="field"><span>Espécie da árvore</span><input name="especie" placeholder="Ex: Embaúba (Cecropia sp.)"></label>
+        <label class="field">
+          <span>Espécie da árvore</span>
+          <input name="especie" id="campo-especie" list="lista-especies-sugeridas" placeholder="Ex: Embaúba (Cecropia sp.)" autocomplete="off">
+          <datalist id="lista-especies-sugeridas"></datalist>
+        </label>
+        <div class="especie-acoes">
+          <button type="button" id="btn-check-especie" class="btn btn-secondary foto-btn">✓ Verificar proteção</button>
+          <button type="button" id="btn-foto-especie" class="btn btn-secondary foto-btn">📷 Foto e identificar</button>
+        </div>
+        <input type="file" id="input-foto-especie" accept="image/*" capture="environment" hidden>
+        <div id="preview-foto-especie" class="preview-foto-especie"></div>
+        <label class="field">
+          <span>Resultado (proteção / conduta)</span>
+          <textarea name="resultado_especie" id="resultado-especie" rows="3" readonly placeholder="Use Verificar ou Foto e identificar para consultar o catálogo de legislação."></textarea>
+        </label>
+        <input type="hidden" name="especie_status" id="especie_status" value="">
+        <input type="hidden" name="especie_catalogo_id" id="especie_catalogo_id" value="">
+        <input type="hidden" name="foto_especie" id="foto_especie" value="">
       </section>
       <section class="form-section">
         <h3>Fotos da árvore</h3>
@@ -96,6 +113,8 @@
   <script src="../js/assinatura.js"></script>
   <script src="../js/sync-meta.js"></script>
   <script src="../js/telefone.js"></script>
+  <script src="../js/especies-data.js"></script>
+  <script src="../js/especies.js"></script>
   <script src="../js/db.js"></script>
   <script src="../js/fotos.js"></script>
   <script>
@@ -111,6 +130,19 @@
         });
       }
       initMascaraTelefone(document.getElementById("contato-telefonico"));
+      const dl = document.getElementById("lista-especies-sugeridas");
+      if (dl && typeof listaEspeciesProtegidas === "function") {
+        dl.innerHTML = listaEspeciesProtegidas()
+          .map((e) => `<option value="${e.nome_popular} (${e.nome_cientifico})">`)
+          .join("");
+      }
+      initEspecieForm({
+        inputId: "campo-especie",
+        resultadoId: "resultado-especie",
+        checkBtnId: "btn-check-especie",
+        fotoBtnId: "btn-foto-especie",
+        fotoInputId: "input-foto-especie",
+      });
     })();
   </script>
   <script src="nova.js"></script>

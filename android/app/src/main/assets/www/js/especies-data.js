@@ -1,0 +1,353 @@
+/* Gerado por scripts/exportar_especies_apk.py — nao editar manualmente */
+const ESPECIES_CATALOGO = {
+  "especies": [
+    {
+      "id": "pau_brasil",
+      "nome_popular": "Pau-brasil",
+      "nome_cientifico": "Paubrasilia echinata",
+      "aliases": [
+        "pau brasil",
+        "ibirapitanga"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "Portaria MMA 148/2022 · Lista oficial de espécies ameaçadas",
+      "conduta": "Corte vedado. Poda somente com autorização do órgão ambiental competente."
+    },
+    {
+      "id": "mogno",
+      "nome_popular": "Mogno",
+      "nome_cientifico": "Swietenia macrophylla",
+      "aliases": [
+        "mogno brasileiro"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "CITES / Portaria MMA — espécies ameaçadas",
+      "conduta": "Corte vedado. Poda somente com autorização ambiental."
+    },
+    {
+      "id": "cedro",
+      "nome_popular": "Cedro",
+      "nome_cientifico": "Cedrela odorata",
+      "aliases": [
+        "cedro-rosa",
+        "cedro rosa"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "Lista oficial de espécies ameaçadas (MMA)",
+      "conduta": "Corte vedado sem autorização. Preferir poda emergencial autorizada."
+    },
+    {
+      "id": "castanha_para",
+      "nome_popular": "Castanheira-do-pará",
+      "nome_cientifico": "Bertholletia excelsa",
+      "aliases": [
+        "castanha do para",
+        "castanheira",
+        "castanha-do-brasil"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "Lei 5.197/1967 · proteção especial",
+      "conduta": "Corte vedado. Espécie de proteção especial."
+    },
+    {
+      "id": "jacaranda_bahia",
+      "nome_popular": "Jacarandá-da-bahia",
+      "nome_cientifico": "Dalbergia nigra",
+      "aliases": [
+        "jacaranda",
+        "jacarandá"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "CITES Apêndice I · MMA",
+      "conduta": "Corte vedado. Poda somente com autorização."
+    },
+    {
+      "id": "aroeira",
+      "nome_popular": "Aroeira",
+      "nome_cientifico": "Astronium urundeuva",
+      "aliases": [
+        "aroeira-do-sertao",
+        "aroeira do sertão",
+        "urundeuva"
+      ],
+      "status": "imune",
+      "esfera": "federal",
+      "referencia": "Imune de corte em várias legislações estaduais/municipais",
+      "conduta": "Imune de corte. Poda só com autorização do órgão ambiental."
+    },
+    {
+      "id": "ipe_amarelo",
+      "nome_popular": "Ipê-amarelo",
+      "nome_cientifico": "Handroanthus albus",
+      "aliases": [
+        "ipe amarelo",
+        "ipê",
+        "ipe",
+        "tabebuia"
+      ],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Arborização urbana — frequentemente protegida em leis municipais",
+      "conduta": "Corte/poda somente com autorização municipal/estadual."
+    },
+    {
+      "id": "ipe_roxo",
+      "nome_popular": "Ipê-roxo",
+      "nome_cientifico": "Handroanthus impetiginosus",
+      "aliases": [
+        "ipe roxo",
+        "ipê-rosa",
+        "ipe rosa"
+      ],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Arborização urbana — proteção municipal frequente",
+      "conduta": "Corte/poda somente com autorização do órgão ambiental."
+    },
+    {
+      "id": "jatoba",
+      "nome_popular": "Jatobá",
+      "nome_cientifico": "Hymenaea courbaril",
+      "aliases": [
+        "jatoba",
+        "jetaí"
+      ],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Espécie nativa de interesse ambiental (MA)",
+      "conduta": "Avaliar autorização ambiental antes de corte ou poda drástica."
+    },
+    {
+      "id": "gameleira",
+      "nome_popular": "Gameleira",
+      "nome_cientifico": "Ficus sp.",
+      "aliases": [
+        "figueira",
+        "gameleira-branca",
+        "ficus"
+      ],
+      "status": "tombada",
+      "esfera": "municipal",
+      "referencia": "Frequente em tombamentos municipais de árvores notáveis",
+      "conduta": "Se tombada/notável: corte vedado. Confirmar no órgão municipal."
+    },
+    {
+      "id": "mangueira_tombada",
+      "nome_popular": "Mangueira",
+      "nome_cientifico": "Mangifera indica",
+      "aliases": [
+        "manga",
+        "mangueira"
+      ],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Árvores notáveis/tombadas em alguns municípios (consultar cadastro local)",
+      "conduta": "Verificar tombamento local. Sem tombamento: poda/corte conforme risco e autorização."
+    },
+    {
+      "id": "oiti",
+      "nome_popular": "Oiti",
+      "nome_cientifico": "Licania tomentosa",
+      "aliases": [],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Espécie frequente em arborização urbana protegida",
+      "conduta": "Corte/poda com autorização do órgão ambiental municipal."
+    },
+    {
+      "id": "sibipiruna",
+      "nome_popular": "Sibipiruna",
+      "nome_cientifico": "Cenostigma pluviosum",
+      "aliases": [
+        "caesalpinia pluviosa"
+      ],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Arborização urbana",
+      "conduta": "Corte/poda com autorização municipal, salvo risco iminente."
+    },
+    {
+      "id": "buriti",
+      "nome_popular": "Buriti",
+      "nome_cientifico": "Mauritia flexuosa",
+      "aliases": [
+        "miriti"
+      ],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Palmeira nativa — proteção em áreas úmidas/APP",
+      "conduta": "Corte vedado em APP. Autorização ambiental obrigatória."
+    },
+    {
+      "id": "babacu",
+      "nome_popular": "Babaçu",
+      "nome_cientifico": "Attalea speciosa",
+      "aliases": [
+        "babacu",
+        "coco-babaçu"
+      ],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Lei estadual MA — proteção do babaçu e quebradeiras",
+      "conduta": "Corte restrito. Observar legislação estadual do babaçu."
+    },
+    {
+      "id": "carnauba",
+      "nome_popular": "Carnaúba",
+      "nome_cientifico": "Copernicia prunifera",
+      "aliases": [
+        "carnauba"
+      ],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Palmeira nativa de interesse econômico/ambiental",
+      "conduta": "Corte somente com autorização ambiental."
+    },
+    {
+      "id": "palmeira_imperial",
+      "nome_popular": "Palmeira-imperial",
+      "nome_cientifico": "Roystonea oleracea",
+      "aliases": [
+        "palmeira imperial",
+        "imperial"
+      ],
+      "status": "tombada",
+      "esfera": "municipal",
+      "referencia": "Frequentemente tombada em praças e vias históricas",
+      "conduta": "Se tombada: corte vedado. Confirmar cadastro municipal."
+    },
+    {
+      "id": "baoba",
+      "nome_popular": "Baobá",
+      "nome_cientifico": "Adansonia digitata",
+      "aliases": [
+        "baoba"
+      ],
+      "status": "tombada",
+      "esfera": "municipal",
+      "referencia": "Árvore notável — tombamento municipal frequente",
+      "conduta": "Corte vedado se tombada. Poda só com autorização."
+    },
+    {
+      "id": "peroba",
+      "nome_popular": "Peroba",
+      "nome_cientifico": "Aspidosperma polyneuron",
+      "aliases": [
+        "peroba-rosa"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "Lista oficial de espécies ameaçadas",
+      "conduta": "Corte vedado. Poda somente com autorização."
+    },
+    {
+      "id": "brauna",
+      "nome_popular": "Braúna",
+      "nome_cientifico": "Melanoxylon brauna",
+      "aliases": [
+        "brauna"
+      ],
+      "status": "ameacada",
+      "esfera": "federal",
+      "referencia": "Lista oficial de espécies ameaçadas",
+      "conduta": "Corte vedado sem autorização ambiental."
+    },
+    {
+      "id": "samauma",
+      "nome_popular": "Samaúma",
+      "nome_cientifico": "Ceiba pentandra",
+      "aliases": [
+        "sumauma",
+        "samauma",
+        "sumaúma"
+      ],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Árvore nativa amazônica de grande porte",
+      "conduta": "Corte/poda com autorização. Avaliar APP e tombamento."
+    },
+    {
+      "id": "andiroba",
+      "nome_popular": "Andiroba",
+      "nome_cientifico": "Carapa guianensis",
+      "aliases": [],
+      "status": "protegida",
+      "esfera": "estadual",
+      "referencia": "Espécie nativa de interesse econômico/ambiental (MA)",
+      "conduta": "Corte somente com autorização ambiental."
+    },
+    {
+      "id": "cumaru",
+      "nome_popular": "Cumaru",
+      "nome_cientifico": "Dipteryx odorata",
+      "aliases": [
+        "cumaru-ferro"
+      ],
+      "status": "protegida",
+      "esfera": "federal",
+      "referencia": "Espécie nativa — restrições de exploração",
+      "conduta": "Corte somente com autorização ambiental."
+    },
+    {
+      "id": "embauba",
+      "nome_popular": "Embaúba",
+      "nome_cientifico": "Cecropia sp.",
+      "aliases": [
+        "embauba",
+        "imbaúba"
+      ],
+      "status": "protegida",
+      "esfera": "municipal",
+      "referencia": "Pioneira urbana — proteção conforme lei municipal de arborização",
+      "conduta": "Sem imunidade federal. Corte/poda conforme risco e autorização municipal."
+    }
+  ],
+  "documentos": [
+    {
+      "id": "port_mma_ameacadas",
+      "titulo": "Lista oficial de espécies da flora ameaçadas de extinção",
+      "referencia": "Portaria MMA nº 148/2022 (e atualizações)",
+      "data": "2022",
+      "arquivo": null
+    },
+    {
+      "id": "lei_codigo_florestal",
+      "titulo": "Código Florestal — proteção da vegetação nativa",
+      "referencia": "Lei nº 12.651/2012",
+      "data": "2012",
+      "arquivo": null
+    },
+    {
+      "id": "lei_babacu_ma",
+      "titulo": "Proteção do babaçu e atividade das quebradeiras — Maranhão",
+      "referencia": "Legislação estadual do MA",
+      "data": "—",
+      "arquivo": null
+    },
+    {
+      "id": "leis_arborizacao_municipal",
+      "titulo": "Leis municipais de arborização, poda e tombamento de árvores",
+      "referencia": "Municípios atendidos pelo BBA",
+      "data": "—",
+      "arquivo": null
+    },
+    {
+      "id": "conama_supressao",
+      "titulo": "Normas CONAMA — licenciamento e supressão de vegetação",
+      "referencia": "CONAMA / órgãos ambientais",
+      "data": "—",
+      "arquivo": null
+    }
+  ],
+  "status_label": {
+    "ameacada": "AMEAÇADA DE EXTINÇÃO",
+    "imune": "IMUNE DE CORTE",
+    "tombada": "TOMBADA / NOTÁVEL",
+    "protegida": "PROTEGIDA"
+  }
+};

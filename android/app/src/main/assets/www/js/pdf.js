@@ -33,6 +33,8 @@ function normalizarVistoriaPdf(vistoria) {
     natureza_ocorrencia: safeText(vistoria.natureza_ocorrencia),
     descricao_ocorrencia: safeText(vistoria.descricao_ocorrencia),
     especie: safeText(vistoria.especie),
+    resultado_especie: safeText(vistoria.resultado_especie),
+    especie_status: safeText(vistoria.especie_status),
     observacoes: safeText(vistoria.observacoes),
     recursos_adicionais: safeText(vistoria.recursos_adicionais),
     justificativa: safeText(vistoria.justificativa),
@@ -204,6 +206,7 @@ function desenharTabelaDados(doc, y, vistoria) {
     ["Natureza da ocorrência", vistoria.natureza_ocorrencia || "—"],
     ["Descrição da ocorrência", vistoria.descricao_ocorrencia || "—"],
     ["Espécie", vistoria.especie || "—"],
+    ["Resultado (proteção)", vistoria.resultado_especie || "—"],
   ];
 
   doc.autoTable({

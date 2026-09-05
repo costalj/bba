@@ -807,6 +807,106 @@ body {
   margin-bottom: 10px;
 }
 
+.especie-acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+
+.preview-foto-especie {
+  margin: 0 0 10px;
+}
+
+.preview-foto-especie img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+#resultado-especie {
+  font-size: 0.88rem;
+  line-height: 1.35;
+  background: #f8fafc;
+}
+
+.resultado-especie-ameacada,
+.resultado-especie-imune,
+.resultado-especie-tombada {
+  border-color: #b91c1c !important;
+  background: #fef2f2 !important;
+  color: #7f1d1d;
+}
+
+.resultado-especie-protegida {
+  border-color: #b45309 !important;
+  background: #fffbeb !important;
+  color: #78350f;
+}
+
+.resultado-especie-livre {
+  border-color: #15803d !important;
+  background: #f0fdf4 !important;
+  color: #14532d;
+}
+
+.modal-especie-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px;
+}
+
+.modal-especie-card {
+  background: #fff;
+  border-radius: 14px 14px 10px 10px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  overflow: auto;
+  padding: 16px;
+}
+
+.modal-especie-foto {
+  width: 100%;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 8px 0 12px;
+}
+
+.lista-especie-modal {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.btn-especie-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.btn-especie-item strong {
+  display: block;
+}
+
+.btn-especie-item small {
+  color: #64748b;
+}
+
 .foto-btn {
   width: 100%;
   margin: 0;

@@ -11,7 +11,7 @@ POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 OUT_PATH = os.path.join(
     ROOT, "android", "app", "src", "main", "assets", "www", "js", "seed-data.js"
 )
-SEED_VERSION = "1.0.22"
+SEED_VERSION = "1.0.23"
 
 
 def _parse_json(raw):
@@ -44,6 +44,10 @@ def _vistoria_apk(row) -> dict:
         "descricao_ocorrencia": row["descricao_ocorrencia"] if "descricao_ocorrencia" in row.keys() else None,
         "recursos_adicionais": row["recursos_adicionais"] if "recursos_adicionais" in row.keys() else None,
         "especie": row["especie"],
+        "resultado_especie": row["resultado_especie"] if "resultado_especie" in row.keys() else None,
+        "especie_status": row["especie_status"] if "especie_status" in row.keys() else None,
+        "especie_catalogo_id": row["especie_catalogo_id"] if "especie_catalogo_id" in row.keys() else None,
+        "foto_especie": row["foto_especie"] if "foto_especie" in row.keys() else None,
         "observacoes": row["observacoes"],
         "pontuacao_total": row["pontuacao_total"],
         "pontuacao_maxima": max_pts,
@@ -116,7 +120,7 @@ def exportar_seed():
                 SELECT id, created_at, codigo, endereco, especie, observacoes,
                        solicitante, cpf_solicitante, contato_telefonico,
                        forma_acionamento, protocolo, natureza_ocorrencia, descricao_ocorrencia,
-                       recursos_adicionais,
+                       recursos_adicionais, resultado_especie, especie_status, especie_catalogo_id, foto_especie,
                        pontuacao_total, recomendacao,
                        justificativa, questionario_json, notas_json,
                        rubrica_solicitante_json, assinatura_json

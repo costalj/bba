@@ -55,8 +55,15 @@
     </dd>
     {% endif %}
     {% if vistoria.especie %}<dt>Espécie</dt><dd>{{ vistoria.especie }}</dd>{% endif %}
+    {% if vistoria.resultado_especie %}<dt>Resultado (proteção)</dt><dd>{{ vistoria.resultado_especie }}</dd>{% endif %}
   </dl>
 </section>
+{% if vistoria.foto_especie %}
+<section class="info-card">
+  <h3>Foto de identificação</h3>
+  <img src="{{ vistoria.foto_especie }}" alt="Foto da espécie" class="rubrica-imagem">
+</section>
+{% endif %}
 
 {% if fotos %}
 <section class="info-card">

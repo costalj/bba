@@ -44,8 +44,22 @@
     </label>
     <label class="field">
       <span>Espécie da árvore</span>
-      <input type="text" name="especie" placeholder="Ex: Embaúba (Cecropia sp.)">
+      <input type="text" name="especie" id="campo-especie" list="lista-especies-sugeridas" placeholder="Ex: Embaúba (Cecropia sp.)" autocomplete="off">
+      <datalist id="lista-especies-sugeridas"></datalist>
     </label>
+    <div class="especie-acoes">
+      <button type="button" id="btn-check-especie" class="btn btn-secondary foto-btn">✓ Verificar proteção</button>
+      <button type="button" id="btn-foto-especie" class="btn btn-secondary foto-btn">📷 Foto e identificar</button>
+    </div>
+    <input type="file" id="input-foto-especie" accept="image/*" capture="environment" hidden>
+    <div id="preview-foto-especie" class="preview-foto-especie"></div>
+    <label class="field">
+      <span>Resultado (proteção / conduta)</span>
+      <textarea name="resultado_especie" id="resultado-especie" rows="3" readonly placeholder="Use Verificar ou Foto e identificar para consultar o catálogo de legislação."></textarea>
+    </label>
+    <input type="hidden" name="especie_status" id="especie_status" value="">
+    <input type="hidden" name="especie_catalogo_id" id="especie_catalogo_id" value="">
+    <input type="hidden" name="foto_especie" id="foto_especie" value="">
   </section>
 
   <section class="form-section">
@@ -148,6 +162,8 @@
   window.USUARIO_LOGADO = {{ usuario | tojson if usuario else 'null' }};
 </script>
 <script src="{{ url_for('static', filename='js/telefone.js') }}"></script>
+<script src="{{ url_for('static', filename='js/especies-data.js') }}"></script>
+<script src="{{ url_for('static', filename='js/especies.js') }}"></script>
 <script src="{{ url_for('static', filename='js/questionario.js') }}"></script>
 <script src="{{ url_for('static', filename='js/assinatura.js') }}"></script>
 <script src="{{ url_for('static', filename='js/fotos.js') }}"></script>
@@ -155,15 +171,29 @@
 <script>
   (function () {
     const cpfInput = document.getElementById("cpf-solicitante");
-    if (!cpfInput) return;
-    cpfInput.addEventListener("input", () => {
-      let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
-      if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
-      else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
-      else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
-      cpfInput.value = v;
-    });
+    if (cpfInput) {
+      cpfInput.addEventListener("input", () => {
+        let v = cpfInput.value.replace(/\D/g, "").slice(0, 11);
+        if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+        else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+        else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+        cpfInput.value = v;
+      });
+    }
     initMascaraTelefone(document.getElementById("contato-telefonico"));
+    const dl = document.getElementById("lista-especies-sugeridas");
+    if (dl && typeof listaEspeciesProtegidas === "function") {
+      dl.innerHTML = listaEspeciesProtegidas()
+        .map((e) => `<option value="${e.nome_popular} (${e.nome_cientifico})">`)
+        .join("");
+    }
+    initEspecieForm({
+      inputId: "campo-especie",
+      resultadoId: "resultado-especie",
+      checkBtnId: "btn-check-especie",
+      fotoBtnId: "btn-foto-especie",
+      fotoInputId: "input-foto-especie",
+    });
   })();
 </script>
 {% endblock %}

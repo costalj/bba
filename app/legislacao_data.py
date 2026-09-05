@@ -1,5 +1,7 @@
 """Catálogo de documentos do módulo Legislação (web e APK)."""
 
+from app.especies_protegidas_data import DOCUMENTOS_ESPECIES, ESPECIES_PROTEGIDAS
+
 LEGISLACAO_CATEGORIAS = [
     {
         "id": "portarias",
@@ -164,6 +166,15 @@ LEGISLACAO_CATEGORIAS = [
                 "arquivo": None,
             },
         ],
+    },
+    {
+        "id": "especies_protegidas",
+        "titulo": "Espécies protegidas",
+        "icone": "🌳",
+        "cor": "#166534",
+        "descricao": "Espécies ameaçadas, imunes, tombadas e protegidas (consulta na vistoria)",
+        "documentos": DOCUMENTOS_ESPECIES,
+        "especies": ESPECIES_PROTEGIDAS,
     },
 ]
 

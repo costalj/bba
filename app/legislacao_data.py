@@ -105,7 +105,7 @@ LEGISLACAO_CATEGORIAS = [
         "titulo": "Leis e Decretos",
         "icone": "⚖️",
         "cor": "#334155",
-        "descricao": "Legislação federal, estadual (Maranhão) e municipal (São Luís)",
+        "descricao": "Legislação federal, estadual (Maranhão) e municipal (São Luís, Paço do Lumiar, São José de Ribamar e Raposa)",
         "documentos": [
             {
                 "id": "cf_art225",
@@ -256,6 +256,74 @@ LEGISLACAO_CATEGORIAS = [
                     {
                         "numero": "Art. 30",
                         "texto": "Altera a Lei Municipal nº 7.380/2023 (competências do Impur).",
+                    },
+                ],
+            },
+            {
+                "id": "lei_plano_diretor_paco_lumiar",
+                "titulo": "Lei Municipal Paço do Lumiar nº 335/2006 — Plano Diretor",
+                "referencia": "Município de Paço do Lumiar/MA",
+                "data": "2006",
+                "arquivo": None,
+                "artigos": [
+                    {
+                        "numero": "Cap. I — Política de Preservação Ambiental",
+                        "texto": "Estabelece diretrizes de preservação ambiental e das áreas verdes.",
+                    },
+                    {
+                        "numero": "Art. 7º",
+                        "texto": "Ações prioritárias para garantir a preservação ambiental e revitalização das áreas verdes.",
+                    },
+                ],
+            },
+            {
+                "id": "lei_codigo_posturas_paco_lumiar",
+                "titulo": "Lei Complementar Paço do Lumiar nº 001/2013 — Código de Posturas",
+                "referencia": "Município de Paço do Lumiar/MA",
+                "data": "2013",
+                "arquivo": None,
+                "artigos": [
+                    {
+                        "numero": "Art. 1º",
+                        "texto": "Compete ao Município zelar pela manutenção da cidade visando ao ambiente urbano sustentável.",
+                    },
+                ],
+            },
+            {
+                "id": "lei_zoneamento_sao_jose_ribamar",
+                "titulo": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+                "referencia": "Município de São José de Ribamar/MA",
+                "data": "2025",
+                "arquivo": None,
+                "artigos": [
+                    {
+                        "numero": "Art. 19",
+                        "texto": "Parcelamento deve incluir arborização de vias e áreas verdes na infraestrutura básica.",
+                    },
+                    {
+                        "numero": "Art. 28",
+                        "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM.",
+                    },
+                    {
+                        "numero": "Art. 37",
+                        "texto": "Obrigatoriedade de arborização de calçadas e projetos paisagísticos conforme diretrizes municipais.",
+                    },
+                ],
+            },
+            {
+                "id": "lei_plano_diretor_raposa",
+                "titulo": "Lei Municipal Raposa nº 113/2006 — Plano Diretor",
+                "referencia": "Município de Raposa/MA",
+                "data": "2006",
+                "arquivo": None,
+                "artigos": [
+                    {
+                        "numero": "Política de desenvolvimento urbano",
+                        "texto": "Institui política e diretrizes de desenvolvimento urbano e ordenamento territorial.",
+                    },
+                    {
+                        "numero": "Preservação ambiental",
+                        "texto": "Diretrizes de uso do solo e preservação ambiental no município de Raposa/MA.",
                     },
                 ],
             },

@@ -95,27 +95,33 @@ form.addEventListener("submit", async (e) => {
     };
   }
 
-  const v = criarVistoria({
-    solicitante: fd.get("solicitante"),
-    cpf_solicitante: fd.get("cpf_solicitante"),
-    endereco: fd.get("endereco"),
-    contato_telefonico: formatarTelefone(fd.get("contato_telefonico")) || null,
-    recursos_adicionais: String(fd.get("recursos_adicionais") || "").trim() || null,
-    forma_acionamento: fd.get("forma_acionamento"),
-    protocolo: fd.get("protocolo"),
-    natureza_ocorrencia: fd.get("natureza_ocorrencia"),
-    descricao_ocorrencia: String(fd.get("descricao_ocorrencia") || "").slice(0, 100),
-    especie: fd.get("especie"),
-    resultado_especie: fd.get("resultado_especie"),
-    especie_status: fd.get("especie_status"),
-    especie_catalogo_id: fd.get("especie_catalogo_id"),
-    foto_especie: fd.get("foto_especie") || null,
-    observacoes: fd.get("observacoes"),
-    questionario: respostas,
-    fotos,
-    rubrica,
-    assinatura,
-    ...resultado,
-  });
+  let v;
+  try {
+    v = criarVistoria({
+      solicitante: fd.get("solicitante"),
+      cpf_solicitante: fd.get("cpf_solicitante"),
+      endereco: fd.get("endereco"),
+      contato_telefonico: formatarTelefone(fd.get("contato_telefonico")) || null,
+      recursos_adicionais: String(fd.get("recursos_adicionais") || "").trim() || null,
+      forma_acionamento: fd.get("forma_acionamento"),
+      protocolo: fd.get("protocolo"),
+      natureza_ocorrencia: fd.get("natureza_ocorrencia"),
+      descricao_ocorrencia: String(fd.get("descricao_ocorrencia") || "").slice(0, 100),
+      especie: fd.get("especie"),
+      resultado_especie: fd.get("resultado_especie"),
+      especie_status: fd.get("especie_status"),
+      especie_catalogo_id: fd.get("especie_catalogo_id"),
+      foto_especie: fd.get("foto_especie") || null,
+      observacoes: fd.get("observacoes"),
+      questionario: respostas,
+      fotos,
+      rubrica,
+      assinatura,
+      ...resultado,
+    });
+  } catch (err) {
+    alert(err.message || "Erro ao salvar vistoria.");
+    return;
+  }
   location.href = `lista.html?salva=${v.id}#vistoria-${v.id}`;
 });

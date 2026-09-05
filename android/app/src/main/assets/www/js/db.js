@@ -9,7 +9,69 @@ function listarVistorias() {
 }
 
 function salvarVistorias(lista) {
-  localStorage.setItem(DB_KEY, JSON.stringify(lista));
+  try {
+    localStorage.setItem(DB_KEY, JSON.stringify(lista));
+    return true;
+  } catch (e) {
+    console.error("Falha ao salvar vistorias:", e);
+    if (e && e.name === "QuotaExceededError") {
+      alert("Armazenamento cheio. Exporte ou remova vistorias antigas com muitas fotos.");
+    }
+    return false;
+  }
+}
+
+function urlFotoVistoria(foto) {
+  if (!foto || typeof foto !== "object") return "";
+  const data = foto.data || "";
+  if (data && String(data).length > 20) return data;
+  const path = foto.storage_path || "";
+  if (path && typeof storagePublicUrl === "function" && typeof getSyncConfig === "function") {
+    const cfg = getSyncConfig();
+    if (cfg?.url) return storagePublicUrl(cfg, path);
+  }
+  return "";
+}
+
+async function hidratarVistoria(vistoria) {
+  if (!vistoria || typeof hidratarFotosVistoriaDoPull !== "function") return vistoria;
+  if (typeof isSyncConfigured !== "function" || !isSyncConfigured()) return vistoria;
+  const cfg = getSyncConfig();
+  const fotos = Array.isArray(vistoria.fotos) ? vistoria.fotos : [];
+  const precisaFotos = fotos.some((f) => f?.storage_path && !f?.data);
+  if (!precisaFotos) return vistoria;
+  const result = await hidratarFotosVistoriaDoPull(cfg, vistoria, vistoria);
+  return result.vistoria || vistoria;
+}
+
+async function hidratarTodasVistorias() {
+  if (typeof isSyncConfigured !== "function" || !isSyncConfigured()) return false;
+  const lista = listarVistorias();
+  let alterou = false;
+  const nova = [];
+  for (const v of lista) {
+    const hidratada = await hidratarVistoria(v);
+    nova.push(hidratada);
+    if (hidratada !== v) alterou = true;
+  }
+  if (alterou) salvarVistorias(nova);
+  return alterou;
+}
+
+async function prepararHistoricoVistorias() {
+  if (
+    typeof sincronizar === "function" &&
+    typeof isSyncConfigured === "function" &&
+    isSyncConfigured() &&
+    navigator.onLine
+  ) {
+    try {
+      await sincronizar({ silencioso: true });
+    } catch (e) {
+      console.warn("Sync do histórico:", e);
+    }
+  }
+  await hidratarTodasVistorias();
 }
 
 function obterVistoria(id) {
@@ -62,7 +124,10 @@ function criarVistoria(dados) {
     ...dados,
   });
   lista.unshift(vistoria);
-  salvarVistorias(lista);
+  if (!salvarVistorias(lista)) {
+    lista.shift();
+    throw new Error("Não foi possível salvar a vistoria no dispositivo.");
+  }
   return vistoria;
 }
 
@@ -71,7 +136,7 @@ function atualizarVistoria(id, dados) {
   const idx = lista.findIndex((v) => String(v.id) === String(id));
   if (idx === -1) return null;
   lista[idx] = touchSyncMeta({ ...lista[idx], ...dados });
-  salvarVistorias(lista);
+  if (!salvarVistorias(lista)) return null;
   return lista[idx];
 }
 

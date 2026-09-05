@@ -46,9 +46,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -96,9 +132,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -147,9 +219,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -193,9 +301,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -238,9 +382,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -284,15 +464,52 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -313,21 +530,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -359,21 +614,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -416,15 +709,52 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -468,9 +798,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -495,21 +861,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -551,9 +955,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -577,21 +1017,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -639,9 +1117,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -684,9 +1198,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -716,15 +1266,52 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -767,9 +1354,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -793,21 +1416,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "estadual",
@@ -861,9 +1522,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -905,9 +1602,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -946,9 +1679,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -982,15 +1751,52 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -1026,9 +1832,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     },
@@ -1047,21 +1889,59 @@ const ESPECIES_CATALOGO = {
       "artigos": [
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 1º",
           "texto": "Institui a Política Municipal de Arborização de São Luís."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 6º",
           "texto": "Objetivos: proteção, conservação, manejo e expansão da arborização urbana."
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         },
         {
           "esfera": "federal",
@@ -1110,9 +1990,45 @@ const ESPECIES_CATALOGO = {
         },
         {
           "esfera": "municipal",
+          "municipio": "São Luís",
           "norma": "Lei Municipal São Luís nº 7.811/2026",
           "artigo": "Art. 7º",
           "texto": "Diretrizes de proteção, poda, plantio e gestão integrada do verde urbano."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Municipal Paço do Lumiar nº 335/2006 (Plano Diretor)",
+          "artigo": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes no município."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Paço do Lumiar",
+          "norma": "Lei Complementar Paço do Lumiar nº 001/2013 (Código de Posturas)",
+          "artigo": "Art. 1º",
+          "texto": "Compete ao Município zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte somente com justificativa e compensação aprovada pela SEMMAM."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "São José de Ribamar",
+          "norma": "Lei de Zoneamento e Uso do Solo — São José de Ribamar/MA",
+          "artigo": "Art. 37",
+          "texto": "Arborização de calçadas e execução de projetos paisagísticos conforme diretrizes municipais."
+        },
+        {
+          "esfera": "municipal",
+          "municipio": "Raposa",
+          "norma": "Lei Municipal Raposa nº 113/2006 (Plano Diretor)",
+          "artigo": "Política de desenvolvimento urbano",
+          "texto": "Diretrizes de ordenamento territorial e preservação ambiental no município de Raposa/MA."
         }
       ]
     }
@@ -1267,6 +2183,62 @@ const ESPECIES_CATALOGO = {
         {
           "numero": "Art. 3º",
           "texto": "Tombamento de bens de valor histórico, artístico ou paisagístico."
+        }
+      ]
+    },
+    {
+      "id": "lei_plano_diretor_paco_lumiar",
+      "titulo": "Plano Diretor e preservação ambiental — Paço do Lumiar",
+      "referencia": "Lei Municipal Paço do Lumiar nº 335/2006",
+      "data": "2006",
+      "arquivo": null,
+      "artigos": [
+        {
+          "numero": "Art. 7º",
+          "texto": "Ações prioritárias de preservação ambiental e das áreas verdes."
+        }
+      ]
+    },
+    {
+      "id": "lei_codigo_posturas_paco_lumiar",
+      "titulo": "Código de Posturas — Paço do Lumiar",
+      "referencia": "Lei Complementar Paço do Lumiar nº 001/2013",
+      "data": "2013",
+      "arquivo": null,
+      "artigos": [
+        {
+          "numero": "Art. 1º",
+          "texto": "Zelar pela manutenção da cidade e pelo ambiente urbano sustentável."
+        }
+      ]
+    },
+    {
+      "id": "lei_zoneamento_sao_jose_ribamar",
+      "titulo": "Zoneamento e preservação de árvores — São José de Ribamar",
+      "referencia": "Lei de Zoneamento e Uso do Solo — SJR/MA",
+      "data": "2025",
+      "arquivo": null,
+      "artigos": [
+        {
+          "numero": "Art. 28",
+          "texto": "Preservar árvores de porte médio e grande; corte com compensação aprovada pela SEMMAM."
+        },
+        {
+          "numero": "Art. 37",
+          "texto": "Arborização de calçadas e projetos paisagísticos obrigatórios."
+        }
+      ]
+    },
+    {
+      "id": "lei_plano_diretor_raposa",
+      "titulo": "Plano Diretor — Raposa/MA",
+      "referencia": "Lei Municipal Raposa nº 113/2006",
+      "data": "2006",
+      "arquivo": null,
+      "artigos": [
+        {
+          "numero": "Desenvolvimento urbano",
+          "texto": "Política e diretrizes de desenvolvimento urbano e ordenamento territorial."
         }
       ]
     }

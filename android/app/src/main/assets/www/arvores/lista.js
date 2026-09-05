@@ -1,6 +1,5 @@
 const params = new URLSearchParams(location.search);
 const salvaId = params.get("salva");
-const lista = listarVistorias();
 const el = document.getElementById("conteudo");
 
 function classeItem(v) {
@@ -21,12 +20,22 @@ function escHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
+function resumoEspecie(v) {
+  if (!v.especie && !v.resultado_especie) return null;
+  if (v.especie) return v.especie;
+  const linha = String(v.resultado_especie || "").split("\n")[0];
+  return linha || null;
+}
+
 function htmlResumoVistoria(v) {
   const linhas = [
     ["Solicitante:", v.solicitante || "—"],
     ["Endereço:", v.endereco || "—"],
     ["N° de vistoria:", numeroLaudoVistoria(v)],
   ];
+  const esp = resumoEspecie(v);
+  if (esp) linhas.push(["Espécie:", esp]);
+  if (v.natureza_ocorrencia) linhas.push(["Natureza:", v.natureza_ocorrencia]);
   const itens = linhas
     .map(
       ([label, valor]) =>
@@ -41,20 +50,23 @@ function suffix(v) {
   return v.questionario ? " SIM" : "";
 }
 
-let banner = "";
-if (salvaId) {
-  banner = `<div class="alerta-sucesso"><strong>✅ Vistoria #${salvaId} salva com sucesso!</strong>
-    <p>Exporte o relatório em PDF abaixo.</p></div>`;
-}
+function renderHistorico(lista) {
+  let banner = "";
+  if (salvaId) {
+    banner = `<div class="alerta-sucesso"><strong>✅ Vistoria #${escHtml(salvaId)} salva com sucesso!</strong>
+      <p>Exporte o relatório em PDF abaixo.</p></div>`;
+  }
 
-if (!lista.length) {
-  el.innerHTML = banner + `
-    <div class="empty-state">
-      <span class="empty-icon">📭</span>
-      <p>Nenhuma vistoria registrada.</p>
-      <a href="nova.html" class="btn btn-primary">Criar primeira vistoria</a>
-    </div>`;
-} else {
+  if (!lista.length) {
+    el.innerHTML = banner + `
+      <div class="empty-state">
+        <span class="empty-icon">📭</span>
+        <p>Nenhuma vistoria registrada.</p>
+        <a href="nova.html" class="btn btn-primary">Criar primeira vistoria</a>
+      </div>`;
+    return;
+  }
+
   el.innerHTML = banner + `<ul class="vistoria-lista">${lista.map((v) => `
     <li class="vistoria-lista-item${String(salvaId) === String(v.id) ? " vistoria-destaque" : ""}" id="vistoria-${v.id}">
       <a href="resultado.html?id=${v.id}" class="vistoria-item ${classeItem(v)}">
@@ -63,7 +75,7 @@ if (!lista.length) {
         </div>
         <div class="vistoria-meta">
           <span class="score-badge">${v.pontuacao_total}/${maxPontos(v)}${suffix(v)}</span>
-          <span class="rec-badge">${v.recomendacao}</span>
+          <span class="rec-badge">${escHtml(v.recomendacao)}</span>
         </div>
       </a>
       <div class="vistoria-acoes">
@@ -87,9 +99,21 @@ if (!lista.length) {
       }
     });
   });
+
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 }
 
-if (location.hash) {
-  const target = document.querySelector(location.hash);
-  if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
-}
+(async function initHistorico() {
+  el.innerHTML = `<div class="empty-state"><p>Carregando histórico…</p></div>`;
+  try {
+    if (typeof prepararHistoricoVistorias === "function") {
+      await prepararHistoricoVistorias();
+    }
+  } catch (e) {
+    console.warn("Histórico:", e);
+  }
+  renderHistorico(listarVistorias());
+})();

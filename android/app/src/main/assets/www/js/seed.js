@@ -22,7 +22,10 @@
       localStorage.setItem("bba_usuarios", JSON.stringify(SEED_DATA.usuarios));
     }
     if (SEED_DATA.vistorias && SEED_DATA.vistorias.length) {
-      localStorage.setItem("bba_vistorias", JSON.stringify(SEED_DATA.vistorias));
+      const existentes = localStorage.getItem("bba_vistorias");
+      if (!existentes || existentes === "[]") {
+        localStorage.setItem("bba_vistorias", JSON.stringify(SEED_DATA.vistorias));
+      }
     }
     if (SEED_DATA.pops && SEED_DATA.pops.length) {
       localStorage.setItem("bba_pops", JSON.stringify(SEED_DATA.pops));

@@ -40,7 +40,13 @@ function normalizarVistoriaPdf(vistoria) {
     justificativa: safeText(vistoria.justificativa),
     recomendacao: safeText(vistoria.recomendacao),
     fotos: Array.isArray(vistoria.fotos)
-      ? vistoria.fotos.filter((f) => f && f.data && safeText(f.data).length > 20)
+      ? vistoria.fotos
+          .map((f) => {
+            const data =
+              typeof urlFotoVistoria === "function" ? urlFotoVistoria(f) : f?.data || "";
+            return data && safeText(data).length > 20 ? { ...f, data } : null;
+          })
+          .filter(Boolean)
       : [],
     questionario:
       vistoria.questionario && typeof vistoria.questionario === "object"
@@ -759,10 +765,13 @@ function garantirAutoTable() {
 
 async function abrirPdfVistoria(id) {
   try {
-    const v = obterVistoria(id);
+    let v = obterVistoria(id);
     if (!v) {
       alert("Vistoria não encontrada.");
       return;
+    }
+    if (typeof hidratarVistoria === "function") {
+      v = await hidratarVistoria(v);
     }
     if (!window.jspdf) {
       alert("Biblioteca PDF não carregada.");

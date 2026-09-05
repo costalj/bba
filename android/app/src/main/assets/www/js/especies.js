@@ -78,26 +78,46 @@
     const rotulos = {
       federal: "Lei federal",
       estadual: "Lei/dec. estadual (MA)",
-      municipal: "Lei municipal (São Luís)",
     };
     const grupos = {};
     artigos.forEach((a) => {
       const e = (a.esfera || "").toLowerCase();
-      if (!grupos[e]) grupos[e] = [];
-      grupos[e].push(a);
+      if (e === "municipal") {
+        const mun = a.municipio || "São Luís";
+        const key = `municipal:${mun}`;
+        if (!grupos[key]) grupos[key] = { esfera: "municipal", municipio: mun, lista: [] };
+        grupos[key].lista.push(a);
+        return;
+      }
+      if (!grupos[e]) grupos[e] = { esfera: e, lista: [] };
+      grupos[e].lista.push(a);
     });
     const linhas = [];
     ordem.forEach((esfera) => {
-      const lista = grupos[esfera];
-      if (!lista || !lista.length) return;
-      const citacoes = lista
-        .map((a) => {
-          const base = `${a.norma}, ${a.artigo}`;
-          return a.texto ? `${base} (${a.texto})` : base;
-        })
-        .join("; ");
-      linhas.push(`${rotulos[esfera]}: ${citacoes}.`);
+      const lista = grupos[esfera]?.lista;
+      if (lista?.length) {
+        const citacoes = lista
+          .map((a) => {
+            const base = `${a.norma}, ${a.artigo}`;
+            return a.texto ? `${base} (${a.texto})` : base;
+          })
+          .join("; ");
+        linhas.push(`${rotulos[esfera]}: ${citacoes}.`);
+      }
     });
+    Object.keys(grupos)
+      .filter((k) => k.startsWith("municipal:"))
+      .sort()
+      .forEach((key) => {
+        const g = grupos[key];
+        const citacoes = g.lista
+          .map((a) => {
+            const base = `${a.norma}, ${a.artigo}`;
+            return a.texto ? `${base} (${a.texto})` : base;
+          })
+          .join("; ");
+        linhas.push(`Lei municipal (${g.municipio}): ${citacoes}.`);
+      });
     if (!linhas.length) return "";
     return `\n\n${linhas.join("\n")}`;
   }

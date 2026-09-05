@@ -10,3 +10,6 @@ tools/
 android/local.properties
 dist/*.apk
 .idea/
+
+dist/
+

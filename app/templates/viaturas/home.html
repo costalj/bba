@@ -20,18 +20,25 @@
 {% if conferencias %}
 <ul class="material-cards">
   {% for c in conferencias %}
-  <li>
+  <li class="material-lista-item{% if salva_id == c.id %} vistoria-destaque{% endif %}" id="conferencia-{{ c.id }}">
     <a href="{{ url_for('main.detalhe_conferencia_materiais', conferencia_id=c.id) }}"
-       class="material-card{% if salva_id == c.id %} material-card-destaque{% endif %}"
-       id="conferencia-{{ c.id }}">
+       class="material-card{% if salva_id == c.id %} material-card-destaque{% endif %}">
       <span class="material-card-data">{{ c.data_label }}</span>
       <span class="material-card-semana">{{ c.dia_semana }}</span>
       <span class="material-card-rotulo">Chefe de socorro</span>
       <strong class="material-card-chefe">{{ c.chefe_socorro }}</strong>
     </a>
+    <div class="vistoria-acoes">
+      <a href="{{ url_for('main.detalhe_conferencia_materiais', conferencia_id=c.id) }}" class="btn-acao">👁️ Abrir</a>
+      <a href="{{ url_for('main.exportar_pdf_conferencia_materiais', conferencia_id=c.id) }}" class="btn-acao btn-acao-pdf" target="_blank" rel="noopener">📄 PDF</a>
+      <button type="button" class="btn-acao btn-acao-share btn-share-pdf"
+              data-pdf-url="{{ url_for('main.exportar_pdf_conferencia_materiais', conferencia_id=c.id) }}"
+              data-titulo="Conferência {{ c.data_label }}">📤 Compartilhar</button>
+    </div>
   </li>
   {% endfor %}
 </ul>
+<script src="{{ url_for('static', filename='js/materiais-lista.js') }}"></script>
 {% else %}
 <div class="empty-state">
   <span class="empty-icon">📭</span>

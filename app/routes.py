@@ -865,6 +865,36 @@ def detalhe_conferencia_materiais(conferencia_id):
     )
 
 
+@bp.route("/viaturas/materiais/<int:conferencia_id>/pdf")
+def exportar_pdf_conferencia_materiais(conferencia_id):
+    from app.materiais_viatura import data_extenso
+    from app.pdf_materiais_viatura import gerar_pdf_conferencia_materiais
+
+    db = get_db()
+    row = db.execute(
+        "SELECT * FROM conferencias_materiais WHERE id = ?", (conferencia_id,)
+    ).fetchone()
+    if row is None:
+        abort(404)
+    conferencia = dict(row)
+    conferencia["data_label"] = data_extenso(row["data_servico"])
+    conferencia["viaturas"] = json.loads(row["viaturas_json"] or "[]")
+    conferencia["secoes"] = json.loads(row["materiais_json"] or "[]")
+    conferencia["fotos"] = _json_campo(row, "fotos_json", [])
+    conferencia["assinaturas"] = _json_campo(row, "assinaturas_json", {})
+    if "tipo_checklist" in row.keys():
+        conferencia["tipo_checklist"] = row["tipo_checklist"]
+
+    pdf_bytes = gerar_pdf_conferencia_materiais(conferencia)
+    data_slug = (row["data_servico"] or "conferencia").replace("-", "")
+    nome = f"conferencia_materiais_{data_slug}_{conferencia_id}.pdf"
+    return Response(
+        pdf_bytes,
+        mimetype="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{nome}"'},
+    )
+
+
 @bp.route("/viaturas/nova")
 def nova_vistoria_viatura():
     from app.auth_utils import pode_assinar_vistoria_viatura

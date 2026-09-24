@@ -66,14 +66,23 @@ function criarConferenciaMateriais(dados) {
   return registro;
 }
 
+function htmlAcoesMaterial(item) {
+  return `<div class="vistoria-acoes">
+    <a href="materiais-detalhe.html?id=${item.id}" class="btn-acao">👁️ Abrir</a>
+    <button type="button" class="btn-acao btn-acao-pdf-materiais" data-id="${item.id}">📄 PDF</button>
+    <button type="button" class="btn-acao btn-acao-share-materiais" data-id="${item.id}">📤 Compartilhar</button>
+  </div>`;
+}
+
 function htmlCardMaterial(item, destaque) {
-  return `<li>
-    <a href="materiais-detalhe.html?id=${item.id}" class="material-card${destaque ? " material-card-destaque" : ""}" id="conferencia-${item.id}">
+  return `<li class="material-lista-item${destaque ? " vistoria-destaque" : ""}" id="conferencia-${item.id}">
+    <a href="materiais-detalhe.html?id=${item.id}" class="material-card${destaque ? " material-card-destaque" : ""}">
       <span class="material-card-data">${escHtmlMaterial(dataExtensoMaterial(item.data_servico))}</span>
       <span class="material-card-semana">${escHtmlMaterial(item.dia_semana)}</span>
       <span class="material-card-rotulo">Chefe de socorro</span>
       <strong class="material-card-chefe">${escHtmlMaterial(item.chefe_socorro)}</strong>
     </a>
+    ${htmlAcoesMaterial(item)}
   </li>`;
 }
 
@@ -90,7 +99,7 @@ function htmlDetalheMaterial(item) {
   const vtrs = (item.viaturas || [])
     .map(
       (v) =>
-        `<li><strong>AR ${escHtmlMaterial(v.ar)}${v.marca ? ` — ${escHtmlMaterial(v.marca)} ${escHtmlMaterial(v.modelo || "")}` : ""}</strong><span>KM inicial ${escHtmlMaterial(v.km_inicial || v.km || "—")}</span><span>Abastecimento ${escHtmlMaterial(v.abastecimento || v.k7 || "—")}</span></li>`
+        `<li><strong>AR ${escHtmlMaterial(v.ar)}${v.marca ? ` — ${escHtmlMaterial(v.marca)} ${escHtmlMaterial(v.modelo || "")}` : ""}</strong><span>KM inicial: ${escHtmlMaterial(v.km_inicial || v.km || "—")}</span><span>Abastecimento: ${escHtmlMaterial(v.abastecimento || v.k7 || "—")}</span></li>`
     )
     .join("");
   const fotos = (item.fotos || [])
@@ -123,6 +132,10 @@ function htmlDetalheMaterial(item) {
     ? `<section class="info-card"><h3>Passagem de serviço</h3>${blocoAssinatura("Saindo", assinaturas.saindo)}${blocoAssinatura("Entrando", assinaturas.entrando)}</section>`
     : "";
   return `
+    <div class="action-row">
+      <button type="button" class="btn btn-secondary btn-block btn-acao-pdf-materiais" data-id="${item.id}">📄 Exportar PDF</button>
+      <button type="button" class="btn btn-secondary btn-block btn-acao-share-materiais" data-id="${item.id}">📤 Compartilhar</button>
+    </div>
     <section class="material-card material-card-estatico">
       <span class="material-card-data">${escHtmlMaterial(dataExtensoMaterial(item.data_servico))}</span>
       <span class="material-card-semana">${escHtmlMaterial(item.dia_semana)}</span>

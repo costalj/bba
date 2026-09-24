@@ -35,6 +35,11 @@
   <script src="../js/materiais-viatura-dados.js"></script>
   <script src="../js/seed.js"></script>
   <script src="../js/materiais-viatura.js"></script>
+  <script src="../js/logo-bba-data.js"></script>
+  <script src="../js/jspdf.umd.min.js"></script>
+  <script src="../js/jspdf-autotable.min.js"></script>
+  <script src="../js/pdf.js"></script>
+  <script src="../js/pdf-materiais-viatura.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
     const salvaId = params.get("salva");
@@ -44,6 +49,7 @@
       el.innerHTML = `<div class="empty-state"><span class="empty-icon">📭</span><p>Nenhuma conferência de materiais registrada.</p></div>`;
     } else {
       el.innerHTML = `<ul class="material-cards">${lista.map((item) => htmlCardMaterial(item, String(salvaId) === String(item.id))).join("")}</ul>`;
+      bindAcoesMateriais(el);
     }
   </script>
   <script src="../js/auth.js"></script>

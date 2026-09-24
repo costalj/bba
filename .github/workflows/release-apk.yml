@@ -28,7 +28,10 @@ jobs:
           java-version: 17
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          # O pacote legado "tools" saiu do repositório do SDK e derruba o build.
+          packages: platform-tools
 
       - name: Install Android packages
         run: |

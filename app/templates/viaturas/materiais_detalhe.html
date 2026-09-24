@@ -18,7 +18,7 @@
     <dt>Contato funcional</dt><dd>{{ conferencia.contato }}</dd>
     {% endif %}
     {% if conferencia.condutor %}
-    <dt>Condutor</dt><dd>{{ conferencia.condutor }}</dd>
+    <dt>Motorista</dt><dd>{{ conferencia.condutor }}</dd>
     {% endif %}
     {% if conferencia.comandante %}
     <dt>Comandante de guarnição</dt><dd>{{ conferencia.comandante }}</dd>
@@ -46,9 +46,9 @@
   <ul class="material-vtrs">
     {% for v in conferencia.viaturas %}
     <li>
-      <strong>AR {{ v.ar }}</strong>
-      <span>KM {{ v.km or "—" }}</span>
-      <span>K7 {{ v.k7 or "—" }}</span>
+      <strong>AR {{ v.ar }}{% if v.marca %} — {{ v.marca }} {{ v.modelo or "" }}{% endif %}</strong>
+      <span>KM inicial {{ v.km_inicial or v.km or "—" }}</span>
+      <span>Abastecimento {{ v.abastecimento or v.k7 or "—" }}</span>
     </li>
     {% endfor %}
   </ul>

@@ -6,18 +6,7 @@ const MATERIAIS_VIATURA_MODELO = {
   "condutor": "",
   "comandante": "",
   "oficial_dia": "",
-  "viaturas": [
-    {
-      "ar": "76",
-      "km": "",
-      "k7": ""
-    },
-    {
-      "ar": "87",
-      "km": "",
-      "k7": ""
-    }
-  ],
+  "viaturas": [],
   "secoes": [
     {
       "titulo": "Materiais VTR AR 76",

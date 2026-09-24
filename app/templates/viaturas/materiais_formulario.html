@@ -17,19 +17,40 @@
     </label>
     <label class="field">
       <span>Chefe de socorro *</span>
-      <input type="text" name="chefe_socorro" required value="{{ modelo.chefe_socorro }}" placeholder="Posto e nome">
+      <select name="chefe_socorro" required>
+        <option value="">Selecione…</option>
+        {% for u in usuarios %}
+        <option value="{{ nome_posto_guerra(u) }}"{% if modelo.chefe_socorro == nome_posto_guerra(u) %} selected{% endif %}>
+          {{ nome_posto_guerra(u) }} ({{ u.perfil }})
+        </option>
+        {% endfor %}
+      </select>
     </label>
     <label class="field">
       <span>Contato funcional</span>
       <input type="tel" name="contato" value="{{ modelo.contato }}">
     </label>
     <label class="field">
-      <span>Condutor</span>
-      <input type="text" name="condutor" value="{{ modelo.condutor }}">
+      <span>Motorista</span>
+      <select name="condutor">
+        <option value="">Selecione…</option>
+        {% for u in usuarios %}
+        <option value="{{ nome_posto_guerra(u) }}"{% if modelo.condutor == nome_posto_guerra(u) %} selected{% endif %}>
+          {{ nome_posto_guerra(u) }} ({{ u.perfil }})
+        </option>
+        {% endfor %}
+      </select>
     </label>
     <label class="field">
       <span>Comandante de guarnição</span>
-      <input type="text" name="comandante" value="{{ modelo.comandante }}">
+      <select name="comandante">
+        <option value="">Selecione…</option>
+        {% for u in usuarios %}
+        <option value="{{ nome_posto_guerra(u) }}"{% if modelo.comandante == nome_posto_guerra(u) %} selected{% endif %}>
+          {{ nome_posto_guerra(u) }} ({{ u.perfil }})
+        </option>
+        {% endfor %}
+      </select>
     </label>
     <label class="field">
       <span>Oficial de dia</span>
@@ -39,22 +60,27 @@
 
   <section class="form-section">
     <h3>Viaturas</h3>
-    {% for v in modelo.viaturas %}
-    <div class="material-vtr-form">
-      <label class="field">
-        <span>AR</span>
-        <input type="text" name="vtr_ar_{{ loop.index0 }}" value="{{ v.ar }}" inputmode="numeric">
-      </label>
-      <label class="field">
-        <span>KM</span>
-        <input type="text" name="vtr_km_{{ loop.index0 }}" value="{{ v.km }}" inputmode="numeric">
-      </label>
-      <label class="field">
-        <span>K7</span>
-        <input type="text" name="vtr_k7_{{ loop.index0 }}" value="{{ v.k7 }}" placeholder="6/8">
-      </label>
+    {% if cadastro_viaturas %}
+    {% for v in cadastro_viaturas %}
+    {% set i = loop.index0 %}
+    <div class="material-vtr-card">
+      <input type="hidden" name="vtr_cadastro_{{ i }}" value="{{ v.id }}">
+      <p class="material-vtr-nome"><strong>{{ v.ar }} — {{ v.marca }} {{ v.modelo }}</strong><small>{{ v.placa }}</small></p>
+      <div class="material-vtr-form">
+        <label class="field">
+          <span>KM inicial</span>
+          <input type="text" name="vtr_km_inicial_{{ i }}" inputmode="numeric" placeholder="Ex: 104433">
+        </label>
+        <label class="field">
+          <span>Abastecimento</span>
+          <input type="text" name="vtr_abastecimento_{{ i }}" placeholder="Ex: 6/8 ou Sim/Não">
+        </label>
+      </div>
     </div>
     {% endfor %}
+    {% else %}
+    <p class="hint">Nenhuma viatura cadastrada. Cadastre em Admin → Viaturas.</p>
+    {% endif %}
   </section>
 
   <section class="form-section">

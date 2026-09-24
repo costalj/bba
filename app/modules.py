@@ -24,26 +24,6 @@ MODULOS = [
 
     {
 
-        "id": "materiais",
-
-        "nome": "Checklist de Materiais",
-
-        "descricao": "Controle de equipamentos e EPIs",
-
-        "icone": "📦",
-
-        "icone_img": "img/icon-motosserra.svg",
-
-        "cor": "#f5921e",
-
-        "rota": "main.materiais",
-
-        "ativo": False,
-
-    },
-
-    {
-
         "id": "viaturas",
 
         "nome": "Materiais da Viatura",
@@ -126,7 +106,7 @@ APP_INFO = {
 
     "subtitulo": "Batalhão de Bombeiros Ambiental",
 
-    "versao": "1.0.34",
+    "versao": "1.0.35",
 
 }
 

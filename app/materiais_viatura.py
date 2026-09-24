@@ -142,8 +142,8 @@ CONFERENCIA_INICIAL = {
     "comandante": "2º SGT BM Lindonberg",
     "oficial_dia": "2° Ten. BM Marconi",
     "viaturas": [
-        {"ar": "76", "km": "104433", "k7": "6/8"},
-        {"ar": "87", "km": "5195", "k7": "7/8"},
+        {"ar": "76", "km_inicial": "104433", "abastecimento": "6/8"},
+        {"ar": "87", "km_inicial": "5195", "abastecimento": "7/8"},
     ],
     "secoes": SECOES_MODELO,
 }
@@ -169,6 +169,25 @@ def data_extenso(data_iso: str) -> str:
     return data.strftime("%d/%m/%Y")
 
 
+def texto_viatura_cadastro(v) -> str:
+    ar = (v.get("ar") or "").strip()
+    marca = (v.get("marca") or "").strip()
+    modelo = (v.get("modelo") or "").strip()
+    placa = (v.get("placa") or "").strip()
+    nome = f"{marca} {modelo}".strip()
+    if ar and nome:
+        return f"AR {ar} — {nome} · {placa}" if placa else f"AR {ar} — {nome}"
+    return ar or placa or "—"
+
+
+def km_viatura_conferencia(v) -> str:
+    return (v.get("km_inicial") or v.get("km") or "").strip() or "—"
+
+
+def abastecimento_viatura_conferencia(v) -> str:
+    return (v.get("abastecimento") or v.get("k7") or "").strip() or "—"
+
+
 def qtd_label(qtd) -> str:
     texto = str(qtd or "").strip()
     if texto.isdigit():
@@ -184,9 +203,6 @@ def modelo_para_formulario():
         "condutor": "",
         "comandante": "",
         "oficial_dia": "",
-        "viaturas": [
-            {"ar": "76", "km": "", "k7": ""},
-            {"ar": "87", "km": "", "k7": ""},
-        ],
+        "viaturas": [],
         "secoes": SECOES_MODELO,
     }

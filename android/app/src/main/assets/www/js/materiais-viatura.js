@@ -80,7 +80,7 @@ function htmlCardMaterial(item, destaque) {
 function htmlDetalheMaterial(item) {
   const servico = [
     ["Contato funcional", item.contato],
-    ["Condutor", item.condutor],
+    ["Motorista", item.condutor],
     ["Comandante de guarnição", item.comandante],
     ["Oficial de dia", item.oficial_dia],
   ]
@@ -90,7 +90,7 @@ function htmlDetalheMaterial(item) {
   const vtrs = (item.viaturas || [])
     .map(
       (v) =>
-        `<li><strong>AR ${escHtmlMaterial(v.ar)}</strong><span>KM ${escHtmlMaterial(v.km || "—")}</span><span>K7 ${escHtmlMaterial(v.k7 || "—")}</span></li>`
+        `<li><strong>AR ${escHtmlMaterial(v.ar)}${v.marca ? ` — ${escHtmlMaterial(v.marca)} ${escHtmlMaterial(v.modelo || "")}` : ""}</strong><span>KM inicial ${escHtmlMaterial(v.km_inicial || v.km || "—")}</span><span>Abastecimento ${escHtmlMaterial(v.abastecimento || v.k7 || "—")}</span></li>`
     )
     .join("");
   const fotos = (item.fotos || [])

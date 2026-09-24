@@ -19,10 +19,8 @@
       <section class="form-section">
         <h3>Serviço do dia</h3>
         <label class="field"><span>Data *</span><input type="date" name="data_servico" required></label>
-        <label class="field"><span>Chefe de socorro *</span><input type="text" name="chefe_socorro" required placeholder="Posto e nome"></label>
+        <div id="bloco-usuarios-servico"></div>
         <label class="field"><span>Contato funcional</span><input type="tel" name="contato"></label>
-        <label class="field"><span>Condutor</span><input type="text" name="condutor"></label>
-        <label class="field"><span>Comandante de guarnição</span><input type="text" name="comandante"></label>
         <label class="field"><span>Oficial de dia</span><input type="text" name="oficial_dia"></label>
       </section>
       <section class="form-section" id="bloco-vtrs"><h3>Viaturas</h3></section>
@@ -72,9 +70,11 @@
     <a href="index.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
   </nav>
   <script src="../js/usuarios-seed.js"></script>
+  <script src="../js/viaturas-cadastro-seed.js"></script>
   <script src="../js/seed-meta.js"></script>
   <script src="../js/materiais-viatura-dados.js"></script>
   <script src="../js/seed.js"></script>
+  <script src="../js/viaturas-cadastro.js"></script>
   <script src="../js/materiais-viatura.js"></script>
   <script src="../js/assinatura.js"></script>
   <script src="../js/auth.js"></script>
@@ -92,12 +92,42 @@
     let pads = null;
 
     form.data_servico.value = new Date().toISOString().slice(0, 10);
-    document.getElementById("bloco-vtrs").insertAdjacentHTML("beforeend", modelo.viaturas.map((v, i) => `
-      <div class="material-vtr-form">
-        <label class="field"><span>AR</span><input type="text" name="vtr_ar_${i}" value="${escHtmlMaterial(v.ar)}" inputmode="numeric"></label>
-        <label class="field"><span>KM</span><input type="text" name="vtr_km_${i}" inputmode="numeric"></label>
-        <label class="field"><span>K7</span><input type="text" name="vtr_k7_${i}" placeholder="6/8"></label>
-      </div>`).join(""));
+
+    function htmlSelectUsuario(campo, rotulo, obrigatorio) {
+      const usuarios = listarUsuarios().filter((u) => u.ativo !== false);
+      const opts = usuarios
+        .map((u) => {
+          const valor = nomePostoGuerra(u);
+          const texto = `${valor} (${u.perfil})`;
+          return `<option value="${escHtmlMaterial(valor)}">${escHtmlMaterial(texto)}</option>`;
+        })
+        .join("");
+      return `<label class="field"><span>${rotulo}${obrigatorio ? " *" : ""}</span>
+        <select name="${campo}"${obrigatorio ? " required" : ""}>
+          <option value="">Selecione…</option>${opts}
+        </select></label>`;
+    }
+
+    document.getElementById("bloco-usuarios-servico").innerHTML =
+      htmlSelectUsuario("chefe_socorro", "Chefe de socorro", true) +
+      htmlSelectUsuario("condutor", "Motorista", false) +
+      htmlSelectUsuario("comandante", "Comandante de guarnição", false);
+
+    const cadastroVtrs = listarCadastroViaturas().slice().sort((a, b) => String(a.ar).localeCompare(String(b.ar), "pt-BR", { numeric: true }));
+    const blocoVtrs = document.getElementById("bloco-vtrs");
+    if (!cadastroVtrs.length) {
+      blocoVtrs.insertAdjacentHTML("beforeend", '<p class="hint">Nenhuma viatura cadastrada. Cadastre em Admin → Viaturas.</p>');
+    } else {
+      blocoVtrs.insertAdjacentHTML("beforeend", cadastroVtrs.map((v, i) => `
+        <div class="material-vtr-card">
+          <input type="hidden" name="vtr_cadastro_${i}" value="${escHtmlMaterial(String(v.id))}">
+          <p class="material-vtr-nome"><strong>${escHtmlMaterial(v.ar)} — ${escHtmlMaterial(v.marca)} ${escHtmlMaterial(v.modelo)}</strong><small>${escHtmlMaterial(v.placa)}</small></p>
+          <div class="material-vtr-form">
+            <label class="field"><span>KM inicial</span><input type="text" name="vtr_km_inicial_${i}" inputmode="numeric" placeholder="Ex: 104433"></label>
+            <label class="field"><span>Abastecimento</span><input type="text" name="vtr_abastecimento_${i}" placeholder="Ex: 6/8 ou Sim/Não"></label>
+          </div>
+        </div>`).join(""));
+    }
 
     blocoChecklist.innerHTML = modelo.secoes.map((secao, s) => `
       <section class="form-section">
@@ -202,11 +232,21 @@
         return;
       }
       const dados = new FormData(form);
+      const cadastroMap = Object.fromEntries(listarCadastroViaturas().map((v) => [String(v.id), v]));
       const viaturas = [];
-      modelo.viaturas.forEach((_, i) => {
-        const ar = String(dados.get(`vtr_ar_${i}`) || "").trim();
-        if (!ar) return;
-        viaturas.push({ ar, km: String(dados.get(`vtr_km_${i}`) || "").trim(), k7: String(dados.get(`vtr_k7_${i}`) || "").trim() });
+      cadastroVtrs.forEach((_, i) => {
+        const cid = String(dados.get(`vtr_cadastro_${i}`) || "").trim();
+        const base = cadastroMap[cid];
+        if (!base) return;
+        viaturas.push({
+          cadastro_id: base.id,
+          ar: base.ar,
+          placa: base.placa,
+          marca: base.marca,
+          modelo: base.modelo,
+          km_inicial: String(dados.get(`vtr_km_inicial_${i}`) || "").trim(),
+          abastecimento: String(dados.get(`vtr_abastecimento_${i}`) || "").trim(),
+        });
       });
       const secoes = modelo.secoes.map((secao, s) => ({
         titulo: secao.titulo,

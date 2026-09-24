@@ -1832,11 +1832,33 @@ code {
   font-size: 0.78rem;
 }
 
+.material-vtr-card {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.material-vtr-card:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.material-vtr-nome {
+  margin: 0 0 8px;
+  line-height: 1.35;
+}
+
+.material-vtr-nome small {
+  display: block;
+  color: #64748b;
+  font-weight: 400;
+}
+
 .material-vtr-form {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-bottom: 8px;
 }
 
 .material-qtd-input {

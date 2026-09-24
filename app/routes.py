@@ -632,16 +632,6 @@ def treinamentos():
     ])
 
 
-@bp.route("/materiais/")
-def materiais():
-    return _modulo_placeholder("materiais", [
-        "Checklist de EPIs e equipamentos",
-        "Controle de estoque em viatura",
-        "Registro de entrega e devolução",
-        "Alertas de reposição",
-    ])
-
-
 def _conferencias_materiais(db):
     from app.materiais_viatura import data_extenso
 
@@ -699,16 +689,32 @@ def _ler_conferencia_form(form):
         if not fotos:
             return None, "Envie a foto dos materiais para comparar com a lista do sistema."
 
+    db = get_db()
+    cadastro_map = {
+        str(r["id"]): dict(r)
+        for r in db.execute(
+            "SELECT id, ar, placa, marca, modelo FROM cadastro_viaturas ORDER BY ar"
+        )
+    }
     viaturas = []
-    for i in range(4):
-        ar = (form.get(f"vtr_ar_{i}") or "").strip()
-        if not ar:
+    for i in range(len(cadastro_map) + 5):
+        cid = (form.get(f"vtr_cadastro_{i}") or "").strip()
+        if not cid:
             continue
+        base = cadastro_map.get(cid)
+        if not base:
+            continue
+        km_inicial = (form.get(f"vtr_km_inicial_{i}") or "").strip()
+        abastecimento = (form.get(f"vtr_abastecimento_{i}") or "").strip()
         viaturas.append(
             {
-                "ar": ar,
-                "km": (form.get(f"vtr_km_{i}") or "").strip(),
-                "k7": (form.get(f"vtr_k7_{i}") or "").strip(),
+                "cadastro_id": base["id"],
+                "ar": base["ar"],
+                "placa": base["placa"],
+                "marca": base["marca"],
+                "modelo": base["modelo"],
+                "km_inicial": km_inicial,
+                "abastecimento": abastecimento,
             }
         )
 
@@ -813,9 +819,18 @@ def nova_conferencia_materiais():
             "data_servico", "chefe_socorro", "contato", "condutor", "comandante", "oficial_dia"
         )})
 
+    db = get_db()
+    usuarios = [
+        dict(r) for r in db.execute(f"{_USUARIOS_SELECT} ORDER BY posto, nome_guerra, nome")
+    ]
+    cadastro_viaturas = db.execute(
+        "SELECT id, ar, placa, marca, modelo FROM cadastro_viaturas ORDER BY ar"
+    ).fetchall()
     return render_template(
         "viaturas/materiais_formulario.html",
         modelo=modelo,
+        usuarios=usuarios,
+        cadastro_viaturas=cadastro_viaturas,
         erro=erro,
         qtd_label=qtd_label,
         show_back=True,

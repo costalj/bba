@@ -38,7 +38,12 @@
       <section class="form-section material-oculto" id="bloco-foto">
         <h3>Foto dos materiais</h3>
         <p class="hint">A foto fica junto da lista do sistema. Compare cada item e marque pronto, alterado ou baixado.</p>
-        <label class="field"><span>Tirar ou enviar foto</span><input type="file" id="fotos-input" accept="image/*" capture="environment" multiple></label>
+        <input type="file" id="fotos-input-camera" accept="image/*" capture="environment" multiple hidden>
+        <input type="file" id="fotos-input-galeria" accept="image/*" multiple hidden>
+        <div class="foto-acoes">
+          <button type="button" id="btn-fotos-camera" class="btn btn-secondary foto-btn">📸 Tirar foto</button>
+          <button type="button" id="btn-fotos-galeria" class="btn btn-secondary foto-btn">🖼️ Galeria</button>
+        </div>
         <div id="fotos-preview" class="material-fotos"></div>
       </section>
       <div id="bloco-checklist" class="material-oculto"></div>
@@ -195,15 +200,21 @@
     }
 
     tipo.addEventListener("change", aplicarTipo);
-    document.getElementById("fotos-input").addEventListener("change", async (event) => {
-      const arquivos = Array.from(event.target.files || []);
-      event.target.value = "";
+    async function adicionarFotos(input) {
+      const arquivos = Array.from(input.files || []);
+      input.value = "";
       for (const arquivo of arquivos) {
         try { fotos.push(await comprimirFoto(arquivo)); } catch { /* ignora */ }
       }
       document.getElementById("fotos-preview").innerHTML = fotos.map((src) => `<img src="${src}" alt="Foto dos materiais">`).join("");
       aplicarTipo();
-    });
+    }
+    const fotosInputCamera = document.getElementById("fotos-input-camera");
+    const fotosInputGaleria = document.getElementById("fotos-input-galeria");
+    document.getElementById("btn-fotos-camera").addEventListener("click", () => fotosInputCamera.click());
+    document.getElementById("btn-fotos-galeria").addEventListener("click", () => fotosInputGaleria.click());
+    fotosInputCamera.addEventListener("change", () => adicionarFotos(fotosInputCamera));
+    fotosInputGaleria.addEventListener("change", () => adicionarFotos(fotosInputGaleria));
 
     form.addEventListener("change", (event) => {
       const radio = event.target;

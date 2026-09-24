@@ -14,7 +14,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(ROOT, "instance", "vistorias.db")
 POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 ASSETS_JS = os.path.join(ROOT, "android", "app", "src", "main", "assets", "www", "js")
-SEED_VERSION = "1.0.36"
+SEED_VERSION = "1.0.37"
 
 # Hash SHA-256 de "admin123" e "teste123" — mesmos do Flask (app/database.py).
 HASH_ADMIN123 = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"

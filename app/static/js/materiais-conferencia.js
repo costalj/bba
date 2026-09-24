@@ -5,7 +5,10 @@
   const blocoChecklist = document.getElementById("bloco-checklist");
   const blocoAssinaturas = document.getElementById("bloco-assinaturas");
   const btnSalvar = document.getElementById("btn-salvar-conferencia");
-  const fotosInput = document.getElementById("fotos-input");
+  const fotosInputCamera = document.getElementById("fotos-input-camera");
+  const fotosInputGaleria = document.getElementById("fotos-input-galeria");
+  const btnFotosCamera = document.getElementById("btn-fotos-camera");
+  const btnFotosGaleria = document.getElementById("btn-fotos-galeria");
   const fotosPreview = document.getElementById("fotos-preview");
   const fotosJson = document.getElementById("fotos-json");
   if (!form || !tipo) return;
@@ -77,19 +80,27 @@
 
   tipo.addEventListener("change", aplicarTipo);
 
-  if (fotosInput) {
-    fotosInput.addEventListener("change", async () => {
-      const arquivos = Array.from(fotosInput.files || []);
-      fotosInput.value = "";
-      for (const arquivo of arquivos) {
-        try {
-          fotos.push(await comprimirFoto(arquivo));
-        } catch {
-          /* ignora arquivo ilegível */
-        }
+  async function adicionarFotos(input) {
+    if (!input) return;
+    const arquivos = Array.from(input.files || []);
+    input.value = "";
+    for (const arquivo of arquivos) {
+      try {
+        fotos.push(await comprimirFoto(arquivo));
+      } catch {
+        /* ignora arquivo ilegível */
       }
-      pintarFotos();
-    });
+    }
+    pintarFotos();
+  }
+
+  if (btnFotosCamera && fotosInputCamera) {
+    btnFotosCamera.addEventListener("click", () => fotosInputCamera.click());
+    fotosInputCamera.addEventListener("change", () => adicionarFotos(fotosInputCamera));
+  }
+  if (btnFotosGaleria && fotosInputGaleria) {
+    btnFotosGaleria.addEventListener("click", () => fotosInputGaleria.click());
+    fotosInputGaleria.addEventListener("change", () => adicionarFotos(fotosInputGaleria));
   }
 
   form.addEventListener("change", (event) => {

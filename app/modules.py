@@ -8,9 +8,9 @@ MODULOS = [
 
         "id": "arvores",
 
-        "nome": "Vistoria de Árvores",
+        "nome": "Ocorrências com Árvores",
 
-        "descricao": "Avaliação de risco arbóreo e laudo",
+        "descricao": "Queda de árvores e vistoria de risco",
 
         "icone": "🌳",
 
@@ -126,7 +126,7 @@ APP_INFO = {
 
     "subtitulo": "Batalhão de Bombeiros Ambiental",
 
-    "versao": "1.0.31",
+    "versao": "1.0.32",
 
 }
 

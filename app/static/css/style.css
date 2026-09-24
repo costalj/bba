@@ -510,6 +510,8 @@ body {
 }
 
 .preview-card.hidden { display: none; }
+#bloco-queda.hidden { display: none; }
+#bloco-vistoria.somente-fotos > :not(#secao-fotos) { display: none; }
 
 .preview-score span {
   font-size: 2.5rem;
@@ -1413,6 +1415,7 @@ code {
 }
 
 .vistoria-item.item-baixo { border-left-color: #2d6a4f; }
+.vistoria-item.item-queda { border-left-color: #b45309; }
 .vistoria-item.item-medio { border-left-color: #e09f3e; }
 .vistoria-item.item-alto,
 .vistoria-item.item-supressao,

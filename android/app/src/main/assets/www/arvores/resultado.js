@@ -69,7 +69,7 @@ function bindAssinar(id) {
 
 function classeResultado(rec) {
   if (rec === "ALTO") return "resultado-alto";
-  if (rec === "MÉDIO") return "resultado-medio";
+  if (rec === "MÉDIO" || rec === "QUEDA") return "resultado-medio";
   if (rec === "BAIXO") return "resultado-baixo";
   if (rec === "SUPRESSÃO") return "resultado-supressao";
   if (rec === "INTERVENÇÃO URGENTE") return "resultado-urgente";
@@ -124,12 +124,22 @@ function renderResultado(v, id) {
     questionarioHtml = `<section class="info-card"><h3>Notas (formato anterior)</h3><ul class="notas-lista">${notasHtml}</ul></section>`;
   }
 
-  const resultado = v.questionario ? calcularResultadoQuestionario(v.questionario) : null;
+  const ehQueda = v.tipo_ocorrencia === "queda" || v.recomendacao === "QUEDA";
+  const resultado = !ehQueda && v.questionario ? calcularResultadoQuestionario(v.questionario) : null;
+  const queda = v.queda || {};
+  const quedaHtml = ehQueda
+    ? `<section class="info-card"><h3>Queda de árvores</h3><dl class="detail-list">
+        ${queda.quantidade ? `<dt>Quantidade de árvores</dt><dd>${escHtml(queda.quantidade)}</dd>` : ""}
+        ${queda.onde_caiu ? `<dt>Onde caiu</dt><dd>${escHtml(queda.onde_caiu)}</dd>` : ""}
+        ${queda.vitimas ? `<dt>Houve vítimas</dt><dd>${escHtml(queda.vitimas)}</dd>` : ""}
+        ${queda.acao ? `<dt>Ação da guarnição</dt><dd>${escHtml(queda.acao)}</dd>` : ""}
+      </dl></section>`
+    : "";
 
   el.innerHTML = `
     <div class="resultado-card ${cls}">
-      <div class="resultado-score"><span class="score-num">${v.pontuacao_total}</span><span class="score-max">/ ${maxPts}${suffix}</span></div>
-      <h2 class="resultado-titulo">${escHtml(v.recomendacao)}</h2>
+      ${ehQueda ? "" : `<div class="resultado-score"><span class="score-num">${v.pontuacao_total}</span><span class="score-max">/ ${maxPts}${suffix}</span></div>`}
+      <h2 class="resultado-titulo">${ehQueda ? "Ocorrência com Queda de Árvores" : escHtml(v.recomendacao)}</h2>
       ${v.recomendacao === "ALTO" ? '<p class="supressao-alerta">⚠️ Alto risco potencial de queda</p>' : ""}
       <p>${escHtml(v.justificativa)}</p>
       ${renderOrientacaoResumo(resultado)}
@@ -157,13 +167,14 @@ function renderResultado(v, id) {
     </section>
     ${v.foto_especie ? `<section class="info-card"><h3>Foto de identificação</h3><img src="${v.foto_especie}" alt="Foto espécie" class="rubrica-imagem"></section>` : ""}
     ${htmlFotosVistoria(v)}
-    ${questionarioHtml}
+    ${quedaHtml}
+    ${ehQueda ? "" : questionarioHtml}
     ${v.observacoes ? `<section class="info-card"><h3>Observações adicionais</h3><p>${escHtml(v.observacoes)}</p></section>` : ""}
     ${resultado ? renderSomatorioHtml(resultado) : ""}
     ${v.recursos_adicionais ? `<section class="info-card"><h3>Recursos adicionais</h3><p>${escHtml(v.recursos_adicionais)}</p></section>` : ""}
     ${renderRubrica(v)}
     ${renderAssinatura(v, id)}
-    <a href="nova.html" class="btn btn-secondary btn-block">Nova Vistoria</a>`;
+    <a href="nova.html" class="btn btn-secondary btn-block">Nova ocorrência</a>`;
 
   bindAssinar(id);
   document.querySelectorAll(".btn-acao-pdf").forEach((btn) => {

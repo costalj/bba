@@ -474,7 +474,14 @@ def detalhe_vistoria(vistoria_id):
         return render_template("404.html"), 404
 
     fotos = get_fotos_vistoria(vistoria_id)
-    questionario = get_questionario_vistoria(row)
+    eh_queda = (row["tipo_ocorrencia"] or "") == "queda" if "tipo_ocorrencia" in row.keys() else False
+    queda = {}
+    if eh_queda and row["queda_json"]:
+        try:
+            queda = json.loads(row["queda_json"])
+        except json.JSONDecodeError:
+            queda = {}
+    questionario = {} if eh_queda else get_questionario_vistoria(row)
     notas = get_notas_vistoria(row)
     assinatura = get_assinatura_vistoria(row)
     rubrica = get_rubrica_solicitante(row)
@@ -486,6 +493,8 @@ def detalhe_vistoria(vistoria_id):
     return render_template(
         "resultado.html",
         vistoria=row,
+        eh_queda=eh_queda,
+        queda=queda,
         numero_laudo=numero_laudo,
         resultado_calc=resultado_calc,
         secoes=get_questionario_secoes() if questionario else [],
@@ -1016,10 +1025,7 @@ def _dados_ocorrencia_vistoria(data):
     forma = (data.get("forma_acionamento") or "").strip() or None
     protocolo = (data.get("protocolo") or "").strip() or None
     natureza = (data.get("natureza_ocorrencia") or "").strip() or None
-    descricao = (data.get("descricao_ocorrencia") or "").strip()
-    if len(descricao) > 100:
-        descricao = descricao[:100]
-    descricao = descricao or None
+    descricao = (data.get("descricao_ocorrencia") or "").strip() or None
     return cpf_solicitante, forma, protocolo, natureza, descricao
 
 
@@ -1035,16 +1041,50 @@ def criar_vistoria():
     if not solicitante:
         return jsonify({"erro": "Solicitante é obrigatório."}), 400
 
-    respostas, erro = _extrair_questionario(data)
-    if erro:
-        return jsonify({"erro": erro}), 400
-
-    resultado = calcular_resultado(respostas)
+    tipo_ocorrencia = (data.get("tipo_ocorrencia") or "vistoria").strip()
+    queda_payload = None
+    if tipo_ocorrencia == "queda":
+        descricao_queda = (data.get("descricao_queda") or "").strip()
+        if not descricao_queda:
+            return jsonify({"erro": "Descreva a ocorrência com queda de árvores."}), 400
+        queda_payload = {
+            "quantidade": (data.get("quantidade_arvores") or "").strip(),
+            "onde_caiu": (data.get("onde_caiu") or "").strip(),
+            "vitimas": (data.get("vitimas") or "").strip(),
+            "acao": (data.get("acao_guarnicao") or "").strip(),
+        }
+        respostas = {}
+        partes = ["Ocorrência com queda de árvores."]
+        if queda_payload["quantidade"]:
+            partes.append(f"Quantidade: {queda_payload['quantidade']}.")
+        if queda_payload["onde_caiu"]:
+            partes.append(f"Local da queda: {queda_payload['onde_caiu']}.")
+        if queda_payload["vitimas"]:
+            partes.append(f"Vítimas: {queda_payload['vitimas']}.")
+        if queda_payload["acao"]:
+            partes.append(queda_payload["acao"])
+        resultado = {
+            "pontuacao_total": 0,
+            "recomendacao": "QUEDA",
+            "justificativa": " ".join(partes),
+        }
+    else:
+        tipo_ocorrencia = "vistoria"
+        respostas, erro = _extrair_questionario(data)
+        if erro:
+            return jsonify({"erro": erro}), 400
+        resultado = calcular_resultado(respostas)
     lat = _float_or_none(data.get("latitude"))
     lng = _float_or_none(data.get("longitude"))
     rubrica_json = _extrair_rubrica(data, solicitante)
     assinatura_json = _extrair_assinatura_chefe(data)
     cpf_solicitante, forma_acionamento, protocolo, natureza_ocorrencia, descricao_ocorrencia = _dados_ocorrencia_vistoria(data)
+    if tipo_ocorrencia == "queda":
+        natureza_ocorrencia = "Ocorrência com Queda de Árvores"
+        descricao_ocorrencia = descricao_queda
+        observacoes = queda_payload["acao"] or None
+    else:
+        observacoes = (data.get("observacoes") or "").strip() or None
 
     db = get_db()
     cursor = db.execute(
@@ -1055,15 +1095,15 @@ def criar_vistoria():
             descricao_ocorrencia, recursos_adicionais,
             resultado_especie, especie_status, especie_catalogo_id, foto_especie,
             latitude, longitude, questionario_json, notas_json,
-            rubrica_solicitante_json, assinatura_json,
+            rubrica_solicitante_json, assinatura_json, tipo_ocorrencia, queda_json,
             nota_tronco, nota_raizes, nota_inclinacao, nota_copa, nota_pragas, nota_proximidade,
             pontuacao_total, recomendacao, justificativa
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, ?, ?, ?)
         """,
         (
             endereco,
             (data.get("especie") or "").strip() or None,
-            (data.get("observacoes") or "").strip() or None,
+            observacoes,
             solicitante,
             cpf_solicitante,
             formatar_telefone((data.get("contato_telefonico") or "").strip()) or None,
@@ -1082,6 +1122,8 @@ def criar_vistoria():
             json.dumps(respostas, ensure_ascii=False),
             rubrica_json,
             assinatura_json,
+            tipo_ocorrencia,
+            json.dumps(queda_payload, ensure_ascii=False) if queda_payload else None,
             resultado["pontuacao_total"],
             resultado["recomendacao"],
             resultado["justificativa"],

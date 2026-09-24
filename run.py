@@ -11,7 +11,7 @@ from app import create_app
 app = create_app()
 
 if __name__ == "__main__":
-    port = int(os.environ.get("BBA_PORT", "5000"))
+    port = int(os.environ.get("BBA_PORT", "5050"))
     url = f"http://127.0.0.1:{port}/login"
 
     def _abrir_navegador():

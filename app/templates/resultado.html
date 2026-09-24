@@ -6,6 +6,12 @@
 
 {% block content %}
 {% set rec = vistoria.recomendacao %}
+{% if eh_queda %}
+<div class="resultado-card resultado-medio">
+  <h2 class="resultado-titulo">Ocorrência com Queda de Árvores</h2>
+  <p>{{ vistoria.justificativa }}</p>
+</div>
+{% else %}
 {% set cls = 'resultado-alto' if rec == 'ALTO' else ('resultado-medio' if rec == 'MÉDIO' else ('resultado-supressao' if rec == 'SUPRESSÃO' else ('resultado-urgente' if rec == 'INTERVENÇÃO URGENTE' else ('resultado-podas' if rec == 'PODAS / ACOMPANHAMENTO' else 'resultado-baixo')))) %}
 
 <div class="resultado-card {{ cls }}">
@@ -29,6 +35,7 @@
   </div>
   {% endif %}
 </div>
+{% endif %}
 
 <div class="action-row">
   <a href="{{ url_for('main.exportar_pdf', vistoria_id=vistoria.id) }}" class="btn btn-secondary btn-block">📄 Exportar PDF</a>
@@ -78,7 +85,17 @@
 </section>
 {% endif %}
 
-{% if questionario %}
+{% if eh_queda %}
+<section class="info-card">
+  <h3>Queda de árvores</h3>
+  <dl class="detail-list">
+    {% if queda.quantidade %}<dt>Quantidade de árvores</dt><dd>{{ queda.quantidade }}</dd>{% endif %}
+    {% if queda.onde_caiu %}<dt>Onde caiu</dt><dd>{{ queda.onde_caiu }}</dd>{% endif %}
+    {% if queda.vitimas %}<dt>Houve vítimas</dt><dd>{{ queda.vitimas }}</dd>{% endif %}
+    {% if queda.acao %}<dt>Ação da guarnição</dt><dd>{{ queda.acao }}</dd>{% endif %}
+  </dl>
+</section>
+{% elif questionario %}
   {% for secao in secoes %}
   <section class="info-card questionario-resumo">
     <h3>{{ secao.titulo }}</h3>
@@ -171,5 +188,5 @@
   {% endif %}
 </section>
 
-<a href="{{ url_for('main.nova_vistoria') }}" class="btn btn-secondary btn-block">Nova Vistoria</a>
+<a href="{{ url_for('main.nova_vistoria') }}" class="btn btn-secondary btn-block">Nova ocorrência</a>
 {% endblock %}

@@ -89,6 +89,8 @@ def _migrate(db):
         ("foto_especie", "TEXT"),
         ("questionario_json", "TEXT"),
         ("rubrica_solicitante_json", "TEXT"),
+        ("tipo_ocorrencia", "TEXT"),
+        ("queda_json", "TEXT"),
     ]
     for col, col_type in migrations:
         if not _column_exists(db, "vistorias", col):

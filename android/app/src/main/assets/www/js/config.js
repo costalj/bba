@@ -48,7 +48,7 @@ const CABECALHO_LAUDO = {
 };
 
 const MODULOS = [
-  { id: "arvores", nome: "Vistoria de Árvores", descricao: "Avaliação de risco arbóreo e laudo", icone: "🌳", cor: "#2d6a4f", url: "arvores/index.html", ativo: true },
+  { id: "arvores", nome: "Ocorrências com Árvores", descricao: "Queda de árvores e vistoria de risco", icone: "🌳", cor: "#2d6a4f", url: "arvores/index.html", ativo: true },
   { id: "materiais", nome: "Checklist de Materiais", descricao: "Controle de equipamentos e EPIs", icone: "📦", icone_img: "img/icon-motosserra.svg", cor: "#f5921e", ativo: false },
   { id: "viaturas", nome: "Vistoria de Viaturas", descricao: "Inspeção de veículos da frota", icone: "🚗", icone_img: "img/icon-viatura-bombeiro.svg", cor: "#c62828", url: "viaturas/index.html", ativo: true },
   { id: "legislacao", nome: "Legislação", descricao: "Portarias, BG, manuais e normas", icone: "⚖️", cor: "#334155", url: "legislacao/index.html", ativo: true },

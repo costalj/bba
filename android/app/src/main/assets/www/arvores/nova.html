@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nova Vistoria</title>
+  <title>Nova ocorrência</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="header-inner">
       <a href="index.html" class="header-back">←</a>
       <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
-      <div class="header-titles"><h1>Nova Vistoria</h1></div>
+      <div class="header-titles"><h1>Nova ocorrência</h1></div>
     </div>
   </header>
   <main class="container">
@@ -26,12 +26,22 @@
         </label>
         <label class="field"><span>Contato telefônico</span><input name="contato_telefonico" id="contato-telefonico" type="tel" inputmode="tel" maxlength="15" placeholder="(98) 99999-9999"></label>
         <label class="field">
+          <span>Tipo *</span>
+          <select name="tipo_ocorrencia" id="tipo-ocorrencia" required>
+            <option value="vistoria">Vistoria de árvores</option>
+            <option value="queda">Ocorrência com Queda de Árvores</option>
+          </select>
+        </label>
+      </section>
+      <div id="bloco-vistoria">
+      <section class="form-section">
+        <label class="field">
           <span>Forma de Acionamento</span>
           <input name="forma_acionamento" type="text" placeholder="CIOPS , Justiça , Ordem do Cmt Geral.">
         </label>
         <label class="field"><span>Protocolo do CIOPS/Portaria/Ordem de Serviço</span><input name="protocolo" placeholder="Nº do protocolo ou ordem de serviço"></label>
         <label class="field"><span>Natureza da ocorrência</span><input name="natureza_ocorrencia" type="text"></label>
-        <label class="field"><span>Descrição da ocorrência</span><textarea name="descricao_ocorrencia" rows="2" maxlength="100" placeholder="Resumo da ocorrência (máx. 100 caracteres)"></textarea></label>
+        <label class="field"><span>Descrição da ocorrência</span><textarea name="descricao_ocorrencia" rows="6" placeholder="Descreva a ocorrência"></textarea></label>
         <label class="field">
           <span>Espécie da árvore</span>
           <input name="especie" id="campo-especie" list="lista-especies-sugeridas" placeholder="Ex: Embaúba (Cecropia sp.)" autocomplete="off">
@@ -51,7 +61,7 @@
         <input type="hidden" name="especie_catalogo_id" id="especie_catalogo_id" value="">
         <input type="hidden" name="foto_especie" id="foto_especie" value="">
       </section>
-      <section class="form-section">
+      <section class="form-section" id="secao-fotos">
         <h3>Fotos da árvore</h3>
         <p class="hint">Registro fotográfico (máx. 5). As fotos aparecem no laudo PDF.</p>
         <input type="file" id="input-fotos-camera" accept="image/*" capture="environment" hidden>
@@ -81,6 +91,45 @@
           <textarea name="recursos_adicionais" rows="2" placeholder="Andaimes, Equatorial, Apoio"></textarea>
         </label>
       </section>
+      </div>
+
+      <div id="bloco-queda" class="hidden">
+        <section class="form-section">
+          <h3>Ocorrência com queda de árvores</h3>
+          <label class="field">
+            <span>Descrição da ocorrência *</span>
+            <textarea name="descricao_queda" rows="5" placeholder="Descreva a queda, o que foi atingido e a situação encontrada"></textarea>
+          </label>
+          <label class="field">
+            <span>Quantidade de árvores</span>
+            <input type="number" name="quantidade_arvores" min="1" inputmode="numeric" placeholder="Ex: 1">
+          </label>
+          <label class="field">
+            <span>Onde caiu</span>
+            <select name="onde_caiu">
+              <option value="">Selecione…</option>
+              <option>Via pública</option>
+              <option>Calçada</option>
+              <option>Imóvel</option>
+              <option>Veículo</option>
+              <option>Rede elétrica</option>
+              <option>Área verde</option>
+              <option>Outro</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Houve vítimas</span>
+            <select name="vitimas">
+              <option value="Não">Não</option>
+              <option value="Sim">Sim</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Ação realizada pela guarnição</span>
+            <textarea name="acao_guarnicao" rows="3" placeholder="Remoção, isolamento, orientação ou outra providência"></textarea>
+          </label>
+        </section>
+      </div>
 
       <section class="form-section assinaturas-secao">
         <h3>8. Rubrica do solicitante <small class="opcional-tag">(opcional)</small></h3>

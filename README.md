@@ -33,7 +33,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-Acesse: http://localhost:5000 (redireciona para login)
+Acesse: http://localhost:5050 (redireciona para login)
 
 Banco: `instance/vistorias.db` (tabela `usuarios` criada automaticamente)
 

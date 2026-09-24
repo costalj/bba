@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Vistoria de Árvores{% endblock %}
-{% block header %}Vistoria de Árvores{% endblock %}
+{% block title %}Ocorrências com Árvores{% endblock %}
+{% block header %}Ocorrências com Árvores{% endblock %}
 {% set modulo = "arvores" %}
 
 {% block content %}
@@ -12,7 +12,7 @@
 <section class="card-grid">
   <a href="{{ url_for('main.nova_vistoria') }}" class="action-card primary">
     <span class="card-icon">➕</span>
-    <strong>Nova Vistoria</strong>
+    <strong>Nova ocorrência</strong>
     <small>Preencher relatório</small>
   </a>
   <a href="{{ url_for('main.listar_vistorias') }}" class="action-card">

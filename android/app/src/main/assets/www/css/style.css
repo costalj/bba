@@ -491,6 +491,8 @@ body {
 }
 
 .preview-card.hidden { display: none; }
+#bloco-queda.hidden { display: none; }
+#bloco-vistoria.somente-fotos > :not(#secao-fotos) { display: none; }
 
 .preview-score span {
   font-size: 2.5rem;

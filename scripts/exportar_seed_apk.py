@@ -13,7 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(ROOT, "instance", "vistorias.db")
 POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 ASSETS_JS = os.path.join(ROOT, "android", "app", "src", "main", "assets", "www", "js")
-SEED_VERSION = "1.0.31"
+SEED_VERSION = "1.0.32"
 
 # Hash SHA-256 de "admin123" e "teste123" — mesmos do Flask (app/database.py).
 HASH_ADMIN123 = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
@@ -131,6 +131,12 @@ def _vistoria_apk(row) -> dict:
         "justificativa": row["justificativa"],
         "fotos": [],
     }
+    if "tipo_ocorrencia" in row.keys() and row["tipo_ocorrencia"]:
+        item["tipo_ocorrencia"] = row["tipo_ocorrencia"]
+    if "queda_json" in row.keys() and row["queda_json"]:
+        queda = _parse_json(row["queda_json"])
+        if queda:
+            item["queda"] = queda
     if questionario:
         item["questionario"] = questionario
     elif notas:
@@ -180,6 +186,28 @@ def _pop_apk(row) -> dict:
         mime = item["mime_type"]
         item["data_url"] = f"data:{mime};base64,{b64}"
     return item
+
+
+def _fotos_por_vistoria(db) -> dict:
+    tabela = db.execute(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'fotos'"
+    ).fetchone()
+    if not tabela:
+        return {}
+    pasta = os.path.join(ROOT, "instance", "uploads")
+    por_id = {}
+    for r in db.execute("SELECT vistoria_id, filename FROM fotos ORDER BY id"):
+        path = os.path.join(pasta, r["filename"])
+        if not os.path.isfile(path):
+            continue
+        ext = os.path.splitext(r["filename"])[1].lower()
+        mime = "image/png" if ext == ".png" else "image/jpeg"
+        with open(path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode("ascii")
+        por_id.setdefault(r["vistoria_id"], []).append(
+            {"nome": r["filename"], "data": f"data:{mime};base64,{b64}"}
+        )
+    return por_id
 
 
 def _seed_file_exists(filename):
@@ -239,21 +267,30 @@ def exportar_seed():
     ]
     usuarios = _merge_usuarios_padrao(usuarios)
 
-    vistorias = [
-        _vistoria_apk(r)
-        for r in db.execute(
-            """
-            SELECT id, created_at, codigo, endereco, especie, observacoes,
-                   solicitante, cpf_solicitante, contato_telefonico,
-                   forma_acionamento, protocolo, natureza_ocorrencia, descricao_ocorrencia,
-                   recursos_adicionais, resultado_especie, especie_status, especie_catalogo_id, foto_especie,
-                   pontuacao_total, recomendacao,
-                   justificativa, questionario_json, notas_json,
-                   rubrica_solicitante_json, assinatura_json
-            FROM vistorias ORDER BY id DESC
-            """
-        )
+    colunas = {r[1] for r in db.execute("PRAGMA table_info(vistorias)")}
+    extras = [
+        nome
+        for nome in ("tipo_ocorrencia", "queda_json")
+        if nome in colunas
     ]
+    select_extras = (", " + ", ".join(extras)) if extras else ""
+    fotos_map = _fotos_por_vistoria(db)
+    vistorias = []
+    for r in db.execute(
+        f"""
+        SELECT id, created_at, codigo, endereco, especie, observacoes,
+               solicitante, cpf_solicitante, contato_telefonico,
+               forma_acionamento, protocolo, natureza_ocorrencia, descricao_ocorrencia,
+               recursos_adicionais, resultado_especie, especie_status, especie_catalogo_id, foto_especie,
+               pontuacao_total, recomendacao,
+               justificativa, questionario_json, notas_json,
+               rubrica_solicitante_json, assinatura_json{select_extras}
+        FROM vistorias ORDER BY id DESC
+        """
+    ):
+        item = _vistoria_apk(r)
+        item["fotos"] = fotos_map.get(r["id"], [])
+        vistorias.append(item)
 
     vistorias_viaturas = []
     if db.execute(

@@ -84,6 +84,22 @@ def gerar_pdf(vistoria, fotos, upload_folder: str) -> bytes:
     _append_cabecalho(story, vistoria, styles)
     _append_dados_ocorrencia(story, vistoria, heading_style)
 
+    if _eh_queda(vistoria):
+        _append_queda(story, vistoria, heading_style, body_style)
+        _append_rubrica_e_assinatura(story, vistoria, heading_style, body_style)
+        if fotos:
+            _append_registro_fotografico(story, fotos, upload_folder, heading_style, body_style)
+        story.append(Spacer(1, 1 * cm))
+        story.append(
+            Paragraph(
+                "<i>Documento gerado automaticamente pelo Sistema de Vistoria Arbórea — BBA/CBMMA.</i>",
+                subtitle_style,
+            )
+        )
+        doc.build(story)
+        buffer.seek(0)
+        return buffer.getvalue()
+
     if questionario:
         for secao in get_questionario_secoes():
             _append_secao_questionario(story, secao, questionario, heading_style, body_style)
@@ -162,6 +178,42 @@ def _valor_coluna(vistoria, chave):
     except (KeyError, IndexError):
         return None
     return val
+
+
+def _eh_queda(vistoria) -> bool:
+    try:
+        return (vistoria["tipo_ocorrencia"] or "") == "queda"
+    except (KeyError, IndexError):
+        return False
+
+
+def _append_queda(story, vistoria, heading_style, body_style):
+    import json
+
+    dados = {}
+    bruto = _valor_coluna(vistoria, "queda_json")
+    if bruto:
+        try:
+            dados = json.loads(bruto)
+        except json.JSONDecodeError:
+            dados = {}
+    story.append(Paragraph("Ocorrência com queda de árvores", heading_style))
+    linhas = [["Campo", "Valor"]]
+    if dados.get("quantidade"):
+        linhas.append(["Quantidade de árvores", str(dados["quantidade"])])
+    if dados.get("onde_caiu"):
+        linhas.append(["Onde caiu", dados["onde_caiu"]])
+    if dados.get("vitimas"):
+        linhas.append(["Houve vítimas", dados["vitimas"]])
+    if dados.get("acao"):
+        linhas.append(["Ação da guarnição", dados["acao"]])
+    if len(linhas) > 1:
+        tabela = Table(linhas, colWidths=[5 * cm, 11 * cm])
+        tabela.setStyle(_table_style_padrao())
+        story.append(tabela)
+        story.append(Spacer(1, 0.3 * cm))
+    elif vistoria["justificativa"]:
+        story.append(Paragraph(vistoria["justificativa"], body_style))
 
 
 def _append_dados_ocorrencia(story, vistoria, heading_style):

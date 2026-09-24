@@ -86,7 +86,7 @@
     return lista;
   }
 
-  function mergePorId(locais, seedItens) {
+  function mergePorId(locais, seedItens, substituir) {
     const map = new Map();
     (Array.isArray(locais) ? locais : []).forEach((item) => {
       if (item && item.id != null) map.set(String(item.id), item);
@@ -94,7 +94,7 @@
     (Array.isArray(seedItens) ? seedItens : []).forEach((item) => {
       if (!item || item.id == null) return;
       const id = String(item.id);
-      if (!map.has(id)) map.set(id, item);
+      if (!map.has(id) || substituir) map.set(id, item);
     });
     return Array.from(map.values()).sort((a, b) => Number(b.id) - Number(a.id));
   }
@@ -121,7 +121,7 @@
     const seedVistorias = obterVistoriasSeed();
     if (seedVistorias.length) {
       const locais = lerJsonStorage("bba_vistorias", []);
-      const merged = mergePorId(locais, seedVistorias);
+      const merged = mergePorId(locais, seedVistorias, versaoMudou);
       if (merged.length !== locais.length || versaoMudou) {
         localStorage.setItem("bba_vistorias", JSON.stringify(merged));
       }
@@ -130,7 +130,7 @@
     const seedViaturas = obterVistoriasViaturasSeed();
     if (seedViaturas.length) {
       const locais = lerJsonStorage("bba_vistorias_viaturas", []);
-      const merged = mergePorId(locais, seedViaturas);
+      const merged = mergePorId(locais, seedViaturas, versaoMudou);
       if (merged.length !== locais.length || versaoMudou) {
         localStorage.setItem("bba_vistorias_viaturas", JSON.stringify(merged));
       }
@@ -139,7 +139,7 @@
     const seedCadastro = obterViaturasCadastroSeed();
     if (seedCadastro.length) {
       const locais = lerJsonStorage("bba_cadastro_viaturas", []);
-      const merged = mergePorId(locais, seedCadastro);
+      const merged = mergePorId(locais, seedCadastro, versaoMudou);
       if (merged.length !== locais.length || versaoMudou || !locais.length) {
         localStorage.setItem("bba_cadastro_viaturas", JSON.stringify(merged));
       }

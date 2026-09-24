@@ -5,7 +5,7 @@ const el = document.getElementById("conteudo");
 function classeItem(v) {
   const rec = v.recomendacao;
   if (rec === "ALTO" || rec === "SUPRESSÃO" || rec === "INTERVENÇÃO URGENTE") return "item-alto";
-  if (rec === "MÉDIO" || rec === "PODAS / ACOMPANHAMENTO") return "item-medio";
+  if (rec === "MÉDIO" || rec === "PODAS / ACOMPANHAMENTO" || rec === "QUEDA") return "item-medio";
   return "item-baixo";
 }
 

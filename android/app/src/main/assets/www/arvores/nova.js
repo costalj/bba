@@ -70,13 +70,48 @@ let fotosVistoria = initFotosVistoria({
   btnGaleriaId: "btn-foto-galeria",
 });
 
+const tipoSelect = document.getElementById("tipo-ocorrencia");
+const blocoVistoria = document.getElementById("bloco-vistoria");
+const blocoQueda = document.getElementById("bloco-queda");
+
+function aplicarTipoOcorrencia() {
+  if (!tipoSelect || !blocoVistoria || !blocoQueda) return;
+  const queda = tipoSelect.value === "queda";
+  blocoVistoria.classList.toggle("somente-fotos", queda);
+  blocoQueda.classList.toggle("hidden", !queda);
+  blocoQueda.querySelectorAll("input, textarea, select").forEach((el) => {
+    el.disabled = !queda;
+    if (el.name === "descricao_queda") el.required = queda;
+  });
+  blocoVistoria.querySelectorAll("input, textarea, select").forEach((el) => {
+    if (el.closest("#secao-fotos")) return;
+    el.disabled = queda;
+  });
+  if (queda && preview) preview.classList.add("hidden");
+}
+
+if (tipoSelect) {
+  tipoSelect.addEventListener("change", () => {
+    aplicarTipoOcorrencia();
+    if (tipoSelect.value !== "queda") atualizarPreview();
+  });
+  aplicarTipoOcorrencia();
+}
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (rubricaCanvas) rubricaCanvas.exportRubrica();
 
   const fd = new FormData(form);
-  const respostas = getRespostas();
-  const resultado = calcularResultadoQuestionario(respostas);
+  const queda = fd.get("tipo_ocorrencia") === "queda";
+  const respostas = queda ? {} : getRespostas();
+  const resultado = queda
+    ? {
+        pontuacao_total: 0,
+        recomendacao: "QUEDA",
+        justificativa: "Ocorrência com queda de árvores.",
+      }
+    : calcularResultadoQuestionario(respostas);
   const fotos = await fotosVistoria.toBase64();
 
   let assinatura = null;
@@ -105,14 +140,25 @@ form.addEventListener("submit", async (e) => {
       recursos_adicionais: String(fd.get("recursos_adicionais") || "").trim() || null,
       forma_acionamento: fd.get("forma_acionamento"),
       protocolo: fd.get("protocolo"),
-      natureza_ocorrencia: fd.get("natureza_ocorrencia"),
-      descricao_ocorrencia: String(fd.get("descricao_ocorrencia") || "").slice(0, 100),
+      tipo_ocorrencia: fd.get("tipo_ocorrencia") || "vistoria",
+      queda: queda
+        ? {
+            quantidade: fd.get("quantidade_arvores"),
+            onde_caiu: fd.get("onde_caiu"),
+            vitimas: fd.get("vitimas"),
+            acao: fd.get("acao_guarnicao"),
+          }
+        : null,
+      descricao_ocorrencia: queda
+        ? String(fd.get("descricao_queda") || "").trim() || null
+        : String(fd.get("descricao_ocorrencia") || "").trim() || null,
+      natureza_ocorrencia: queda ? "Ocorrência com Queda de Árvores" : fd.get("natureza_ocorrencia"),
+      observacoes: queda ? fd.get("acao_guarnicao") : fd.get("observacoes"),
       especie: fd.get("especie"),
       resultado_especie: fd.get("resultado_especie"),
       especie_status: fd.get("especie_status"),
       especie_catalogo_id: fd.get("especie_catalogo_id"),
       foto_especie: fd.get("foto_especie") || null,
-      observacoes: fd.get("observacoes"),
       questionario: respostas,
       fotos,
       rubrica,

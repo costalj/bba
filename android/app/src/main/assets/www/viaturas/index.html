@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Vistoria de Viaturas</title>
+  <title>Materiais da Viatura</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -11,33 +11,41 @@
     <div class="header-inner">
       <a href="../index.html" class="header-back">←</a>
       <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
-      <div class="header-titles"><h1>Vistoria de Viaturas</h1></div>
+      <div class="header-titles"><h1>Materiais da Viatura</h1></div>
     </div>
   </header>
   <main class="container">
     <section class="hero">
-      <h2>Inspeção pré-operacional</h2>
-      <p>Checklist básico com itens principais. Assinatura eletrônica do condutor de viatura.</p>
+      <h2>Conferência do dia</h2>
+      <p>Cada card é um dia de serviço. A lista mostra a data e o chefe de socorro.</p>
     </section>
-    <section class="card-grid">
-      <a href="nova.html" class="action-card primary">
-        <span class="card-icon">➕</span><strong>Nova Vistoria</strong><small>Preencher checklist</small>
-      </a>
-      <a href="lista.html" class="action-card">
-        <span class="card-icon">📂</span><strong>Histórico</strong><small>Vistorias salvas</small>
-      </a>
-    </section>
+    <a href="materiais-nova.html" class="btn btn-primary btn-block">Nova conferência</a>
+    <div id="conteudo"></div>
+    <p class="hint material-link-antigo"><a href="nova.html">Checklist mecânico da viatura</a></p>
   </main>
   <nav class="bottom-nav">
     <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
-    <a href="nova.html" class="nav-item"><span class="nav-icon">➕</span><span>Nova</span></a>
-    <a href="lista.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
+    <a href="materiais-nova.html" class="nav-item"><span class="nav-icon">➕</span><span>Nova</span></a>
+    <a href="index.html" class="nav-item active"><span class="nav-icon">📁</span><span>Histórico</span></a>
   </nav>
   <script src="../js/usuarios-seed.js"></script>
   <script src="../js/seed-meta.js"></script>
   <script src="../js/vistorias-viaturas-seed.js"></script>
   <script src="../js/viaturas-cadastro-seed.js"></script>
+  <script src="../js/materiais-viatura-dados.js"></script>
   <script src="../js/seed.js"></script>
+  <script src="../js/materiais-viatura.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const salvaId = params.get("salva");
+    const lista = listarConferenciasMateriais();
+    const el = document.getElementById("conteudo");
+    if (!lista.length) {
+      el.innerHTML = `<div class="empty-state"><span class="empty-icon">📭</span><p>Nenhuma conferência de materiais registrada.</p></div>`;
+    } else {
+      el.innerHTML = `<ul class="material-cards">${lista.map((item) => htmlCardMaterial(item, String(salvaId) === String(item.id))).join("")}</ul>`;
+    }
+  </script>
   <script src="../js/auth.js"></script>
   <script src="../js/header.js"></script>
   <script>if (!exigirLogin()) throw new Error("auth");</script>

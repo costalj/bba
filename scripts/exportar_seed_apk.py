@@ -7,13 +7,14 @@ import base64
 import json
 import os
 import sqlite3
+import sys
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(ROOT, "instance", "vistorias.db")
 POP_FOLDER = os.path.join(ROOT, "instance", "pops")
 ASSETS_JS = os.path.join(ROOT, "android", "app", "src", "main", "assets", "www", "js")
-SEED_VERSION = "1.0.33"
+SEED_VERSION = "1.0.34"
 
 # Hash SHA-256 de "admin123" e "teste123" — mesmos do Flask (app/database.py).
 HASH_ADMIN123 = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
@@ -210,6 +211,47 @@ def _fotos_por_vistoria(db) -> dict:
     return por_id
 
 
+def _conferencia_materiais_apk(row) -> dict:
+    keys = row.keys()
+    item = {
+        "id": row["id"],
+        "created_at": row["created_at"],
+        "data_servico": row["data_servico"],
+        "dia_semana": row["dia_semana"] or "",
+        "chefe_socorro": row["chefe_socorro"],
+        "contato": row["contato"] or "",
+        "condutor": row["condutor"] or "",
+        "comandante": row["comandante"] or "",
+        "oficial_dia": row["oficial_dia"] or "",
+        "viaturas": _parse_json(row["viaturas_json"]) or [],
+        "secoes": _parse_json(row["materiais_json"]) or [],
+    }
+    if "tipo_checklist" in keys and row["tipo_checklist"]:
+        item["tipo_checklist"] = row["tipo_checklist"]
+    fotos = _parse_json(row["fotos_json"]) if "fotos_json" in keys else None
+    if fotos:
+        item["fotos"] = fotos
+    assinaturas = _parse_json(row["assinaturas_json"]) if "assinaturas_json" in keys else None
+    if assinaturas:
+        item["assinaturas"] = assinaturas
+    return item
+
+
+def _write_materiais_viatura_dados(modelo, conferencias):
+    path = os.path.join(ASSETS_JS, "materiais-viatura-dados.js")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    modelo_json = json.dumps(modelo, ensure_ascii=False, indent=2)
+    conf_json = json.dumps(conferencias, ensure_ascii=False, indent=2)
+    content = (
+        "/* Gerado por scripts/exportar_seed_apk.py — nao editar manualmente */\n"
+        f"const MATERIAIS_VIATURA_MODELO = {modelo_json};\n"
+        f"const MATERIAIS_VIATURA_SEED = {conf_json};\n"
+    )
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    return path
+
+
 def _seed_file_exists(filename):
     return os.path.isfile(os.path.join(ASSETS_JS, filename))
 
@@ -231,6 +273,7 @@ def exportar_seed():
             "vistorias-viaturas-seed.js",
             "viaturas-cadastro-seed.js",
             "pops-seed.js",
+            "materiais-viatura-dados.js",
         ):
             if _seed_file_exists(name):
                 print(f"  mantido: {name}")
@@ -335,6 +378,24 @@ def exportar_seed():
                 "FROM pops ORDER BY id DESC"
             )
         ]
+
+    if ROOT not in sys.path:
+        sys.path.insert(0, ROOT)
+    from app.materiais_viatura import SECOES_MODELO, modelo_para_formulario
+
+    conferencias_materiais = []
+    if db.execute(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'conferencias_materiais'"
+    ).fetchone():
+        conferencias_materiais = [
+            _conferencia_materiais_apk(r)
+            for r in db.execute(
+                "SELECT * FROM conferencias_materiais ORDER BY data_servico DESC, id DESC"
+            )
+        ]
+
+    modelo_materiais = modelo_para_formulario()
+    modelo_materiais["secoes"] = SECOES_MODELO
     db.close()
 
     paths = {
@@ -348,6 +409,9 @@ def exportar_seed():
             "viaturas-cadastro-seed.js", "VIATURAS_CADASTRO_SEED", viaturas_cadastradas
         ),
         "pops-seed.js": _write_js("pops-seed.js", "POPS_SEED", pops),
+        "materiais-viatura-dados.js": _write_materiais_viatura_dados(
+            modelo_materiais, conferencias_materiais
+        ),
     }
 
     legacy_path = os.path.join(ASSETS_JS, "seed-data.js")
@@ -364,6 +428,7 @@ def exportar_seed():
     print(f"  vistorias viaturas: {len(vistorias_viaturas)}")
     print(f"  viaturas cadastradas: {len(viaturas_cadastradas)}")
     print(f"  pops: {len(pops)}")
+    print(f"  conferencias materiais: {len(conferencias_materiais)}")
 
 
 if __name__ == "__main__":

@@ -55,6 +55,13 @@
     return [];
   }
 
+  function obterMateriaisViaturaSeed() {
+    if (typeof MATERIAIS_VIATURA_SEED !== "undefined" && MATERIAIS_VIATURA_SEED.length) {
+      return MATERIAIS_VIATURA_SEED;
+    }
+    return [];
+  }
+
   function obterPopsSeed() {
     if (typeof POPS_SEED !== "undefined" && POPS_SEED.length) {
       return POPS_SEED;
@@ -142,6 +149,15 @@
       const merged = mergePorId(locais, seedCadastro, versaoMudou);
       if (merged.length !== locais.length || versaoMudou || !locais.length) {
         localStorage.setItem("bba_cadastro_viaturas", JSON.stringify(merged));
+      }
+    }
+
+    const seedMateriais = obterMateriaisViaturaSeed();
+    if (seedMateriais.length) {
+      const locais = lerJsonStorage("bba_conferencias_materiais", []);
+      const merged = mergePorId(locais, seedMateriais, versaoMudou);
+      if (merged.length !== locais.length || versaoMudou || !locais.length) {
+        localStorage.setItem("bba_conferencias_materiais", JSON.stringify(merged));
       }
     }
 

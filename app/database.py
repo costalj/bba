@@ -141,9 +141,64 @@ def _migrate(db):
             created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
             uploaded_by TEXT
         );
+
+        CREATE TABLE IF NOT EXISTS conferencias_materiais (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+            data_servico TEXT NOT NULL,
+            dia_semana TEXT,
+            chefe_socorro TEXT NOT NULL,
+            contato TEXT,
+            condutor TEXT,
+            comandante TEXT,
+            oficial_dia TEXT,
+            viaturas_json TEXT NOT NULL,
+            materiais_json TEXT NOT NULL
+        );
         """
     )
+    _seed_conferencia_materiais(db)
+    for col, col_type in (
+        ("tipo_checklist", "TEXT"),
+        ("fotos_json", "TEXT"),
+        ("assinaturas_json", "TEXT"),
+    ):
+        if not _column_exists(db, "conferencias_materiais", col):
+            db.execute(
+                f"ALTER TABLE conferencias_materiais ADD COLUMN {col} {col_type}"
+            )
     db.commit()
+
+
+def _seed_conferencia_materiais(db):
+    import json
+
+    from app.materiais_viatura import CONFERENCIA_INICIAL
+
+    row = db.execute("SELECT COUNT(*) AS n FROM conferencias_materiais").fetchone()
+    if row and row["n"]:
+        return
+    inicial = CONFERENCIA_INICIAL
+    db.execute(
+        """
+        INSERT INTO conferencias_materiais (
+            created_at, data_servico, dia_semana, chefe_socorro, contato,
+            condutor, comandante, oficial_dia, viaturas_json, materiais_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            "2026-09-23 08:00:00",
+            inicial["data_servico"],
+            inicial["dia_semana"],
+            inicial["chefe_socorro"],
+            inicial["contato"],
+            inicial["condutor"],
+            inicial["comandante"],
+            inicial["oficial_dia"],
+            json.dumps(inicial["viaturas"], ensure_ascii=False),
+            json.dumps(inicial["secoes"], ensure_ascii=False),
+        ),
+    )
 
 
 def _seed_admin(db):

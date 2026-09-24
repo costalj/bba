@@ -642,18 +642,210 @@ def materiais():
     ])
 
 
+def _conferencias_materiais(db):
+    from app.materiais_viatura import data_extenso
+
+    rows = db.execute(
+        "SELECT * FROM conferencias_materiais ORDER BY data_servico DESC, id DESC"
+    ).fetchall()
+    lista = []
+    for row in rows:
+        item = dict(row)
+        item["data_label"] = data_extenso(row["data_servico"])
+        item["viaturas"] = json.loads(row["viaturas_json"] or "[]")
+        item["secoes"] = json.loads(row["materiais_json"] or "[]")
+        item["fotos"] = _json_campo(row, "fotos_json", [])
+        item["assinaturas"] = _json_campo(row, "assinaturas_json", {})
+        lista.append(item)
+    return lista
+
+
+def _json_campo(row, nome, vazio):
+    if nome not in row.keys() or not row[nome]:
+        return vazio
+    try:
+        return json.loads(row[nome])
+    except (TypeError, json.JSONDecodeError):
+        return vazio
+
+
+def _assinatura_militar(form, lado):
+    nome = (form.get(f"nome_{lado}") or "").strip()
+    imagem = (form.get(f"assinatura_{lado}") or "").strip()
+    if not nome or not imagem.startswith("data:image"):
+        return None
+    return {"nome": nome, "imagem": imagem}
+
+
+def _ler_conferencia_form(form):
+    from app.materiais_viatura import SECOES_MODELO, dia_semana
+
+    data_servico = (form.get("data_servico") or "").strip()
+    chefe = (form.get("chefe_socorro") or "").strip()
+    if not data_servico or not chefe:
+        return None, "Informe a data e o chefe de socorro."
+
+    tipo = (form.get("tipo_checklist") or "").strip()
+    if tipo not in ("foto", "manual"):
+        return None, "Escolha Checklist com Foto ou Checklist Manual."
+
+    fotos = []
+    if tipo == "foto":
+        try:
+            fotos = json.loads(form.get("fotos_json") or "[]")
+        except json.JSONDecodeError:
+            fotos = []
+        fotos = [f for f in fotos if isinstance(f, str) and f.startswith("data:image")]
+        if not fotos:
+            return None, "Envie a foto dos materiais para comparar com a lista do sistema."
+
+    viaturas = []
+    for i in range(4):
+        ar = (form.get(f"vtr_ar_{i}") or "").strip()
+        if not ar:
+            continue
+        viaturas.append(
+            {
+                "ar": ar,
+                "km": (form.get(f"vtr_km_{i}") or "").strip(),
+                "k7": (form.get(f"vtr_k7_{i}") or "").strip(),
+            }
+        )
+
+    secoes = []
+    for s_idx, secao in enumerate(SECOES_MODELO):
+        itens = []
+        for i_idx, base in enumerate(secao["itens"]):
+            status = (form.get(f"status_{s_idx}_{i_idx}") or "pronto").strip()
+            if status not in ("pronto", "alterado", "baixado"):
+                status = "pronto"
+            qtd_nova = (form.get(f"qtd_{s_idx}_{i_idx}") or "").strip()
+            obs_nova = (form.get(f"obs_{s_idx}_{i_idx}") or "").strip()
+            if status == "alterado" and not qtd_nova and not obs_nova:
+                return None, f"Em «{base['nome']}», informe a nova quantidade ou a observação."
+            item = {
+                "qtd": base["qtd"],
+                "nome": base["nome"],
+                "obs": base.get("obs") or "",
+                "status": status,
+            }
+            if status == "alterado":
+                item["qtd_nova"] = qtd_nova
+                item["obs_nova"] = obs_nova
+            itens.append(item)
+        secoes.append({"titulo": secao["titulo"], "itens": itens})
+
+    saindo = _assinatura_militar(form, "saindo")
+    entrando = _assinatura_militar(form, "entrando")
+    if not saindo or not entrando:
+        return None, "Assine o militar que está saindo e o que está entrando."
+
+    return {
+        "data_servico": data_servico,
+        "dia_semana": dia_semana(data_servico),
+        "chefe_socorro": chefe,
+        "contato": (form.get("contato") or "").strip(),
+        "condutor": (form.get("condutor") or "").strip(),
+        "comandante": (form.get("comandante") or "").strip(),
+        "oficial_dia": (form.get("oficial_dia") or "").strip(),
+        "tipo_checklist": tipo,
+        "fotos": fotos,
+        "viaturas": viaturas,
+        "secoes": secoes,
+        "assinaturas": {"saindo": saindo, "entrando": entrando},
+    }, None
+
+
 @bp.route("/viaturas/")
 def viaturas_home():
     from app.modules import MODULOS
-    from app.viaturas_checklist import total_itens_checklist
 
     info = next(m for m in MODULOS if m["id"] == "viaturas")
+    db = get_db()
+    salva_id = request.args.get("salva", type=int)
     return render_template(
         "viaturas/home.html",
         modulo_info=info,
-        total_itens=total_itens_checklist(),
+        conferencias=_conferencias_materiais(db),
+        salva_id=salva_id,
         show_back=True,
         back_url=url_for("main.index"),
+        modulo="viaturas",
+    )
+
+
+@bp.route("/viaturas/materiais/nova", methods=["GET", "POST"])
+def nova_conferencia_materiais():
+    from app.materiais_viatura import modelo_para_formulario, qtd_label
+
+    erro = None
+    modelo = modelo_para_formulario()
+    if request.method == "POST":
+        dados, erro = _ler_conferencia_form(request.form)
+        if dados:
+            db = get_db()
+            cursor = db.execute(
+                """
+                INSERT INTO conferencias_materiais (
+                    data_servico, dia_semana, chefe_socorro, contato,
+                    condutor, comandante, oficial_dia, viaturas_json, materiais_json,
+                    tipo_checklist, fotos_json, assinaturas_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    dados["data_servico"],
+                    dados["dia_semana"],
+                    dados["chefe_socorro"],
+                    dados["contato"],
+                    dados["condutor"],
+                    dados["comandante"],
+                    dados["oficial_dia"],
+                    json.dumps(dados["viaturas"], ensure_ascii=False),
+                    json.dumps(dados["secoes"], ensure_ascii=False),
+                    dados["tipo_checklist"],
+                    json.dumps(dados["fotos"], ensure_ascii=False),
+                    json.dumps(dados["assinaturas"], ensure_ascii=False),
+                ),
+            )
+            db.commit()
+            return redirect(url_for("main.viaturas_home", salva=cursor.lastrowid))
+        modelo.update({k: request.form.get(k, "") for k in (
+            "data_servico", "chefe_socorro", "contato", "condutor", "comandante", "oficial_dia"
+        )})
+
+    return render_template(
+        "viaturas/materiais_formulario.html",
+        modelo=modelo,
+        erro=erro,
+        qtd_label=qtd_label,
+        show_back=True,
+        back_url=url_for("main.viaturas_home"),
+        modulo="viaturas",
+    )
+
+
+@bp.route("/viaturas/materiais/<int:conferencia_id>")
+def detalhe_conferencia_materiais(conferencia_id):
+    from app.materiais_viatura import data_extenso, qtd_label
+
+    db = get_db()
+    row = db.execute(
+        "SELECT * FROM conferencias_materiais WHERE id = ?", (conferencia_id,)
+    ).fetchone()
+    if row is None:
+        return render_template("404.html"), 404
+    conferencia = dict(row)
+    conferencia["data_label"] = data_extenso(row["data_servico"])
+    conferencia["viaturas"] = json.loads(row["viaturas_json"] or "[]")
+    conferencia["secoes"] = json.loads(row["materiais_json"] or "[]")
+    conferencia["fotos"] = _json_campo(row, "fotos_json", [])
+    conferencia["assinaturas"] = _json_campo(row, "assinaturas_json", {})
+    return render_template(
+        "viaturas/materiais_detalhe.html",
+        conferencia=conferencia,
+        qtd_label=qtd_label,
+        show_back=True,
+        back_url=url_for("main.viaturas_home"),
         modulo="viaturas",
     )
 

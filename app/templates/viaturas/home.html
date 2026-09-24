@@ -1,33 +1,45 @@
 {% extends "base.html" %}
-{% block title %}Vistoria de Viaturas{% endblock %}
-{% block header %}Vistoria de Viaturas{% endblock %}
+{% block title %}Materiais da Viatura{% endblock %}
+{% block header %}Materiais da Viatura{% endblock %}
 {% set modulo = "viaturas" %}
 
 {% block content %}
 <section class="hero">
-  <h2>Inspeção pré-operacional</h2>
-  <p>Checklist básico com {{ total_itens }} itens principais. Assinatura eletrônica do condutor de viatura.</p>
+  <h2>Conferência do dia</h2>
+  <p>Cada card é um dia de serviço. A lista mostra a data e o chefe de socorro.</p>
 </section>
 
-<section class="card-grid">
-  <a href="{{ url_for('main.nova_vistoria_viatura') }}" class="action-card primary">
-    <span class="card-icon">➕</span>
-    <strong>Nova Vistoria</strong>
-    <small>Preencher checklist</small>
-  </a>
-  <a href="{{ url_for('main.listar_vistorias_viaturas') }}" class="action-card">
-    <span class="card-icon">📂</span>
-    <strong>Histórico</strong>
-    <small>Vistorias salvas</small>
-  </a>
-</section>
+<a href="{{ url_for('main.nova_conferencia_materiais') }}" class="btn btn-primary btn-block">Nova conferência</a>
 
-<section class="info-card">
-  <h3>Resultado da vistoria</h3>
-  <ul class="escala">
-    <li><span class="badge badge-ok">APROVADA</span> Todos os itens conformes</li>
-    <li><span class="badge badge-warn">COM RESTRIÇÕES</span> Até 3 itens não conformes (sem crítico)</li>
-    <li><span class="badge badge-danger">IMPEDIDA</span> Item crítico ou muitos não conformes</li>
-  </ul>
-</section>
+{% if salva_id %}
+<div class="alerta-sucesso">
+  <strong>Conferência salva.</strong>
+</div>
+{% endif %}
+
+{% if conferencias %}
+<ul class="material-cards">
+  {% for c in conferencias %}
+  <li>
+    <a href="{{ url_for('main.detalhe_conferencia_materiais', conferencia_id=c.id) }}"
+       class="material-card{% if salva_id == c.id %} material-card-destaque{% endif %}"
+       id="conferencia-{{ c.id }}">
+      <span class="material-card-data">{{ c.data_label }}</span>
+      <span class="material-card-semana">{{ c.dia_semana }}</span>
+      <span class="material-card-rotulo">Chefe de socorro</span>
+      <strong class="material-card-chefe">{{ c.chefe_socorro }}</strong>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state">
+  <span class="empty-icon">📭</span>
+  <p>Nenhuma conferência de materiais registrada.</p>
+</div>
+{% endif %}
+
+<p class="hint material-link-antigo">
+  <a href="{{ url_for('main.nova_vistoria_viatura') }}">Checklist mecânico da viatura</a>
+</p>
 {% endblock %}

@@ -69,11 +69,11 @@
       <span>Histórico</span>
     </a>
     {% elif modulo|default('') == 'viaturas' %}
-    <a href="{{ url_for('main.nova_vistoria_viatura') }}" class="nav-item {% if request.endpoint == 'main.nova_vistoria_viatura' %}active{% endif %}">
+    <a href="{{ url_for('main.nova_conferencia_materiais') }}" class="nav-item {% if request.endpoint == 'main.nova_conferencia_materiais' %}active{% endif %}">
       <span class="nav-icon">➕</span>
       <span>Nova</span>
     </a>
-    <a href="{{ url_for('main.listar_vistorias_viaturas') }}" class="nav-item {% if request.endpoint in ('main.listar_vistorias_viaturas', 'main.detalhe_vistoria_viatura') %}active{% endif %}">
+    <a href="{{ url_for('main.viaturas_home') }}" class="nav-item {% if request.endpoint in ('main.viaturas_home', 'main.detalhe_conferencia_materiais') %}active{% endif %}">
       <span class="nav-icon">📁</span>
       <span>Histórico</span>
     </a>

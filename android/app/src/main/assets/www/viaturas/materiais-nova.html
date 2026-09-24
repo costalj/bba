@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nova conferência</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <a href="index.html" class="header-back">←</a>
+      <span class="logo"><img src="../img/logo-bba.png" alt="BBA"></span>
+      <div class="header-titles"><h1>Nova conferência</h1></div>
+    </div>
+  </header>
+  <main class="container">
+    <form id="form-materiais">
+      <section class="form-section">
+        <h3>Serviço do dia</h3>
+        <label class="field"><span>Data *</span><input type="date" name="data_servico" required></label>
+        <label class="field"><span>Chefe de socorro *</span><input type="text" name="chefe_socorro" required placeholder="Posto e nome"></label>
+        <label class="field"><span>Contato funcional</span><input type="tel" name="contato"></label>
+        <label class="field"><span>Condutor</span><input type="text" name="condutor"></label>
+        <label class="field"><span>Comandante de guarnição</span><input type="text" name="comandante"></label>
+        <label class="field"><span>Oficial de dia</span><input type="text" name="oficial_dia"></label>
+      </section>
+      <section class="form-section" id="bloco-vtrs"><h3>Viaturas</h3></section>
+      <section class="form-section">
+        <h3>Tipo de checklist</h3>
+        <label class="field">
+          <span>Como conferir os materiais *</span>
+          <select name="tipo_checklist" id="tipo-checklist" required>
+            <option value="">Selecione…</option>
+            <option value="foto">Checklist com Foto</option>
+            <option value="manual">Checklist Manual</option>
+          </select>
+        </label>
+      </section>
+      <section class="form-section material-oculto" id="bloco-foto">
+        <h3>Foto dos materiais</h3>
+        <p class="hint">A foto fica junto da lista do sistema. Compare cada item e marque pronto, alterado ou baixado.</p>
+        <label class="field"><span>Tirar ou enviar foto</span><input type="file" id="fotos-input" accept="image/*" capture="environment" multiple></label>
+        <div id="fotos-preview" class="material-fotos"></div>
+      </section>
+      <div id="bloco-checklist" class="material-oculto"></div>
+      <section class="form-section material-oculto" id="bloco-assinaturas">
+        <h3>Passagem de serviço</h3>
+        <div class="material-assinatura">
+          <label class="field"><span>Militar que está saindo *</span><input type="text" id="nome-saindo" placeholder="Posto e nome"></label>
+          <div class="rubrica-wrap">
+            <canvas id="canvas-saindo" class="canvas-rubrica" aria-label="Assinatura de quem está saindo"></canvas>
+            <button type="button" id="limpar-saindo" class="btn btn-secondary btn-sm">Limpar assinatura</button>
+          </div>
+          <input type="hidden" id="assinatura-saindo">
+        </div>
+        <div class="material-assinatura">
+          <label class="field"><span>Militar que está entrando *</span><input type="text" id="nome-entrando" placeholder="Posto e nome"></label>
+          <div class="rubrica-wrap">
+            <canvas id="canvas-entrando" class="canvas-rubrica" aria-label="Assinatura de quem está entrando"></canvas>
+            <button type="button" id="limpar-entrando" class="btn btn-secondary btn-sm">Limpar assinatura</button>
+          </div>
+          <input type="hidden" id="assinatura-entrando">
+        </div>
+      </section>
+      <button type="submit" class="btn btn-primary btn-block material-oculto" id="btn-salvar-conferencia">Salvar conferência</button>
+    </form>
+  </main>
+  <nav class="bottom-nav">
+    <a href="../index.html" class="nav-item"><span class="nav-icon">🏠</span><span>Início</span></a>
+    <a href="materiais-nova.html" class="nav-item active"><span class="nav-icon">➕</span><span>Nova</span></a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">📁</span><span>Histórico</span></a>
+  </nav>
+  <script src="../js/usuarios-seed.js"></script>
+  <script src="../js/seed-meta.js"></script>
+  <script src="../js/materiais-viatura-dados.js"></script>
+  <script src="../js/seed.js"></script>
+  <script src="../js/materiais-viatura.js"></script>
+  <script src="../js/assinatura.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/header.js"></script>
+  <script>
+    if (!exigirLogin()) throw new Error("auth");
+    const modelo = MATERIAIS_VIATURA_MODELO;
+    const form = document.getElementById("form-materiais");
+    const tipo = document.getElementById("tipo-checklist");
+    const blocoFoto = document.getElementById("bloco-foto");
+    const blocoChecklist = document.getElementById("bloco-checklist");
+    const blocoAssinaturas = document.getElementById("bloco-assinaturas");
+    const btnSalvar = document.getElementById("btn-salvar-conferencia");
+    let fotos = [];
+    let pads = null;
+
+    form.data_servico.value = new Date().toISOString().slice(0, 10);
+    document.getElementById("bloco-vtrs").insertAdjacentHTML("beforeend", modelo.viaturas.map((v, i) => `
+      <div class="material-vtr-form">
+        <label class="field"><span>AR</span><input type="text" name="vtr_ar_${i}" value="${escHtmlMaterial(v.ar)}" inputmode="numeric"></label>
+        <label class="field"><span>KM</span><input type="text" name="vtr_km_${i}" inputmode="numeric"></label>
+        <label class="field"><span>K7</span><input type="text" name="vtr_k7_${i}" placeholder="6/8"></label>
+      </div>`).join(""));
+
+    blocoChecklist.innerHTML = modelo.secoes.map((secao, s) => `
+      <section class="form-section">
+        <h3>${escHtmlMaterial(secao.titulo)}</h3>
+        <ul class="material-check-lista">
+          ${secao.itens.map((item, i) => `
+            <li class="material-check-item">
+              <div class="material-check-topo">
+                <span class="material-qtd">${escHtmlMaterial(qtdLabelMaterial(item.qtd))}</span>
+                <span><strong>${escHtmlMaterial(item.nome)}</strong>${item.obs ? `<small class="material-obs">${escHtmlMaterial(item.obs)}</small>` : ""}</span>
+              </div>
+              <div class="material-status">
+                <label><input type="radio" name="status_${s}_${i}" value="pronto" checked> Pronto</label>
+                <label><input type="radio" name="status_${s}_${i}" value="alterado"> Alterado</label>
+                <label><input type="radio" name="status_${s}_${i}" value="baixado"> Baixado</label>
+              </div>
+              <div class="material-alterado material-oculto">
+                <label class="field"><span>Nova quantidade</span><input type="number" min="0" inputmode="numeric" name="qtd_${s}_${i}" value="${escHtmlMaterial(item.qtd)}"></label>
+                <label class="field"><span>Observação</span><input type="text" name="obs_${s}_${i}" placeholder="O que mudou"></label>
+              </div>
+            </li>`).join("")}
+        </ul>
+      </section>`).join("");
+
+    function mostrar(el, visivel) {
+      el.classList.toggle("material-oculto", !visivel);
+    }
+
+    function garantirAssinaturas() {
+      if (pads) return;
+      mostrar(blocoAssinaturas, true);
+      pads = {
+        saindo: initRubricaCanvas({ canvasId: "canvas-saindo", hiddenId: "assinatura-saindo", clearBtnId: "limpar-saindo" }),
+        entrando: initRubricaCanvas({ canvasId: "canvas-entrando", hiddenId: "assinatura-entrando", clearBtnId: "limpar-entrando" }),
+      };
+    }
+
+    function aplicarTipo() {
+      const modo = tipo.value;
+      mostrar(blocoFoto, modo === "foto");
+      const listaVisivel = modo === "manual" || (modo === "foto" && fotos.length > 0);
+      mostrar(blocoChecklist, listaVisivel);
+      mostrar(blocoAssinaturas, listaVisivel);
+      mostrar(btnSalvar, listaVisivel);
+      if (listaVisivel) garantirAssinaturas();
+    }
+
+    function comprimirFoto(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          const max = 1280;
+          const escala = Math.min(1, max / Math.max(img.width, img.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.round(img.width * escala);
+          canvas.height = Math.round(img.height * escala);
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          URL.revokeObjectURL(url);
+          resolve(canvas.toDataURL("image/jpeg", 0.72));
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("foto")); };
+        img.src = url;
+      });
+    }
+
+    tipo.addEventListener("change", aplicarTipo);
+    document.getElementById("fotos-input").addEventListener("change", async (event) => {
+      const arquivos = Array.from(event.target.files || []);
+      event.target.value = "";
+      for (const arquivo of arquivos) {
+        try { fotos.push(await comprimirFoto(arquivo)); } catch { /* ignora */ }
+      }
+      document.getElementById("fotos-preview").innerHTML = fotos.map((src) => `<img src="${src}" alt="Foto dos materiais">`).join("");
+      aplicarTipo();
+    });
+
+    form.addEventListener("change", (event) => {
+      const radio = event.target;
+      if (!radio.matches || !radio.matches('input[type="radio"]')) return;
+      const item = radio.closest(".material-check-item");
+      if (!item) return;
+      item.querySelector(".material-alterado").classList.toggle("material-oculto", radio.value !== "alterado");
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (pads) {
+        pads.saindo.exportRubrica();
+        pads.entrando.exportRubrica();
+      }
+      if (tipo.value === "foto" && !fotos.length) {
+        alert("Envie a foto dos materiais para comparar com a lista do sistema.");
+        return;
+      }
+      const nomeSaindo = document.getElementById("nome-saindo").value.trim();
+      const nomeEntrando = document.getElementById("nome-entrando").value.trim();
+      const imgSaindo = document.getElementById("assinatura-saindo").value;
+      const imgEntrando = document.getElementById("assinatura-entrando").value;
+      if (!nomeSaindo || !nomeEntrando || !imgSaindo || !imgEntrando) {
+        alert("Informe o nome e a assinatura de quem está saindo e de quem está entrando.");
+        return;
+      }
+      const dados = new FormData(form);
+      const viaturas = [];
+      modelo.viaturas.forEach((_, i) => {
+        const ar = String(dados.get(`vtr_ar_${i}`) || "").trim();
+        if (!ar) return;
+        viaturas.push({ ar, km: String(dados.get(`vtr_km_${i}`) || "").trim(), k7: String(dados.get(`vtr_k7_${i}`) || "").trim() });
+      });
+      const secoes = modelo.secoes.map((secao, s) => ({
+        titulo: secao.titulo,
+        itens: secao.itens.map((item, i) => {
+          const status = String(dados.get(`status_${s}_${i}`) || "pronto");
+          const salvo = { qtd: item.qtd, nome: item.nome, obs: item.obs || "", status };
+          if (status === "alterado") {
+            salvo.qtd_nova = String(dados.get(`qtd_${s}_${i}`) || "").trim();
+            salvo.obs_nova = String(dados.get(`obs_${s}_${i}`) || "").trim();
+            if (!salvo.qtd_nova && !salvo.obs_nova) {
+              alert(`Em «${item.nome}», informe a nova quantidade ou a observação.`);
+              throw new Error("alterado");
+            }
+          }
+          return salvo;
+        }),
+      }));
+      let salva;
+      try {
+        salva = criarConferenciaMateriais({
+          data_servico: dados.get("data_servico"),
+          chefe_socorro: String(dados.get("chefe_socorro") || "").trim(),
+          contato: String(dados.get("contato") || "").trim(),
+          condutor: String(dados.get("condutor") || "").trim(),
+          comandante: String(dados.get("comandante") || "").trim(),
+          oficial_dia: String(dados.get("oficial_dia") || "").trim(),
+          tipo_checklist: tipo.value,
+          fotos: tipo.value === "foto" ? fotos : [],
+          viaturas,
+          secoes,
+          assinaturas: {
+            saindo: { nome: nomeSaindo, imagem: imgSaindo },
+            entrando: { nome: nomeEntrando, imagem: imgEntrando },
+          },
+        });
+      } catch {
+        return;
+      }
+      location.href = `index.html?salva=${salva.id}`;
+    });
+  </script>
+</body>
+</html>

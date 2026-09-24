@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Nova conferência de materiais{% endblock %}
+{% block header %}Nova conferência{% endblock %}
+{% set modulo = "viaturas" %}
+
+{% block content %}
+{% if erro %}
+<div class="alerta-erro"><strong>{{ erro }}</strong></div>
+{% endif %}
+
+<form id="form-materiais" method="POST" action="{{ url_for('main.nova_conferencia_materiais') }}">
+  <section class="form-section">
+    <h3>Serviço do dia</h3>
+    <label class="field">
+      <span>Data *</span>
+      <input type="date" name="data_servico" required value="{{ modelo.data_servico }}">
+    </label>
+    <label class="field">
+      <span>Chefe de socorro *</span>
+      <input type="text" name="chefe_socorro" required value="{{ modelo.chefe_socorro }}" placeholder="Posto e nome">
+    </label>
+    <label class="field">
+      <span>Contato funcional</span>
+      <input type="tel" name="contato" value="{{ modelo.contato }}">
+    </label>
+    <label class="field">
+      <span>Condutor</span>
+      <input type="text" name="condutor" value="{{ modelo.condutor }}">
+    </label>
+    <label class="field">
+      <span>Comandante de guarnição</span>
+      <input type="text" name="comandante" value="{{ modelo.comandante }}">
+    </label>
+    <label class="field">
+      <span>Oficial de dia</span>
+      <input type="text" name="oficial_dia" value="{{ modelo.oficial_dia }}">
+    </label>
+  </section>
+
+  <section class="form-section">
+    <h3>Viaturas</h3>
+    {% for v in modelo.viaturas %}
+    <div class="material-vtr-form">
+      <label class="field">
+        <span>AR</span>
+        <input type="text" name="vtr_ar_{{ loop.index0 }}" value="{{ v.ar }}" inputmode="numeric">
+      </label>
+      <label class="field">
+        <span>KM</span>
+        <input type="text" name="vtr_km_{{ loop.index0 }}" value="{{ v.km }}" inputmode="numeric">
+      </label>
+      <label class="field">
+        <span>K7</span>
+        <input type="text" name="vtr_k7_{{ loop.index0 }}" value="{{ v.k7 }}" placeholder="6/8">
+      </label>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section class="form-section">
+    <h3>Tipo de checklist</h3>
+    <label class="field">
+      <span>Como conferir os materiais *</span>
+      <select name="tipo_checklist" id="tipo-checklist" required>
+        <option value="">Selecione…</option>
+        <option value="foto">Checklist com Foto</option>
+        <option value="manual">Checklist Manual</option>
+      </select>
+    </label>
+  </section>
+
+  <section class="form-section material-oculto" id="bloco-foto">
+    <h3>Foto dos materiais</h3>
+    <p class="hint">A foto fica junto da lista do sistema. Compare cada item e marque pronto, alterado ou baixado.</p>
+    <label class="field">
+      <span>Tirar ou enviar foto</span>
+      <input type="file" id="fotos-input" accept="image/*" capture="environment" multiple>
+    </label>
+    <div id="fotos-preview" class="material-fotos"></div>
+    <input type="hidden" name="fotos_json" id="fotos-json" value="[]">
+  </section>
+
+  <div id="bloco-checklist" class="material-oculto">
+    {% for secao in modelo.secoes %}
+    {% set s_idx = loop.index0 %}
+    <section class="form-section">
+      <h3>{{ secao.titulo }}</h3>
+      <ul class="material-check-lista">
+        {% for item in secao.itens %}
+        {% set i_idx = loop.index0 %}
+        <li class="material-check-item">
+          <div class="material-check-topo">
+            <span class="material-qtd">{{ qtd_label(item.qtd) }}</span>
+            <span>
+              <strong>{{ item.nome }}</strong>
+              {% if item.obs %}<small class="material-obs">{{ item.obs }}</small>{% endif %}
+            </span>
+          </div>
+          <div class="material-status">
+            <label><input type="radio" name="status_{{ s_idx }}_{{ i_idx }}" value="pronto" checked> Pronto</label>
+            <label><input type="radio" name="status_{{ s_idx }}_{{ i_idx }}" value="alterado"> Alterado</label>
+            <label><input type="radio" name="status_{{ s_idx }}_{{ i_idx }}" value="baixado"> Baixado</label>
+          </div>
+          <div class="material-alterado material-oculto">
+            <label class="field">
+              <span>Nova quantidade</span>
+              <input type="number" min="0" inputmode="numeric" name="qtd_{{ s_idx }}_{{ i_idx }}" value="{{ item.qtd }}">
+            </label>
+            <label class="field">
+              <span>Observação</span>
+              <input type="text" name="obs_{{ s_idx }}_{{ i_idx }}" placeholder="O que mudou">
+            </label>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+  </div>
+
+  <section class="form-section material-oculto" id="bloco-assinaturas">
+    <h3>Passagem de serviço</h3>
+    <div class="material-assinatura">
+      <label class="field">
+        <span>Militar que está saindo *</span>
+        <input type="text" name="nome_saindo" id="nome-saindo" placeholder="Posto e nome">
+      </label>
+      <div class="rubrica-wrap">
+        <canvas id="canvas-saindo" class="canvas-rubrica" aria-label="Assinatura de quem está saindo"></canvas>
+        <button type="button" id="limpar-saindo" class="btn btn-secondary btn-sm">Limpar assinatura</button>
+      </div>
+      <input type="hidden" name="assinatura_saindo" id="assinatura-saindo">
+    </div>
+    <div class="material-assinatura">
+      <label class="field">
+        <span>Militar que está entrando *</span>
+        <input type="text" name="nome_entrando" id="nome-entrando" placeholder="Posto e nome">
+      </label>
+      <div class="rubrica-wrap">
+        <canvas id="canvas-entrando" class="canvas-rubrica" aria-label="Assinatura de quem está entrando"></canvas>
+        <button type="button" id="limpar-entrando" class="btn btn-secondary btn-sm">Limpar assinatura</button>
+      </div>
+      <input type="hidden" name="assinatura_entrando" id="assinatura-entrando">
+    </div>
+  </section>
+
+  <button type="submit" class="btn btn-primary btn-block material-oculto" id="btn-salvar-conferencia">Salvar conferência</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/assinatura.js') }}"></script>
+<script src="{{ url_for('static', filename='js/materiais-conferencia.js') }}"></script>
+{% endblock %}

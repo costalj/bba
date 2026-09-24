@@ -46,9 +46,9 @@ MODULOS = [
 
         "id": "viaturas",
 
-        "nome": "Vistoria de Viaturas",
+        "nome": "Materiais da Viatura",
 
-        "descricao": "Inspeção de veículos da frota",
+        "descricao": "Conferência diária de materiais",
 
         "icone": "🚗",
 
@@ -126,7 +126,7 @@ APP_INFO = {
 
     "subtitulo": "Batalhão de Bombeiros Ambiental",
 
-    "versao": "1.0.33",
+    "versao": "1.0.34",
 
 }
 

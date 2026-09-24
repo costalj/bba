@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Materiais — {{ conferencia.data_label }}{% endblock %}
+{% block header %}Materiais da Viatura{% endblock %}
+{% set modulo = "viaturas" %}
+
+{% block content %}
+<section class="material-card material-card-estatico">
+  <span class="material-card-data">{{ conferencia.data_label }}</span>
+  <span class="material-card-semana">{{ conferencia.dia_semana }}</span>
+  <span class="material-card-rotulo">Chefe de socorro</span>
+  <strong class="material-card-chefe">{{ conferencia.chefe_socorro }}</strong>
+</section>
+
+<section class="info-card">
+  <h3>Serviço</h3>
+  <dl class="detail-list">
+    {% if conferencia.contato %}
+    <dt>Contato funcional</dt><dd>{{ conferencia.contato }}</dd>
+    {% endif %}
+    {% if conferencia.condutor %}
+    <dt>Condutor</dt><dd>{{ conferencia.condutor }}</dd>
+    {% endif %}
+    {% if conferencia.comandante %}
+    <dt>Comandante de guarnição</dt><dd>{{ conferencia.comandante }}</dd>
+    {% endif %}
+    {% if conferencia.oficial_dia %}
+    <dt>Oficial de dia</dt><dd>{{ conferencia.oficial_dia }}</dd>
+    {% endif %}
+  </dl>
+</section>
+
+{% if conferencia.fotos %}
+<section class="info-card">
+  <h3>Fotos da conferência</h3>
+  <div class="material-fotos">
+    {% for foto in conferencia.fotos %}
+    <img src="{{ foto }}" alt="Foto dos materiais">
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if conferencia.viaturas %}
+<section class="info-card">
+  <h3>Viaturas</h3>
+  <ul class="material-vtrs">
+    {% for v in conferencia.viaturas %}
+    <li>
+      <strong>AR {{ v.ar }}</strong>
+      <span>KM {{ v.km or "—" }}</span>
+      <span>K7 {{ v.k7 or "—" }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% for secao in conferencia.secoes %}
+<section class="info-card">
+  <h3>{{ secao.titulo }}</h3>
+  <ul class="material-itens">
+    {% for item in secao.itens %}
+      <li>
+      <span class="material-qtd">{{ qtd_label(item.qtd_nova if item.status == 'alterado' and item.qtd_nova else item.qtd) }}</span>
+      <span>
+        {{ item.nome }}
+        {% if item.status %}
+        <small class="material-status-tag tag-{{ item.status }}">{{ item.status }}</small>
+        {% endif %}
+        {% if item.obs %}<small class="material-obs">{{ item.obs }}</small>{% endif %}
+        {% if item.status == 'alterado' and item.obs_nova %}<small class="material-obs">{{ item.obs_nova }}</small>{% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}
+
+{% if conferencia.assinaturas.saindo or conferencia.assinaturas.entrando %}
+<section class="info-card">
+  <h3>Passagem de serviço</h3>
+  {% if conferencia.assinaturas.saindo %}
+  <p><strong>Saindo:</strong> {{ conferencia.assinaturas.saindo.nome }}</p>
+  {% if conferencia.assinaturas.saindo.imagem %}
+  <img src="{{ conferencia.assinaturas.saindo.imagem }}" alt="Assinatura de quem está saindo" class="rubrica-imagem">
+  {% endif %}
+  {% endif %}
+  {% if conferencia.assinaturas.entrando %}
+  <p><strong>Entrando:</strong> {{ conferencia.assinaturas.entrando.nome }}</p>
+  {% if conferencia.assinaturas.entrando.imagem %}
+  <img src="{{ conferencia.assinaturas.entrando.imagem }}" alt="Assinatura de quem está entrando" class="rubrica-imagem">
+  {% endif %}
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
